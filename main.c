@@ -27,7 +27,7 @@ typedef struct pcb {
 
 int main(int argc, const char * argv[]) {
     
-    
+    int v =0;
     
     return 0;
 }
