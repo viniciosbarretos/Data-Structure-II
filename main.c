@@ -1,9 +1,29 @@
+//
+//  Laboratory of Data Structure II
+//  Vinicios Barretos
+//  Vinicius Martins
+//  David Candelero
+//  Thiago Leal
+//
+
+/* Status
+ 0 -> New
+ 1 -> Ready
+ 2 -> In execution
+ 3 -> Blocked
+ 4 -> Done
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct pcb {
     struct pcb *next;
-    int quantum;
+    unsigned int id;
+    unsigned int quantum;
+    unsigned short int priority;
+    unsigned short int status;
+    unsigned int interruption;
 } pcb;
 
 //inserting process(es)
@@ -90,7 +110,7 @@ void printStatus(pcb *jobsQueue, pcb *readyQueue, pcb *finishedQueue) {
     printf("\n");
 }
 
-int main() {
+int main(int argc, const char * argv[]) {
 
     pcb *jobsQueue, *readyQueue, *blockedQueue, *finishedQueue;
     int quantum, x = 0;
