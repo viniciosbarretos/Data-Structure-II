@@ -21,6 +21,7 @@ List * listInsert(List *list, PCB *pcb) {
         list->back = pcb;
     } else {
         pcb->next = list->front;
+        list->front = pcb;
     }
 
     return list;
