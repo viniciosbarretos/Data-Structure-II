@@ -3,7 +3,7 @@
 #include "pcb.h"
 
 // Create the pointer for a PCB
-PCB * newPcb() {
+PCB * newPCB() {
     PCB *pcb = (PCB *) malloc(sizeof(PCB));
     return pcb;
 }

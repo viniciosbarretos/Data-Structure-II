@@ -10,6 +10,6 @@ typedef struct PCB {
     unsigned int interruption;
 } PCB;
 
-PCB * newPcb();
+PCB * newPCB();
 
 #endif //DATA_STRUCTURE_PCB_H

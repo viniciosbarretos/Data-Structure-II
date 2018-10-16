@@ -21,7 +21,7 @@
 
 //inserting process(es)
 List * insertProcess(List *list, int quantum) {
-    PCB *pcb = newPcb();
+    PCB *pcb = newPCB();
     pcb->quantum = (unsigned) quantum;
     list = listInsert(list, pcb);
 
