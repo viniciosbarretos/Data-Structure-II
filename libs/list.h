@@ -11,5 +11,7 @@ typedef struct List {
 List * newList();
 List * listInsert(List *list, PCB *pcb);
 List * listRemove(List *list);
+List * listInsertSorted(List *list, PCB *pcb);
+List * listUpdatePriority(List *list);
 
 #endif //DATA_STRUCTURE_LIST_H
