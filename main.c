@@ -16,38 +16,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct pcb {
-    struct pcb *next;
-    unsigned int id;
-    unsigned int quantum;
-    unsigned short int priority;
-    unsigned short int status;
-    unsigned int interruption;
-} pcb;
+#include "libs/list.h"
+#include "libs/pcb.h"
 
 //inserting process(es)
-pcb *insertProcess(pcb *queue, int quantum) {
-    pcb *process, *aux;
-    process = (pcb*)malloc(sizeof(pcb));
-    aux = queue;
-    process->quantum = quantum;
-    process->next = NULL;
+List * insertProcess(List *list, int quantum) {
+    PCB *pcb = newPcb();
+    pcb->quantum = (unsigned) quantum;
+    list = listInsert(list, pcb);
 
-    if (queue == NULL) {
-        queue = process;
-        return queue;
-    } else {
-        while(aux->next != NULL) {
-            aux = aux->next;
-        }
-        aux->next = process;
-        return queue;
-    }
+    return list;
 }
 
 //list print function
-void printQueue(pcb *queue) {
+void printQueue(PCB *queue) {
     if (queue == NULL)
         printf("Lista Vazia!");
     else {
@@ -62,8 +44,9 @@ void printQueue(pcb *queue) {
 
 
 //scheduling algorithm
-pcb *RoundRobin(pcb *queue) {
-    pcb *aux = queue;
+PCB *RoundRobin(List *list) {
+    PCB *queue = list->front;
+    PCB *aux = queue;
     if(queue != NULL) {
         if(aux->quantum <= 35) {
             //If we need to show the time (quantum) elapsed.
@@ -87,7 +70,7 @@ pcb *RoundRobin(pcb *queue) {
 }
 
 //print function for all queues
-void printStatus(pcb *jobsQueue, pcb *readyQueue, pcb *finishedQueue) {
+void printStatus(PCB *jobsQueue, PCB *readyQueue, PCB *finishedQueue) {
     printf("\n");
     int i;
 
@@ -111,15 +94,9 @@ void printStatus(pcb *jobsQueue, pcb *readyQueue, pcb *finishedQueue) {
 }
 
 int main(int argc, const char * argv[]) {
-
-    pcb *jobsQueue, *readyQueue, *blockedQueue, *finishedQueue;
+    List *jobsQueue, *readyQueue, *blockedqueue, *finishedQueue;
     int quantum, x = 0;
     char choice, choice2;
-
-    jobsQueue = NULL;
-    readyQueue = NULL;
-    blockedQueue = NULL;
-    finishedQueue = NULL;
 
     do {
         printf("Digite 1 para inserir novo processo, 2 para continuar e 0 para finalizar.");
@@ -149,12 +126,6 @@ int main(int argc, const char * argv[]) {
         }
 
     } while (x != 0);
-
-
-
-
-
-
 
     return 0;
 }
