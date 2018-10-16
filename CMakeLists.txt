@@ -3,4 +3,4 @@ project(data_structure C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(data_structure main.c)
+add_executable(data_structure main.c libs/list.c libs/list.h libs/pcb.c libs/pcb.h)
