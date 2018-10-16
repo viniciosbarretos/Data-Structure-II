@@ -14,6 +14,11 @@
  4 -> Done
  */
 
+/* 
+Modified lines: 
+    34, 37, 86, 88, 180, 189
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -26,6 +31,19 @@ typedef struct pcb {
     unsigned short int status;
     unsigned int interruption;
 } pcb;
+
+//modified - aux counting for the id
+int count_id = 0;
+
+//modified
+//Process generator - needs revision
+void processGenerator() {
+    count_id++;
+    pcb *newProcess = malloc (sizeof (pcb));
+    newProcess->id = count_id;
+    srand( (unsigned)time(NULL) );
+    newProcess->quantum = 20 + (rand() % 11);
+}
 
 //inserting process(es)
 pcb *insertProcess(pcb *queue, int quantum) {
@@ -66,9 +84,17 @@ void printQueue(pcb *queue) {
 pcb *RoundRobin(pcb *queue) {
     pcb *aux = queue;
     if(queue != NULL) {
-        if(aux->quantum <= 35) {
+        //modified - adding a verification for interruptions
+        if(aux->quantum <= 35 || aux->quantum - aux->interruption <= 35 {
+            //modified - inserting the process in the blocked queue - needs to review
+            if(aux->quantum - aux->interruption <= 35) {
+                aux->quantum = aux->quantum - aux->interruption;
+                insertProcess(blockedQueue, aux->quantum);
+            }
             //If we need to show the time (quantum) elapsed.
-            aux->quantum = 0;
+            else {  
+                aux->quantum = 0;
+            }
             queue = queue->next;
             return queue;
             //insert in the finishedQueue (we'll probably need an id for each process)
@@ -114,13 +140,13 @@ void printStatus(pcb *jobsQueue, pcb *readyQueue, pcb *finishedQueue) {
 //Creates 38% rate for process interruption 
 int interruptionGenerator(pcb *p) {
     int aux;
-    int interruptionTime = 0;
+    int interruptionTime = p->interruption;
 
     srand( (unsigned)time(NULL) );
     aux = 1 + ( rand() % 13 );
 
-    //This is about 38% likely to happen
-    if(aux >= 1 || aux <= 5)
+    //This is about 38% likely to happen, it`s possible only one interruption for process - needs to review
+    if(aux >= 1 || aux <= 5 && interruptionTime = 0)
         interruptionTime = 1 + ( rand() % (p->quantum) - 1);
     
     return interruptionTime;
@@ -138,7 +164,7 @@ int main(int argc, const char * argv[]) {
     finishedQueue = NULL;
 
     do {
-        printf("Digite 1 para inserir novo processo, 2 para continuar e 0 para finalizar.");
+        printf("Digite 1 para inserir novo processo, 2 para countinuar e 0 para finalizar.");
         scanf("%d", &x);
 
         //printf ("Deseja criar um novo processo?\n[y/n]:");
@@ -152,6 +178,8 @@ int main(int argc, const char * argv[]) {
                 printf("Deseja inseri-lo na lista de prontos?\n[y/n]:");
                 scanf(" %c", &choice2);
                 if (choice2 == 'y') {
+                    //modified - verifying if will occur an interruption - needs to review
+                    readyQueue->interruption = interruptionGenerator(readyQueue);
                     readyQueue = insertProcess(readyQueue, quantum);
                     printStatus(jobsQueue,readyQueue, finishedQueue);
                 }
@@ -159,18 +187,14 @@ int main(int argc, const char * argv[]) {
             printStatus(jobsQueue,readyQueue, finishedQueue);
         } else {
             if (x == 2) {
+                //modified - verifying if will occur an interruption - needs to review
+                readyQueue->interruption = interruptionGenerator(readyQueue);
                 readyQueue = RoundRobin(readyQueue);
                 printStatus(jobsQueue, readyQueue, finishedQueue);
             }
         }
 
     } while (x != 0);
-
-
-
-
-
-
 
     return 0;
 }
