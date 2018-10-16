@@ -88,14 +88,15 @@ pcb *RoundRobin(pcb *queue) {
         if(aux->quantum <= 35 || aux->quantum - aux->interruption <= 35 {
             //modified - inserting the process in the blocked queue - needs to review
             if(aux->quantum - aux->interruption <= 35) {
+                queue = queue->next;
                 aux->quantum = aux->quantum - aux->interruption;
                 insertProcess(blockedQueue, aux->quantum);
             }
             //If we need to show the time (quantum) elapsed.
             else {  
                 aux->quantum = 0;
+                queue = queue->next;
             }
-            queue = queue->next;
             return queue;
             //insert in the finishedQueue (we'll probably need an id for each process)
             //insertProcess(queue, id);

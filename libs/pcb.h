@@ -8,6 +8,9 @@ typedef struct PCB {
     unsigned short int priority;
     unsigned short int status;
     unsigned int interruption;
+    unsigned int startProcessingTime;
+    unsigned int endProcessingTime;
+    unsigned int waitTime;
 } PCB;
 
 PCB * newPCB();
