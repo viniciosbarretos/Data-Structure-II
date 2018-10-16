@@ -3,6 +3,7 @@
 #include "list.h"
 #include "pcb.h"
 
+// Create the list pointers.
 List * newList() {
     List * list = (List *) malloc(sizeof(PCB));
     list->front = NULL;
@@ -11,6 +12,7 @@ List * newList() {
     return list;
 }
 
+// Insert an element in front of the list.
 List * listInsert(List *list, PCB *pcb) {
 
     if (list->front == NULL) {
@@ -24,6 +26,7 @@ List * listInsert(List *list, PCB *pcb) {
     return list;
 }
 
+// Return the last but one element from a list.
 PCB * _searchLastButOneElement(List *list) {
     PCB* aux = list->front;
     while (aux->next != NULL && aux->next != list->back) {
@@ -33,6 +36,7 @@ PCB * _searchLastButOneElement(List *list) {
     return aux;
 }
 
+// Remove the last element and re-point.
 List * _removeLastElement(List *list) {
     PCB *aux = list->back;
     list->back = _searchLastButOneElement(list);
@@ -42,6 +46,7 @@ List * _removeLastElement(List *list) {
     return list;
 }
 
+// Remove the remaining element from a queue.
 List * _removeRemainingElement(List *list) {
     if (list->back != NULL) {
         free(list->back);
@@ -52,6 +57,7 @@ List * _removeRemainingElement(List *list) {
     return list;
 }
 
+// Remove the last element from a queue.
 List * listRemove(List *list) {
     if (list->front != list->back) {
         list = _removeLastElement(list);

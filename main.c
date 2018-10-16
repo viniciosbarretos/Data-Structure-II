@@ -94,7 +94,10 @@ void printStatus(PCB *jobsQueue, PCB *readyQueue, PCB *finishedQueue) {
 }
 
 int main(int argc, const char * argv[]) {
-    List *jobsQueue, *readyQueue, *blockedqueue, *finishedQueue;
+    List *jobsQueue = newList();
+    List *readyQueue = newList();
+    List *blockedqueue = newList();
+    List *finishedQueue = newList();
     int quantum, x = 0;
     char choice, choice2;
 
