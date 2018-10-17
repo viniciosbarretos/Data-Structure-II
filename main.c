@@ -22,13 +22,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "libs/list.h"
 #include "libs/pcb.h"
-#include "time.h"
 
 unsigned int id = 1;
 unsigned int clock = 1;
-#define quantum 35
+#define processorQuantum 35
 
 int main(int argc, const char * argv[]) {
 
@@ -42,8 +42,8 @@ int main(int argc, const char * argv[]) {
     List *finished = newList();
 
     // Variables
-    int exec = 1;
-    int i;
+    char exec = 'y';
+    unsigned int i;
 
 
     // Generate initial data
@@ -54,19 +54,29 @@ int main(int argc, const char * argv[]) {
 
 
     // Control Flux
-    while(exec) {
+    while(exec=='y') {
 
         // One process is created every 20 clocks
         // Update priority of processes every 20 clocks
         if(clock%20 == 0) {
             listInsertSorted(jobs, newPCB(&id), clock);
-            listUpdatePriority(jobs, clock);
+            listUpdatePriority(jobs, clock); // This cannot happen every clock due optimization
         }
 
-        foo();
+        /*
+         * Insert process(es) at Ready List
+         * Send process to execution
+         *      Checks Interruption
+         *          y -> Send to Block List
+         *          n -> Send to Ready or finished
+         * Show to user
+         */
+
 
         clock++;
-        exec = 0;
+
+        printf("Do you want to stop? (y/n):  ");
+        scanf("%c", exec);
     }
 
     return 0;

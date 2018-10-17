@@ -3,6 +3,12 @@
 #include "list.h"
 #include "pcb.h"
 
+/*
+ * List Scheme
+ * 1 -> 2 -> 3 -> 4
+ * Start          End
+ */
+
 // Create the list pointers.
 List * newList() {
     List * list = (List *) malloc(sizeof(PCB));
