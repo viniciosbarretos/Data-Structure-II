@@ -18,82 +18,23 @@
 #include <stdlib.h>
 #include "libs/list.h"
 #include "libs/pcb.h"
+#include "time.h"
 
-//inserting process(es)
-List * insertProcess(List *list, int quantum) {
-    PCB *pcb = newPCB();
-    pcb->quantum = (unsigned) quantum;
-    list = listInsert(list, pcb);
+int id = 1;
 
-    return list;
-}
-
-//list print function
-void printQueue(PCB *queue) {
-    if (queue == NULL)
-        printf("Lista Vazia!");
-    else {
-        if (queue->next != NULL) {
-            printQueue(queue->next);
-            printf(" |%d|", queue->quantum);
-        }
-        else
-            printf(" |%d|", queue->quantum);
+void printProcessInfo(PCB *queue) {
+    while(queue != NULL) {
+        printf("ID: %d\t\t Quant: %d\t\t Pri: %d\t\tStat: %d\t\t Interr: %d\t\tWT: %d\n", queue->id, queue->quantum, queue->priority, queue->status, queue->interruption, queue->waitTime);
+        queue = queue->next;
     }
-}
-
-
-//scheduling algorithm
-PCB *RoundRobin(List *list) {
-    PCB *queue = list->front;
-    PCB *aux = queue;
-    if(queue != NULL) {
-        if(aux->quantum <= 35) {
-            //If we need to show the time (quantum) elapsed.
-            aux->quantum = 0;
-            queue = queue->next;
-            return queue;
-            //insert in the finishedQueue (we'll probably need an id for each process)
-            //insertProcess(queue, id);
-        } else
-            aux->quantum = aux->quantum - 35;
-
-        //removing from the first position and placing in the last (after removing the processed quantum)
-        if(queue->next!= NULL) {
-            queue = queue->next;
-            queue = insertProcess(queue, aux->quantum);
-        }
-        return queue;
-    }
-
-    return NULL;
-}
-
-//print function for all queues
-void printStatus(PCB *jobsQueue, PCB *readyQueue, PCB *finishedQueue) {
-    printf("\n");
-    int i;
-
-    for(i = 0; i < 50; i++)
-        printf("-");
-
-    printf("\n");
-    printf("JobsQueue:  ");
-    printQueue(jobsQueue);
-    printf("\n");
-    printf("ReadyQueue:  ");
-    printQueue(readyQueue);
-    printf("\n");
-    printf("FinishedQueue:  ");
-    printQueue(finishedQueue);
-    printf("\n");
-    for(i = 0; i < 50; i++)
-        printf("-");
-
-    printf("\n");
 }
 
 int main(int argc, const char * argv[]) {
+
+    srand((int)time(NULL));
+
+    int i;
+    /*
     List *jobsQueue = newList();
     List *readyQueue = newList();
     List *blockedqueue = newList();
@@ -129,6 +70,34 @@ int main(int argc, const char * argv[]) {
         }
 
     } while (x != 0);
+
+     */
+
+    List *jobs = newList();
+    PCB *aux;
+
+    for(i=0; i<20; i++) {
+        listInsertSorted(jobs, newPCB(&id));
+    }
+
+    printProcessInfo(jobs->start);
+
+    printf("\n\nstart %d | end %d \n\n\n", jobs->start->id, jobs->end->id);
+
+    for(i=0; i<5; i++) {
+        for (aux = jobs->start; aux != NULL; aux = aux->next) {
+            if (rand() % 2)
+                aux->waitTime += (int) aux->quantum / 2;
+        }
+    }
+
+    listUpdatePriority(jobs);
+
+
+    printProcessInfo(jobs->start);
+
+    printf("\n\nstart %d | end %d ", jobs->start->id, jobs->end->id);
+
 
     return 0;
 }

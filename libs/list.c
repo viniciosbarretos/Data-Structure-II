@@ -6,73 +6,89 @@
 // Create the list pointers.
 List * newList() {
     List * list = (List *) malloc(sizeof(PCB));
-    list->front = NULL;
-    list->back = NULL;
+    list->start = NULL;
+    list->end = NULL;
 
     return list;
 }
 
-// Insert an element in front of the list.
-List * listInsert(List *list, PCB *pcb) {
-
-    if (list->front == NULL) {
+// Insert an element at start of the list
+List * listInsertStart(List *list, PCB *pcb) {
+    if (list->start == NULL) {
         pcb->next = NULL;
-        list->front = pcb;
-        list->back = pcb;
+        list->start = pcb;
+        list->end = pcb;
     } else {
-        pcb->next = list->front;
-        list->front = pcb;
+        pcb->next = list->start;
+        list->start = pcb;
     }
-
     return list;
 }
 
-// Insert process in a List sorted by priority
+// Insert an element at end of the list
+List * listInsertEnd(List *list, PCB *pcb) {
+    if (list->start == NULL) {
+        list->start = pcb;
+        list->end = pcb;
+    } else {
+        list->end->next = pcb;
+        list->end = pcb;
+    }
+    return list;
+}
+
+// Insert process at a list sorted by priority
 List * listInsertSorted(List *list, PCB *pcb) {
-    PCB *process;
-    process = generateProcess(); // MUDAR NOME DO PROCESSO
     
-    if (list == NULL)
-        return process;
+    if (list->start == NULL) {
+        list->start = pcb;
+        list->end = pcb;
+    }
     else {
         PCB *prev = NULL;
-        PCB *aux = list;
-        while( (aux != NULL) && (aux->priority > process->priority) ) {
+        PCB *aux = list->start;
+        while( (aux != NULL) && (aux->priority >= pcb->priority) ) {
             prev = aux;
             aux = aux->next;
         }
         if(prev == NULL) {
-            process->next = list;
-            list = process;
+            pcb->next = list->start;
+            list->start = pcb;
         } else {
-            prev->next = process;
-            process->next = aux;
+            prev->next = pcb;
+            pcb->next = aux;
+            if(aux == NULL)
+                list->end = pcb;
         }
-        return list;
     }
+    return list;
 }
 
-// To avoid starvation at jobs queue
-// this function rearange process
-// Insert at start
-pcb* updateProcessPriority(pcb* queue) {
-    pcb* aux = queue;
-    pcb* prev = NULL;
+
+// To avoid starvation at jobs list
+// this function rearange old processes
+// inserting them at start
+List * listUpdatePriority(List *list) {
+    PCB *aux = list->start;
+    PCB *prev = NULL;
     while(aux != NULL) {
         if( (aux->waitTime >= aux->quantum * 2) && (aux->priority != 2) ) {
             aux->priority = 2;
-            if(aux != queue) {
+            if(aux != list->start) {
                 prev->next = aux->next;
-                aux->next = queue;
-                queue = aux;
+                if(prev->next == NULL)
+                    list->end = prev;
+                aux->next = list->start;
+                list->start = aux;
             }
         }
         prev = aux;
         aux = aux->next;
     }
-    return queue;
+    return list;
 }
 
+/*
 // Return the last but one element from a list.
 PCB * _searchLastButOneElement(List *list) {
     PCB* aux = list->front;
@@ -117,3 +133,4 @@ List * listRemove(List *list) {
 
 
 
+*/

@@ -4,12 +4,13 @@
 #include "pcb.h"
 
 typedef struct List {
-    struct PCB* front;
-    struct PCB* back;
+    struct PCB *start;
+    struct PCB *end;
 } List;
 
 List * newList();
-List * listInsert(List *list, PCB *pcb);
+List * listInsertStart(List *list, PCB *pcb);
+List * listInsertEnd(List *list, PCB *pcb);
 List * listRemove(List *list);
 List * listInsertSorted(List *list, PCB *pcb);
 List * listUpdatePriority(List *list);

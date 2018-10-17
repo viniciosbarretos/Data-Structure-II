@@ -13,6 +13,6 @@ typedef struct PCB {
     unsigned int waitTime;
 } PCB;
 
-PCB * newPCB();
+PCB * newPCB(int *id);
 
 #endif //DATA_STRUCTURE_PCB_H
