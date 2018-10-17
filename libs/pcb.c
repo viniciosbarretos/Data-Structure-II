@@ -3,7 +3,7 @@
 #include "pcb.h"
 
 // Create the pointer for a PCB
-PCB * newPCB(int *id) {
+PCB * newPCB(unsigned int *id, unsigned int creationTime) {
     PCB *pcb = (PCB *) malloc(sizeof(PCB));
     pcb->id = (*id)++;
     pcb->quantum = rand() % 200 + 1;
@@ -13,6 +13,7 @@ PCB * newPCB(int *id) {
     pcb->next = NULL;
     pcb->startProcessingTime = 0;
     pcb->endProcessingTime = 0;
+    pcb->creationTime = creationTime;
     pcb->waitTime = 0;
     return pcb;
 }

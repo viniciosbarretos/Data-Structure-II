@@ -8,7 +8,6 @@ List * newList() {
     List * list = (List *) malloc(sizeof(PCB));
     list->start = NULL;
     list->end = NULL;
-
     return list;
 }
 
@@ -47,11 +46,11 @@ List * listInsertSorted(List *list, PCB *pcb) {
     else {
         PCB *prev = NULL;
         PCB *aux = list->start;
-        while( (aux != NULL) && (aux->priority >= pcb->priority) ) {
+        while ( (aux != NULL) && (aux->priority >= pcb->priority) ) {
             prev = aux;
             aux = aux->next;
         }
-        if(prev == NULL) {
+        if (prev == NULL) {
             pcb->next = list->start;
             list->start = pcb;
         } else {
@@ -68,11 +67,11 @@ List * listInsertSorted(List *list, PCB *pcb) {
 // To avoid starvation at jobs list
 // this function rearange old processes
 // inserting them at start
-List * listUpdatePriority(List *list) {
+List * listUpdatePriority(List *list, unsigned int clock) {
     PCB *aux = list->start;
     PCB *prev = NULL;
-    while(aux != NULL) {
-        if( (aux->waitTime >= aux->quantum * 2) && (aux->priority != 2) ) {
+    while (aux != NULL) {
+        if ( ((clock - aux->creationTime) >= aux->quantum * 2) && (aux->priority != 2) ) {
             aux->priority = 2;
             if(aux != list->start) {
                 prev->next = aux->next;

@@ -6,21 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/list.c
+stdio.h
+-
+stdlib.h
+-
+list.h
+/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/list.h
+pcb.h
+/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/pcb.h
+
 /Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/list.h
 pcb.h
 /Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/pcb.h
 
 /Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/pcb.h
-
-/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/main.c
-stdio.h
--
-stdlib.h
--
-libs/list.h
-/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/list.h
-libs/pcb.h
-/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/libs/pcb.h
-time.h
-/Users/Vinicios/Documents/UNESP/ED2/Lab/ED2 Lab/Projeto 1/data-structure/time.h
 

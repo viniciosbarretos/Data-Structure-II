@@ -10,9 +10,10 @@ typedef struct PCB {
     unsigned int interruption;
     unsigned int startProcessingTime;
     unsigned int endProcessingTime;
+    unsigned int creationTime;
     unsigned int waitTime;
 } PCB;
 
-PCB * newPCB(int *id);
+PCB * newPCB(unsigned int *id, unsigned int creationTime);
 
 #endif //DATA_STRUCTURE_PCB_H

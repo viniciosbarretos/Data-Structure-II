@@ -14,90 +14,61 @@
  4 -> Done
  */
 
+/* Priority
+ 0 -> Low
+ 1 -> Medium
+ 2 -> High
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "libs/list.h"
 #include "libs/pcb.h"
 #include "time.h"
 
-int id = 1;
-
-void printProcessInfo(PCB *queue) {
-    while(queue != NULL) {
-        printf("ID: %d\t\t Quant: %d\t\t Pri: %d\t\tStat: %d\t\t Interr: %d\t\tWT: %d\n", queue->id, queue->quantum, queue->priority, queue->status, queue->interruption, queue->waitTime);
-        queue = queue->next;
-    }
-}
+unsigned int id = 1;
+unsigned int clock = 1;
+#define quantum 35
 
 int main(int argc, const char * argv[]) {
 
-    srand((int)time(NULL));
+    // Generate Random Numbers
+    srand((unsigned int)time(NULL));
 
-    int i;
-    /*
-    List *jobsQueue = newList();
-    List *readyQueue = newList();
-    List *blockedqueue = newList();
-    List *finishedQueue = newList();
-    int quantum, x = 0;
-    char choice, choice2;
-
-    do {
-        printf("Digite 1 para inserir novo processo, 2 para continuar e 0 para finalizar.");
-        scanf("%d", &x);
-
-        //printf ("Deseja criar um novo processo?\n[y/n]:");
-        //scanf(" %c", &choice);
-        if (x == 1) {
-                printf("Digite o quantum do processo:");
-                scanf("%d", &quantum);
-                jobsQueue = insertProcess(jobsQueue, quantum);
-                printStatus(jobsQueue,readyQueue, finishedQueue);
-
-                printf("Deseja inseri-lo na lista de prontos?\n[y/n]:");
-                scanf(" %c", &choice2);
-                if (choice2 == 'y') {
-                    readyQueue = insertProcess(readyQueue, quantum);
-                    printStatus(jobsQueue,readyQueue, finishedQueue);
-                }
-            readyQueue = RoundRobin(readyQueue);
-            printStatus(jobsQueue,readyQueue, finishedQueue);
-        } else {
-            if (x == 2) {
-                readyQueue = RoundRobin(readyQueue);
-                printStatus(jobsQueue, readyQueue, finishedQueue);
-            }
-        }
-
-    } while (x != 0);
-
-     */
-
+    // Lists
     List *jobs = newList();
-    PCB *aux;
+    List *ready = newList();
+    List *blocked = newList();
+    List *finished = newList();
 
-    for(i=0; i<20; i++) {
-        listInsertSorted(jobs, newPCB(&id));
+    // Variables
+    int exec = 1;
+    int i;
+
+
+    // Generate initial data
+    for(int i = 0; i < 10; ++i) {
+        listInsertSorted(jobs, newPCB(&id), clock);
+        clock++;
     }
 
-    printProcessInfo(jobs->start);
 
-    printf("\n\nstart %d | end %d \n\n\n", jobs->start->id, jobs->end->id);
+    // Control Flux
+    while(exec) {
 
-    for(i=0; i<5; i++) {
-        for (aux = jobs->start; aux != NULL; aux = aux->next) {
-            if (rand() % 2)
-                aux->waitTime += (int) aux->quantum / 2;
+        // One process is created every 20 clocks
+        // Update priority of processes every 20 clocks
+        if(clock%20 == 0) {
+            listInsertSorted(jobs, newPCB(&id), clock);
+            listUpdatePriority(jobs, clock);
         }
+
+        foo();
+
+        clock++;
+        exec = 0;
     }
-
-    listUpdatePriority(jobs);
-
-
-    printProcessInfo(jobs->start);
-
-    printf("\n\nstart %d | end %d ", jobs->start->id, jobs->end->id);
-
 
     return 0;
+
 }
