@@ -8,11 +8,15 @@ typedef struct List {
     struct PCB *end;
 } List;
 
-List * newList();
-List * listInsertStart(List *list, PCB *pcb);
-List * listInsertEnd(List *list, PCB *pcb);
-List * listRemove(List *list);
-List * listInsertSorted(List *list, PCB *pcb);
-List * listUpdatePriority(List *list, unsigned int clock);
+List* newList();
+List* listInsertStart(List *list, PCB *pcb);
+List* listInsertEnd(List *list, PCB *pcb);
+List* listRemove(List *list);
+List* listInsertSorted(List *list, PCB *pcb);
+List* listUpdatePriority(List *list, unsigned int clock);
+int moveBetweenLists(List **from, List **to);
+int moveElementBetweenLists(List **from, List **to, unsigned int id);
+unsigned int listCounter(List* list);
+
 
 #endif //DATA_STRUCTURE_LIST_H

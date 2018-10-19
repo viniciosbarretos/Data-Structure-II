@@ -10,7 +10,7 @@
  */
 
 // Create the list pointers.
-List * newList() {
+List* newList() {
     List * list = (List *) malloc(sizeof(PCB));
     list->start = NULL;
     list->end = NULL;
@@ -18,7 +18,7 @@ List * newList() {
 }
 
 // Insert an element at start of the list
-List * listInsertStart(List *list, PCB *pcb) {
+List* listInsertStart(List *list, PCB *pcb) {
     if (list->start == NULL) {
         pcb->next = NULL;
         list->start = pcb;
@@ -31,8 +31,9 @@ List * listInsertStart(List *list, PCB *pcb) {
 }
 
 // Insert an element at end of the list
-List * listInsertEnd(List *list, PCB *pcb) {
+List* listInsertEnd(List *list, PCB *pcb) {
     if (list->start == NULL) {
+        pcb->next = NULL;
         list->start = pcb;
         list->end = pcb;
     } else {
@@ -43,37 +44,51 @@ List * listInsertEnd(List *list, PCB *pcb) {
 }
 
 // Insert process at a list sorted by priority
-List * listInsertSorted(List *list, PCB *pcb) {
+List* listInsertSorted(List *list, PCB *pcb) {
     
     if (list->start == NULL) {
+        pcb->next = NULL;
         list->start = pcb;
         list->end = pcb;
-    }
-    else {
+    } else {
         PCB *prev = NULL;
         PCB *aux = list->start;
+
         while ( (aux != NULL) && (aux->priority >= pcb->priority) ) {
             prev = aux;
             aux = aux->next;
         }
+
         if (prev == NULL) {
             pcb->next = list->start;
             list->start = pcb;
         } else {
             prev->next = pcb;
             pcb->next = aux;
-            if(aux == NULL)
+            if (aux == NULL)
                 list->end = pcb;
         }
     }
     return list;
 }
 
+unsigned int listCounter(List* list) {
+    unsigned int counter = 0;
+
+    // Counter the elements of the list.
+    PCB *aux = list->start;
+    while (aux != NULL) {
+        counter++;
+        aux = aux->next;
+    }
+
+    return counter;
+}
 
 // To avoid starvation at jobs list
-// this function rearange old processes
+// this function rearrange old processes
 // inserting them at start
-List * listUpdatePriority(List *list, unsigned int clock) {
+List* listUpdatePriority(List* list, unsigned int clock) {
     PCB *aux = list->start;
     PCB *prev = NULL;
     while (aux != NULL) {
@@ -93,49 +108,74 @@ List * listUpdatePriority(List *list, unsigned int clock) {
     return list;
 }
 
-/*
-// Return the last but one element from a list.
-PCB * _searchLastButOneElement(List *list) {
-    PCB* aux = list->front;
-    while (aux->next != NULL && aux->next != list->back) {
+// Return an element from a list and re-point the elements.
+PCB* _detachElement(List** list, unsigned int targetId) {
+    // Empty list.
+    if ((*list)->start == NULL) return NULL;
+
+    // Search the element.
+    PCB *aux = (*list)->start;
+    PCB *prev = NULL;
+    while ( (aux->next != NULL) && (aux->id != targetId) ) {
+        prev = aux;
         aux = aux->next;
     }
+
+    // Detach the element and re-point.
+    if (aux->id == targetId) {
+        // Detach the last only list element.
+        if ((*list)->start == (*list)->end) {
+            (*list)->start = NULL;
+            (*list)->end = NULL;
+        }
+        // Detach the first element.
+        else if (prev == NULL) {
+            (*list)->start = (*list)->start->next;
+        }
+        // Detach an middle element.
+        else if (aux->next != NULL) {
+            prev->next = aux->next;
+        }
+        // Detach the last element.
+        else {
+            prev->next = NULL;
+            (*list)->end = prev;
+        }
+    }
+
+    // Clean element.
+    aux->next = NULL;
 
     return aux;
 }
 
-// Remove the last element and re-point.
-List * _removeLastElement(List *list) {
-    PCB *aux = list->back;
-    list->back = _searchLastButOneElement(list);
-    list->back->next = NULL;
-    free(aux);
-
-    return list;
-}
-
-// Remove the remaining element from a queue.
-List * _removeRemainingElement(List *list) {
-    if (list->back != NULL) {
-        free(list->back);
-        list->front = NULL;
-        list->back = NULL;
-    }
-
-    return list;
+PCB* _detachLastElement(List** list) {
+    return _detachElement(list, (*list)->end->id);
 }
 
 // Remove the last element from a queue.
-List * listRemove(List *list) {
-    if (list->front != list->back) {
-        list = _removeLastElement(list);
-    } else {
-        list = _removeRemainingElement(list);
-    }
+List* listRemove(List *list) {
+    if (list->start == NULL) return list; // Nothing to remove.
+
+    // Get last element and delete.
+    free(_detachLastElement(&list));
 
     return list;
 }
 
+int moveElementBetweenLists(List **from, List **to, unsigned int id) {
+    if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
 
+    // Detach the last element.
+    PCB *element = _detachElement(from, id);
 
-*/
+    // Insert element into the new list.
+    (*to) = listInsertStart(*to, element);
+
+    return 1;
+}
+
+int moveBetweenLists(List **from, List **to) {
+    return moveElementBetweenLists(from, to, (*from)->end->id);
+}
+
