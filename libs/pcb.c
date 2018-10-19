@@ -1,39 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pcb.h"
+#include "rand.h"
 
 //Creates 38% rate for process interruption
 unsigned int _interruptionGenerator(unsigned int quantum) {
 
-    unsigned int interruption;
-    unsigned int willStop;
-
-    willStop = rand() % 101;
-    if(willStop >= 38)
-        willStop = 1;
+    // This is about 38% likely to happen, it`s possible only one interruption for process
+    if (getRandom(0, 101) <= 38)
+        return (unsigned) getRandom(0, quantum);
     else
-        willStop = 0;
+        return 0;
 
-    //This is about 38% likely to happen, it`s possible only one interruption for process - needs to review
-    if(willStop)
-        interruption = 1 + ( rand() % (quantum-1) );
-
-    return interruption;
+//    return (getRandom(0, 101) <= 38) ? (unsigned) getRandom(1, quantum - 1) : 0;
 }
 
-// Create the pointer for a PCB
-PCB * newPCB(unsigned int *id, unsigned int creationTime) {
-    PCB *pcb = (PCB *) malloc(sizeof(PCB));
-    pcb->id = (*id)++;
-    pcb->quantum = rand() % 200 + 1;
-    pcb->priority = rand() % 3;
+// Allocate memory for pcb.
+PCB* newPCB() {
+    return (PCB*) malloc(sizeof(PCB));
+}
+
+// Create the pointer for a PCB.
+PCB* generatePCB(unsigned int id, unsigned int creationTime) {
+    PCB *pcb = newPCB();
+
+    pcb->id = id;
+    pcb->quantum = (unsigned) getRandom(0, 201);
+    pcb->priority = (unsigned short) getRandom(0, 3);
     pcb->status = 0;
+    pcb->lineCounter = 0;
     pcb->interruption = _interruptionGenerator(pcb->quantum);
     pcb->next = NULL;
     pcb->startProcessingTime = 0;
     pcb->endProcessingTime = 0;
     pcb->creationTime = creationTime;
     pcb->waitTime = 0;
+
     return pcb;
 }
 
+PCB* getWaitTime(PCB* pcb) {
+    pcb->waitTime = (unsigned) getRandom(0, 64);
+    return pcb;
+}
