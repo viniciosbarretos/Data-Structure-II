@@ -116,7 +116,7 @@ PCB* _detachElement(List** list, unsigned int targetId) {
     // Search the element.
     PCB *aux = (*list)->start;
     PCB *prev = NULL;
-    while ( (aux->next != NULL) && (aux->id != targetId) ) {
+    while ( (aux->next != NULL) || (aux->id != targetId) ) {
         prev = aux;
         aux = aux->next;
     }
@@ -124,7 +124,7 @@ PCB* _detachElement(List** list, unsigned int targetId) {
     // Detach the element and re-point.
     if (aux->id == targetId) {
         // Detach the last only list element.
-        if ((*list)->start == (*list)->end) {
+        if (prev == NULL && aux->next == NULL) {
             (*list)->start = NULL;
             (*list)->end = NULL;
         }
@@ -141,10 +141,14 @@ PCB* _detachElement(List** list, unsigned int targetId) {
             prev->next = NULL;
             (*list)->end = prev;
         }
-    }
 
-    // Clean element.
-    aux->next = NULL;
+        // Clean element.
+        aux->next = NULL;
+    }
+    // Element not found.
+    else {
+        aux = NULL;
+    }
 
     return aux;
 }
@@ -176,6 +180,7 @@ int moveElementBetweenLists(List **from, List **to, unsigned int id) {
 }
 
 int moveBetweenLists(List **from, List **to) {
+    if ((*from)->end == NULL) return 0;
     return moveElementBetweenLists(from, to, (*from)->end->id);
 }
 
