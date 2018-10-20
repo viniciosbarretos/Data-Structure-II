@@ -47,6 +47,10 @@ void renderElement(PCB *pcb) {
 void renderList(List *list) {
     PCB *aux = list->start;
 
+    if (aux == NULL) {
+        printf("! Empty list !");
+    }
+
     while (aux != NULL) {
         renderElement(aux);
         aux = aux->next;
@@ -65,9 +69,9 @@ void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* 
     renderList(finished);
     printf("\n\nClock: %d", (int) clock);
     printf("\tClock past: %d", (int) time);
-    printf("\nProcess: %d", cpu->start->id);
+    printf("\nProcess:");
+    renderElement(cpu->start);
     printf("\nAction: %s", action);
-    printf("---------------------");
 }
 
 
@@ -100,26 +104,26 @@ int manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
     // Manage the process if necessary.
     if (status == 0) { // Process finished.
         // Mode pcb to finished.
-        return moveBetweenLists(cpu, finished);
+        if (moveBetweenLists(cpu, finished)) return true;
     } else if (status == 2) { // Process blocked.
         // Get wait time for the pcb i/o interruption and move to blocked.
         (*cpu)->start = getWaitTime((*cpu)->start);
-        return moveBetweenLists(cpu, blocked);
+        if (moveBetweenLists(cpu, blocked)) return true;
     }
 
     return false;
 }
 
 // Manage the blocked list and return an action status;
-int manageBlocked(List** ready, List** blocked, bool action) {
+int manageBlocked(List** ready, List** blocked) {
     // Decrement wait time
     PCB *aux = (*blocked)->start;
     while (aux != NULL) {
         if (aux->waitTime > 0) aux->waitTime--;
 
         // When the wait ends, moves to ready. If not superior action occurs.
-        if (aux->waitTime == 0 && !action) {
-            return moveElementBetweenLists(blocked, ready, aux->id);
+        if (aux->waitTime == 0) {
+            if (moveElementBetweenLists(blocked, ready, aux->id)) return true;
         }
 
         aux = aux->next;
@@ -127,14 +131,14 @@ int manageBlocked(List** ready, List** blocked, bool action) {
     return false;
 }
 
-int manageJobs(List** ready, List** blocked, List** jobs, unsigned int* processToLoad, bool action) {
+int manageJobs(List** ready, List** blocked, List** jobs, unsigned int* processToLoad) {
     // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) <= maxReadyLength && !action) {
-        return moveBetweenLists(jobs, ready);
+    if ( listCounter((*ready)) + listCounter((*blocked)) <= maxReadyLength) {
+        if (moveBetweenLists(jobs, ready)) return true;
     }
 
     // When have process to load, generate then.  If not superior action occurs.
-    if ((*processToLoad) > 0 && !action) {
+    if ((*processToLoad) > 0) {
         (*processToLoad)--;
         *jobs = listInsertSorted(*jobs, generatePCB(id++, clockTime));
         return true;
@@ -145,26 +149,21 @@ int manageJobs(List** ready, List** blocked, List** jobs, unsigned int* processT
 
 
 void runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished,  unsigned int* processToLoad) {
-    bool action;
-
-    printf("----------cpu-----------");
+    int action;
 
     // Execute the CPU manager
     action = manageCPU(cpu, ready, blocked, finished);
 
-    printf("----------blocked-----------");
-
-    // After cpu manage the blocked queue
-    action = manageBlocked(ready, blocked, action);
-
-    printf("----------jobs-----------");
+    // After cpu manage the blocked queue, if not occur any action before
+    if (!action)
+        action = manageBlocked(ready, blocked);
 
     // For last, manage the jobs queue.
-    manageJobs(ready, blocked, jobs, processToLoad, action);
+    if (!action)
+        manageJobs(ready, blocked, jobs, processToLoad);
 }
 
 int main(int argc, const char *argv[]) {
-    printf("---------------------");
 
     // Lists
     List *jobs = newList();
@@ -173,12 +172,15 @@ int main(int argc, const char *argv[]) {
     List *blocked = newList();
     List *finished = newList();
 
-    printf("---------------------");
-
     // Variables
     char exec = 'y';
     bool status = true;
     unsigned int processInDisk = 10;
+
+    // Initial render.
+    renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockTime, "teste");
+    printf("\nEnter to next step: ");
+    status = (getchar() != 'e') ? true: false;
 
     // Generate initial data
 //    for (unsigned int i = 0; i < 19; ++i) {
@@ -186,15 +188,29 @@ int main(int argc, const char *argv[]) {
 //        clockTime++;
 //    }
 
-    printf("---------------------");
-
     // Control Flux
     while (status) {
         // Render the screen.
-        printf("---------------------");
+
+//        if (clockTime < 1) {
+//            jobs = listInsertSorted(jobs, generatePCB(id++, clockTime));
+//        }
+
+//        if (clockTime > 1) {
+//            moveBetweenLists(&jobs, &ready);
+//            renderElement(jobs->start);
+//        }
+
+//        if (clockTime % 2 == 1) {
+//            printf("-3-");
+//            moveBetweenLists(&ready, &finished);
+//        }
+
+//        printf("---------------%d---------------", clockTime);
+
+        printf("-----------------------------------------------------------------------\n");
+        runClock(&cpu, &ready, &blocked, &jobs, &finished, &processInDisk);
         renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockTime, "teste");
-        printf("---------------------");
-//        runClock(&cpu, &ready, &blocked, &jobs, &finished, &processInDisk);
 
         // One process is created every 20 clocks
         // Update priority of processes every 20 clocks
