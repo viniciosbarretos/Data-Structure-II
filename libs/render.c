@@ -102,7 +102,7 @@ void renderList(List *list) {
 void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* cpu, unsigned int clock,
                   unsigned int time, char* action) {
     // Print screen separator.
-    printf("-----------------------------------------------------------------------\n");
+    printf("\n-----------------------------------------------------------------------\n");
 
     // Printing lists.
     printf("Jobs:       \n");
