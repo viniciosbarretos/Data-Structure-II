@@ -213,6 +213,7 @@ int main(int argc, const char *argv[]) {
     renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockTime, "Simulation started");
     printf("\nEnter to next step: ");
     status = (getchar() != 'e') ? true: false;
+    getchar();
 
     // Control Flux
     while (status) {
@@ -225,6 +226,7 @@ int main(int argc, const char *argv[]) {
         // Print control information.
         printf("\nEnter to next step: ");
         status = (getchar() != 'e') ? true: false;
+        getchar();
     }
 
     return 0;
