@@ -15,44 +15,44 @@ char* strCopy(char* out, const char* src) {
     return out;
 }
 
-char* getStatus(int status) {
+char* getStatus(int status, int id) {
     char *str = (char*) malloc(sizeof(char) * 64);
 
     switch (status) {
         case 0:
-            str = strCopy(str, "Nothing happens");
+            sprintf(str, "Nothing happens");
             break;
 
         case 1:
-            str = strCopy(str, "Process moved from Ready  to CPU");
+            sprintf(str, "Process %d dispatched", id);
             break;
 
         case 2:
-            str = strCopy(str, "Process moved from CPU to Ready");
+            sprintf(str, "Process %d interrupted", id);
             break;
 
         case 3:
-            str = strCopy(str, "Process moved from CPU to Blocked");
+            sprintf(str, "Process %d I/O wait", id);
             break;
 
         case 4:
-            str = strCopy(str, "Process moved from CPU to Finished");
+            sprintf(str, "Process %d exited", id);
             break;
 
         case 5:
-            str = strCopy(str, "Process moved from Blocked to Ready");
+            sprintf(str, "Process %d I/O completed", id);
             break;
 
         case 6:
-            str = strCopy(str, "Process moved from Jobs to Ready");
+            sprintf(str, "Process %d admitted", id);
             break;
 
         case 7:
-            str = strCopy(str, "Process created");
+            sprintf(str, "Process %d created", id);
             break;
 
         default:
-            str = strCopy(str, "I don't know");
+            sprintf(str, "I do not know");
     }
 
     return str;
@@ -65,32 +65,59 @@ void renderElement(PCB *pcb) {
     }
 }
 
-void renderList(List *list) {
+void renderInfo(int n) {
+    printf("[%*d%*s]", 4, n, 1, "");
+}
+
+void renderId(List *list) {
     PCB *aux = list->start;
 
-    if (aux == NULL) {
-        printf("! Empty list !");
+    while (aux != NULL) {
+        renderInfo(aux->id);
+        aux = aux->next;
     }
+}
+
+void renderQuantum(List *list) {
+    PCB *aux = list->start;
 
     while (aux != NULL) {
-        renderElement(aux);
+        renderInfo(aux->quantum - aux->lineCounter);
         aux = aux->next;
+    }
+}
+
+void renderList(List *list) {
+
+    if (list->start == NULL)
+        printf("Empty list!\n");
+    else {
+        renderId(list);
+        printf("\n");
+        renderQuantum(list);
+        printf("\n");
     }
 }
 
 void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* cpu, unsigned int clock,
                   unsigned int time, char* action) {
-    printf("Jobs:       ");
+    // Print screen separator.
+    printf("-----------------------------------------------------------------------\n");
+
+    // Printing lists.
+    printf("Jobs:       \n");
     renderList(jobs);
-    printf("\nReady:    ");
+    printf("\nReady:    \n");
     renderList(ready);
-    printf("\nBlocked:  ");
+    printf("\nBlocked:  \n");
     renderList(blocked);
-    printf("\nFinished: ");
+    printf("\nFinished: \n");
     renderList(finished);
+
+    // Printing the additional data.
     printf("\n\nClock: %d", (int) clock);
     printf("\tClock past: %d", (int) time);
     printf("\nProcess:");
     renderElement(cpu->start);
-    printf("\nAction: %s", action);
+    printf("\nAction: %s\n", action);
 }
