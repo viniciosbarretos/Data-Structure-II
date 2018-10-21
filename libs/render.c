@@ -99,10 +99,18 @@ void renderList(List *list) {
     }
 }
 
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
 void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* cpu, unsigned int clock,
                   unsigned int time, char* action) {
-    // Print screen separator.
-    printf("\n-----------------------------------------------------------------------\n");
+    // Clear screen.
+    clearScreen();
 
     // Printing lists.
     printf("Jobs:       \n");
