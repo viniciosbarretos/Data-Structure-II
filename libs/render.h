@@ -4,6 +4,7 @@
 #include "pcb.h"
 #include "list.h"
 
+char* getStatus(int status);
 void renderElement(PCB *pcb);
 void renderList(List *list);
 void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* cpu, unsigned int clock,
