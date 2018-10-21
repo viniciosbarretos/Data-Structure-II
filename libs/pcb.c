@@ -27,7 +27,7 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     pcb->id = id;
     pcb->quantum = (unsigned) getRandom(0, 201);
     pcb->priority = (unsigned short) getRandom(0, 3);
-    pcb->status = 0;
+    pcb->status = _pcbStatusNew;
     pcb->lineCounter = 0;
     pcb->interruption = _interruptionGenerator(pcb->quantum);
     pcb->next = NULL;
