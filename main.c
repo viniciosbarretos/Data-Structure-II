@@ -20,11 +20,11 @@
  2 -> High
  */
 
-#define processorQuantum 35
+#define processorQuantum 45
 #define true 1
 #define false 0
 #define _status int
-#define maxReadyLength 20
+#define maxReadyLength 10
 
 // Execution statuses
 #define _statusNone             0
@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "libs/list.h"
 #include "libs/pcb.h"
 #include "libs/render.h"
@@ -145,7 +146,7 @@ _status manageBlocked(List** ready, List** blocked) {
 
 _status manageJobs(List** ready, List** blocked, List** jobs, unsigned int* processToLoad) {
     // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) <= maxReadyLength) {
+    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadyLength) {
         // Change status
         if ((*jobs)->end != NULL) {
             ((*jobs)->end)->status =  _pcbStatusReady;
@@ -158,6 +159,7 @@ _status manageJobs(List** ready, List** blocked, List** jobs, unsigned int* proc
     if ((*processToLoad) > 0) {
         (*processToLoad)--;
         *jobs = listInsertSorted(*jobs, generatePCB(id++, clockTime));
+        *jobs = listUpdatePriority(*jobs, clockTime); // Update priority of old elements
         return _statusCreatePCB;
     }
 
@@ -165,7 +167,7 @@ _status manageJobs(List** ready, List** blocked, List** jobs, unsigned int* proc
 }
 
 
-int runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished,  unsigned int* processToLoad) {
+_status runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished,  unsigned int* processToLoad) {
     int action = _statusNone;
     clockPast = 0;
 
@@ -183,7 +185,7 @@ int runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finis
 
         // One process is created every 20 clocks
         // Update priority of processes every 20 clocks
-        if (clockTime % 20 == 0) {
+        if (clockTime % 40 == 0) {
             (*processToLoad)++;
         }
 
@@ -196,12 +198,15 @@ int runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finis
 }
 
 int main(int argc, const char *argv[]) {
+
     // Lists
     List *jobs = newList();
     List *ready = newList();
     List *cpu = newList();
     List *blocked = newList();
     List *finished = newList();
+
+    srand((unsigned int)time(NULL));
 
     // Variables
     _status status;

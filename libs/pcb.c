@@ -7,8 +7,8 @@
 unsigned int _interruptionGenerator(unsigned int quantum) {
 
     // This is about 38% likely to happen, it`s possible only one interruption for process
-    if (getRandom(0, 101) <= 38)
-        return (unsigned) getRandom(0, quantum);
+    if (getRandom(0, 100) < 38 && quantum > 1)
+        return (unsigned) getRandom(1, quantum);
     else
         return 0;
 
@@ -25,7 +25,7 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     PCB *pcb = newPCB();
 
     pcb->id = id;
-    pcb->quantum = (unsigned) getRandom(1, 201);
+    pcb->quantum = (unsigned) getRandom(1, 90);
     pcb->priority = (unsigned short) getRandom(0, 3);
     pcb->status = _pcbStatusNew;
     pcb->lineCounter = 0;
@@ -40,6 +40,6 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
 }
 
 PCB* getWaitTime(PCB* pcb) {
-    pcb->waitTime = (unsigned) getRandom(0, 64);
+    pcb->waitTime = (unsigned) getRandom(1, 64);
     return pcb;
 }

@@ -69,32 +69,73 @@ void renderInfo(int n) {
     printf("[%*d%*s]", 4, n, 1, "");
 }
 
-void renderId(List *list) {
+void renderId(List *list, int maxElements) {
     PCB *aux = list->start;
+    int count = 0;
 
-    while (aux != NULL) {
-        renderInfo(aux->id);
-        aux = aux->next;
+    printf("ID: ");
+    if(maxElements != -1) {
+        while (aux != NULL && count < maxElements) {
+            printf("[%4d%1s] ", aux->id, "");
+            aux = aux->next;
+            count++;
+        }
+    } else {
+        while (aux != NULL) {
+            printf("[%4d%1s] ", aux->id, "");
+            aux = aux->next;
+        }
     }
 }
 
-void renderQuantum(List *list) {
+void renderQuantum(List *list, int maxElements) {
     PCB *aux = list->start;
+    int count = 0;
 
-    while (aux != NULL) {
-        renderInfo(aux->quantum - aux->lineCounter);
-        aux = aux->next;
+    printf("QU: ");
+    if (maxElements != -1) {
+        while (aux != NULL && count < maxElements) {
+            printf("[%4d%1s] ", aux->quantum - aux->lineCounter, "");
+            aux = aux->next;
+            count++;
+        }
+    } else {
+        while (aux != NULL) {
+            printf("[%4d%1s] ", aux->quantum - aux->lineCounter, "");
+            aux = aux->next;
+        }
     }
 }
 
-void renderList(List *list) {
+void renderPriority(List *list, int maxElements) {
+    PCB *aux = list->start;
+    int count = 0;
+
+    printf("PR: ");
+    if(maxElements != -1) {
+        while (aux != NULL && count < maxElements) {
+            printf("[%4d%1s] ", aux->priority, "");
+            aux = aux->next;
+            count++;
+        }
+    } else {
+        while (aux != NULL) {
+            printf("[%4d%1s] ", aux->priority, "");
+            aux = aux->next;
+        }
+    }
+}
+
+void renderList(List *list, int maxElements) {
 
     if (list->start == NULL)
         printf("Empty list!\n");
     else {
-        renderId(list);
+        renderId(list, maxElements);
         printf("\n");
-        renderQuantum(list);
+        renderPriority(list, maxElements);
+        printf("\n");
+        renderQuantum(list, maxElements);
         printf("\n");
     }
 }
@@ -114,13 +155,13 @@ void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* 
 
     // Printing lists.
     printf("Jobs:       \n");
-    renderList(jobs);
+    renderList(jobs, -1);
     printf("\nReady:    \n");
-    renderList(ready);
+    renderList(ready, -1);
     printf("\nBlocked:  \n");
-    renderList(blocked);
+    renderList(blocked, -1);
     printf("\nFinished: \n");
-    renderList(finished);
+    renderList(finished, 12);
 
     // Printing the additional data.
     printf("\n\nClock: %d", (int) clock);

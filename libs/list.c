@@ -92,7 +92,7 @@ List* listUpdatePriority(List* list, unsigned int clock) {
     PCB *aux = list->start;
     PCB *prev = NULL;
     while (aux != NULL) {
-        if ( ((clock - aux->creationTime) >= aux->quantum * 2) && (aux->priority != 2) ) {
+        if ( ((clock - aux->creationTime) >= aux->quantum * 10) && (aux->priority != 2) ) {
             aux->priority = 2;
             if(aux != list->start) {
                 prev->next = aux->next;
@@ -116,7 +116,7 @@ PCB* _detachElement(List** list, unsigned int targetId) {
     // Search the element.
     PCB *aux = (*list)->start;
     PCB *prev = NULL;
-    while ( (aux->next != NULL) || (aux->id != targetId) ) {
+    while ( (aux->next != NULL) && (aux->id != targetId) ) {
         prev = aux;
         aux = aux->next;
     }
