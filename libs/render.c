@@ -163,7 +163,7 @@ void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* 
     // Printing the additional data.
     printf("\n----------------------------------------");
     printf("\nClock: %d", (int) clock);
-    printf("\t\t\tElapsed Clock: %d", (int) time);
+    printf("\tElapsed Clock: %d", (int) time);
     printf("\n\nProcessing:");
     renderElement(cpu->start);
     printf("\n\nAction: %s\n", action);
