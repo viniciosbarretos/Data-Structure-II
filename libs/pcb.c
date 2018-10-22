@@ -25,7 +25,7 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     PCB *pcb = newPCB();
 
     pcb->id = id;
-    pcb->quantum = (unsigned) getRandom(0, 201);
+    pcb->quantum = (unsigned) getRandom(1, 201);
     pcb->priority = (unsigned short) getRandom(0, 3);
     pcb->status = _pcbStatusNew;
     pcb->lineCounter = 0;
