@@ -61,12 +61,9 @@ char* getStatus(int status, int id) {
 
 void renderElement(PCB *pcb) {
     if (pcb != NULL) {
-        printf("[%d: %d]", pcb->id, pcb->quantum - pcb->lineCounter);
+        printf(" ID: [%4d%1s]\n", pcb->id, "");
+        printf("%12sQU: [%4d%1s] ", "", pcb->quantum - pcb->lineCounter, "");
     }
-}
-
-void renderInfo(int n) {
-    printf("[%*d%*s]", 4, n, 1, "");
 }
 
 void renderId(List *list, int maxElements) {
@@ -164,9 +161,11 @@ void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* 
     renderList(finished, 12);
 
     // Printing the additional data.
-    printf("\n\nClock: %d", (int) clock);
-    printf("\tClock past: %d", (int) time);
-    printf("\nProcess:");
+    printf("\n----------------------------------------");
+    printf("\nClock: %d", (int) clock);
+    printf("\t\t\tElapsed Clock: %d", (int) time);
+    printf("\n\nProcessing:");
     renderElement(cpu->start);
-    printf("\nAction: %s\n", action);
+    printf("\n\nAction: %s\n", action);
+    printf("----------------------------------------\n");
 }
