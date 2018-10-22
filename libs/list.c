@@ -54,7 +54,7 @@ List* listInsertSorted(List *list, PCB *pcb) {
         PCB *prev = NULL;
         PCB *aux = list->start;
 
-        while ( (aux != NULL) && (aux->priority >= pcb->priority) ) {
+        while ( (aux != NULL) && (aux->priority < pcb->priority) ) {
             prev = aux;
             aux = aux->next;
         }
@@ -92,14 +92,17 @@ List* listUpdatePriority(List* list, unsigned int clock) {
     PCB *aux = list->start;
     PCB *prev = NULL;
     while (aux != NULL) {
-        if ( ((clock - aux->creationTime) >= aux->quantum * 10) && (aux->priority != 2) ) {
+        if ( ((clock - aux->creationTime) >= aux->quantum * 7) && (aux->priority != 2) ) {
             aux->priority = 2;
-            if(aux != list->start) {
-                prev->next = aux->next;
-                if(prev->next == NULL)
-                    list->end = prev;
-                aux->next = list->start;
-                list->start = aux;
+            if(aux != list->end) {
+                if(aux == list->start)
+                    list->start = aux->next;
+                else
+                    prev->next = aux->next;
+
+                aux->next = NULL;
+                list->end->next = aux;
+                list->end = aux;
             }
         }
         prev = aux;

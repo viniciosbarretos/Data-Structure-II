@@ -66,6 +66,25 @@ void renderElement(PCB *pcb) {
     }
 }
 
+void renderProcessingTime(List *list, int maxElements) {
+    PCB *aux = list->start;
+    int count = 0;
+
+    printf("ET: ");
+    if(maxElements != -1) {
+        while (aux != NULL && count < maxElements) {
+            printf("[%4d%1s] ", (aux->endProcessingTime - aux->startProcessingTime) + 1, "");
+            aux = aux->next;
+            count++;
+        }
+    } else {
+        while (aux != NULL) {
+            printf("[%4d%1s] ", (aux->endProcessingTime - aux->startProcessingTime) + 1, "");
+            aux = aux->next;
+        }
+    }
+}
+
 void renderId(List *list, int maxElements) {
     PCB *aux = list->start;
     int count = 0;
@@ -80,6 +99,25 @@ void renderId(List *list, int maxElements) {
     } else {
         while (aux != NULL) {
             printf("[%4d%1s] ", aux->id, "");
+            aux = aux->next;
+        }
+    }
+}
+
+void renderInitialQuantum(List *list, int maxElements) {
+    PCB *aux = list->start;
+    int count = 0;
+
+    printf("QU: ");
+    if (maxElements != -1) {
+        while (aux != NULL && count < maxElements) {
+            printf("[%4d%1s] ", aux->quantum, "");
+            aux = aux->next;
+            count++;
+        }
+    } else {
+        while (aux != NULL) {
+            printf("[%4d%1s] ", aux->quantum, "");
             aux = aux->next;
         }
     }
@@ -137,6 +175,19 @@ void renderList(List *list, int maxElements) {
     }
 }
 
+void renderListFinished(List *list, int maxElements) {
+    if (list->start == NULL)
+        printf("Empty list!\n");
+    else {
+        renderId(list, maxElements);
+        printf("\n");
+        renderProcessingTime(list, maxElements);
+        printf("\n");
+        renderInitialQuantum(list, maxElements);
+        printf("\n");
+    }
+}
+
 void clearScreen() {
 #ifdef _WIN32
     system("cls");
@@ -158,7 +209,7 @@ void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* 
     printf("\nBlocked:  \n");
     renderList(blocked, -1);
     printf("\nFinished: \n");
-    renderList(finished, 12);
+    renderListFinished(finished, 12);
 
     // Printing the additional data.
     printf("\n----------------------------------------");
