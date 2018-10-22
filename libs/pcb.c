@@ -40,6 +40,6 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
 }
 
 PCB* getWaitTime(PCB* pcb) {
-    pcb->waitTime = (unsigned) getRandom(1, 64);
+    pcb->waitTime = (unsigned) getRandom(1, 15);
     return pcb;
 }

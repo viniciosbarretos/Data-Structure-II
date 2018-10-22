@@ -183,8 +183,8 @@ _status runClock(List** cpu, List** ready, List** blocked, List** jobs, List** f
         if (action == _statusNone)
             action = manageJobs(ready, blocked, jobs, processToLoad);
 
-        // One process is created every 20 clocks
-        // Update priority of processes every 20 clocks
+        // One process is created every 40 clocks
+        // Update priority of processes every 40 clocks
         if (clockTime % 40 == 0) {
             (*processToLoad)++;
         }
