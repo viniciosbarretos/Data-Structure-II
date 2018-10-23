@@ -20,21 +20,31 @@
  2 -> High
  */
 
+// Simulation defaults.
 #define processorQuantum 45
+#define maxReadySize 10
+#define initialProcessQuantity 10
+#define processDividerMod 40
+
+// General definitions.
 #define true 1
 #define false 0
-#define _status int
-#define maxReadyLength 10
+#define _action int
 
-// Execution statuses
-#define _statusNone             0
-#define _statusMoveReadyCPU     1
-#define _statusMoveCPUReady     2
-#define _statusMoveCPUBlocked   3
-#define _statusMoveCPUFinish    4
-#define _statusMoveBlockedReady 5
-#define _statusMoveJobsReady    6
-#define _statusCreatePCB        7
+// Execution status
+#define _actionNone             0
+#define _actionMoveReadyCPU     1
+#define _actionMoveCPUReady     2
+#define _actionMoveCPUBlocked   3
+#define _actionMoveCPUFinish    4
+#define _actionMoveBlockedReady 5
+#define _actionMoveJobsReady    6
+#define _actionCreatePCB        7
+
+// CPU status
+#define _processFinished 0
+#define _processRunning  1
+#define _processBlocked  2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,7 +57,8 @@
 unsigned int id = 1;
 unsigned int clockTime = 0;
 unsigned int clockPast = 0;
-unsigned int remainingQuantum = processorQuantum;
+unsigned int remainingQuantum;
+unsigned int processToLoad;
 unsigned int lastId = 0;
 
 unsigned int executeCPU(PCB* pcb) {
@@ -56,137 +67,157 @@ unsigned int executeCPU(PCB* pcb) {
 
     // Return the cpu status of this process. (0 -> finished; 1 -> running; 2 -> Blocked).
     if (pcb->lineCounter == pcb->interruption) {
-        return 2; // Blocked.
+        return _processBlocked; // Blocked.
     } else if (pcb->lineCounter == pcb->quantum) {
-        return 0; // Finished.
+        return _processFinished; // Finished.
     } else {
-        return 1; // Running.
+        return _processRunning; // Running.
     }
 }
 
 
 // Manage the PCB iteration around cpu and return an action status;
-_status manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
+_action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
 
     // When CPU empty, get next process.
     if ((*cpu)->start == NULL) {
-        // Set max quantum.
-        remainingQuantum = processorQuantum;
 
-        // Move to cpu.
-        if (moveBetweenLists(ready, cpu)) {
-            // Change the status.
-            ((*cpu)->start)->status = _pcbStatusRunning;
-            return _statusMoveReadyCPU;
-        } else {
-            return _statusNone;
+        // Move pcb to cpu.
+        if (moveBetweenLists(ready, cpu, _pcbStatusRunning)) {
+            // Set max quantum.
+            remainingQuantum = processorQuantum;
+
+            // Get the process id for the action.
+            lastId = ((*cpu)->start)->id;
+
+            // Set the start time, when it's first execution.
+            if (((*cpu)->start)->startProcessingTime == 0) {
+                ((*cpu)->start)->startProcessingTime = clockTime;
+            }
+
+            return _actionMoveReadyCPU;
+        }
+    } else {
+        // Execute the next instruction.
+        unsigned int status = executeCPU((*cpu)->start);
+        remainingQuantum--;
+
+        // Check for a exceeded quantum.
+        if (remainingQuantum == 0) {
+            // Get the process id for the action.
+            lastId = ((*cpu)->start)->id;
+
+            // Move pcb to ready.
+            moveBetweenLists(cpu, ready, _pcbStatusReady);
+            return _actionMoveCPUReady;
+        }
+
+        // Manage the process if necessary.
+        if (status == _processFinished) { // Process finished.
+            // Set end time.
+            ((*cpu)->start)->endProcessingTime = clockTime;
+
+            // Get the process id for the action.
+            lastId = ((*cpu)->start)->id;
+
+            // Move pcb to finished.
+            moveBetweenLists(cpu, finished, _pcbStatusDone);
+            return _actionMoveCPUFinish;
+
+        } else if (status == _processBlocked) { // Process blocked.
+            // Get wait time for the pcb i/o interruption and move to blocked.
+            (*cpu)->start = getWaitTime((*cpu)->start);
+
+            // Get the process id for the action.
+            lastId = ((*cpu)->start)->id;
+
+            // Move pcb to blocked.
+            moveBetweenLists(cpu, blocked, _pcbStatusBlocked);
+            return _actionMoveCPUBlocked;
         }
     }
 
-    // Set the start time, if needed.
-    if (((*cpu)->start)->startProcessingTime == 0) { // First execution.
-        ((*cpu)->start)->startProcessingTime = clockTime;
-    }
-
-    // Execute next instruction.
-    unsigned int status = executeCPU((*cpu)->start);
-    remainingQuantum--;
-
-    // Check for a exceeded quantum.
-    if (remainingQuantum == 0) {
-        // Update status.
-        ((*cpu)->start)->status = _pcbStatusReady;
-
-        moveBetweenLists(cpu, ready);
-        return _statusMoveCPUReady;
-    }
-
-    // Manage the process if necessary.
-    if (status == 0) { // Process finished.
-        // Set end time.
-        ((*cpu)->start)->endProcessingTime = clockTime;
-
-        // Change status
-        ((*cpu)->start)->status = _pcbStatusDone;
-
-        // Move pcb to finished.
-        if (moveBetweenLists(cpu, finished)) return _statusMoveCPUFinish;
-    } else if (status == 2) { // Process blocked.
-        // Get wait time for the pcb i/o interruption and move to blocked.
-        (*cpu)->start = getWaitTime((*cpu)->start);
-
-        // Change status
-        ((*cpu)->start)->status = _pcbStatusBlocked;
-
-        if (moveBetweenLists(cpu, blocked)) return _statusMoveCPUBlocked;
-    }
-
-    return _statusNone;
+    return _actionNone;
 }
 
 // Manage the blocked list and return an action status;
-_status manageBlocked(List** ready, List** blocked) {
-    // Decrement wait time
+_action manageBlocked(List** ready, List** blocked) {
+    // iterate for each process in blocked queue.
     PCB *aux = (*blocked)->start;
     while (aux != NULL) {
+        // Decrement wait time
         if (aux->waitTime > 0) aux->waitTime--;
 
         // When the wait ends, moves to ready. If not superior action occurs.
         if (aux->waitTime == 0) {
-            // Change status
-            aux->status = _pcbStatusReady;
+            // Get the process id for the action.
+            lastId = aux->id;
 
-            if (moveElementBetweenLists(blocked, ready, aux->id)) return _statusMoveBlockedReady;
+            // Move pcb to ready.
+            moveElementBetweenLists(blocked, ready, aux->id, _pcbStatusReady);
+            return _actionMoveBlockedReady;
         }
 
+        // Increment aux.
         aux = aux->next;
     }
-    return _statusNone;
+
+    return _actionNone;
 }
 
-_status manageJobs(List** ready, List** blocked, List** jobs, unsigned int* processToLoad) {
+_action manageJobs(List** ready, List** blocked, List** jobs) {
     // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadyLength) {
-        // Change status
-        if ((*jobs)->end != NULL) {
-            ((*jobs)->end)->status =  _pcbStatusReady;
-        }
+    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && (*jobs)->end != NULL) {
 
-        if (moveBetweenLists(jobs, ready)) return _statusMoveJobsReady;
+        // Get the process id for the action.
+        lastId = ((*jobs)->end)->id;
+
+        // Move pcb to ready.
+        moveBetweenLists(jobs, ready, _pcbStatusReady);
+        return _actionMoveJobsReady;
     }
 
     // When have process to load, generate then.  If not superior action occurs.
-    if ((*processToLoad) > 0) {
-        (*processToLoad)--;
-        *jobs = listInsertSorted(*jobs, generatePCB(id++, clockTime));
-        *jobs = listUpdatePriority(*jobs, clockTime); // Update priority of old elements
-        return _statusCreatePCB;
+    if (processToLoad > 0) {
+        processToLoad--;
+
+        // Create the new pcb.
+        PCB *newProcess = generatePCB(id++, clockTime);
+
+        // Get the process id for the action.
+        lastId = newProcess->id;
+
+        // Insert element in jobs.
+        *jobs = listInsertSorted(*jobs, newProcess);
+
+        // Update priority for old elements.
+        *jobs = listUpdatePriority(*jobs, clockTime);
+        return _actionCreatePCB;
     }
 
-    return _statusNone;
+    return _actionNone;
 }
 
 
-_status runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished,  unsigned int* processToLoad) {
-    int action = _statusNone;
+_action runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished) {
+    int action = _actionNone;
     clockPast = 0;
 
-    while (action == _statusNone) {
+    while (action == _actionNone) {
         // Execute the CPU manager.
         action = manageCPU(cpu, ready, blocked, finished);
 
-        // After cpu manage the blocked queue, if not occur any action before.
-        if (action == _statusNone)
+        // After cpu, manage the blocked queue, if doesn't occur any action before.
+        if (action == _actionNone)
             action = manageBlocked(ready, blocked);
 
         // For last, manage the jobs queue.
-        if (action == _statusNone)
-            action = manageJobs(ready, blocked, jobs, processToLoad);
+        if (action == _actionNone)
+            action = manageJobs(ready, blocked, jobs);
 
-        // One process is created every 40 clocks
-        // Update priority of processes every 40 clocks
-        if (clockTime % 40 == 0) {
-            (*processToLoad)++;
+        // One process is created every processDividerMod (40) clocks.
+        if (clockTime % processDividerMod == 0) {
+            processToLoad++;
         }
 
         // Increment clock.
@@ -198,7 +229,6 @@ _status runClock(List** cpu, List** ready, List** blocked, List** jobs, List** f
 }
 
 int main(int argc, const char *argv[]) {
-
     // Lists
     List *jobs = newList();
     List *ready = newList();
@@ -206,31 +236,33 @@ int main(int argc, const char *argv[]) {
     List *blocked = newList();
     List *finished = newList();
 
+    // srand initialization.
     srand((unsigned int)time(NULL));
 
     // Variables
-    _status status;
+    _action action;
+    int shell;
 
     // Start simulation with 10 process to load.
-    unsigned int processInDisk = 10;
+    processToLoad = initialProcessQuantity;
 
     // Initial render.
-    renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockTime, "Simulation started");
-    printf("\nEnter to next step: ");
-    status = (getchar() != 'e') ? true: false;
+    renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockPast, "Simulation started");
+    printf("\nPress Enter to the next step: ");
+    shell = (getchar() != 'e') ? true : false;
     getchar();
 
     // Control Flux
-    while (status) {
-        // Run a clock iteration.
-        status = runClock(&cpu, &ready, &blocked, &jobs, &finished, &processInDisk);
+    while (shell) {
+        // Run a clock iteration while doesn't occur an action.
+        action = runClock(&cpu, &ready, &blocked, &jobs, &finished);
 
-        // Render screen
-        renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(status, lastId));
+        // Render screen.
+        renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(action, lastId));
 
         // Print control information.
         printf("\nEnter to next step: ");
-        status = (getchar() != 'e') ? true: false;
+        shell = (getchar() != 'e') ? true: false;
         getchar();
     }
 
