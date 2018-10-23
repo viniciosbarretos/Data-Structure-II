@@ -170,11 +170,14 @@ List* listRemove(List *list) {
     return list;
 }
 
-int moveElementBetweenLists(List **from, List **to, unsigned int id) {
+int moveElementBetweenLists(List **from, List **to, unsigned int id, unsigned short status) {
     if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
 
-    // Detach the last element.
+    // Detach the element specified by id.
     PCB *element = _detachElement(from, id);
+
+    // Set new status to pbc.
+    element->status = status;
 
     // Insert element into the new list.
     (*to) = listInsertStart(*to, element);
@@ -182,8 +185,8 @@ int moveElementBetweenLists(List **from, List **to, unsigned int id) {
     return 1;
 }
 
-int moveBetweenLists(List **from, List **to) {
+int moveBetweenLists(List **from, List **to, unsigned short status) {
     if ((*from)->end == NULL) return 0;
-    return moveElementBetweenLists(from, to, (*from)->end->id);
+    return moveElementBetweenLists(from, to, (*from)->end->id, status);
 }
 
