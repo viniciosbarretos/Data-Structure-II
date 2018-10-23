@@ -89,24 +89,26 @@ unsigned int listCounter(List* list) {
 // this function rearrange old processes
 // inserting them at start
 List* listUpdatePriority(List* list, unsigned int clock) {
-    PCB *aux = list->start;
-    PCB *prev = NULL;
-    while (aux != NULL) {
-        if ( ((clock - aux->creationTime) >= aux->quantum * 7) && (aux->priority != 2) ) {
-            aux->priority = 2;
-            if(aux != list->end) {
-                if(aux == list->start)
-                    list->start = aux->next;
-                else
-                    prev->next = aux->next;
+    if(list != NULL) {
+        PCB *aux = list->start;
+        PCB *prev = NULL;
+        while (aux != NULL) {
+            if (((clock - aux->creationTime) >= aux->quantum * 6) && (aux->priority != 2)) {
+                aux->priority = 2;
+                if (aux != list->end) {
+                    if (aux == list->start)
+                        list->start = aux->next;
+                    else
+                        prev->next = aux->next;
 
-                aux->next = NULL;
-                list->end->next = aux;
-                list->end = aux;
+                    aux->next = NULL;
+                    list->end->next = aux;
+                    list->end = aux;
+                }
             }
+            prev = aux;
+            aux = aux->next;
         }
-        prev = aux;
-        aux = aux->next;
     }
     return list;
 }
