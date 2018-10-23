@@ -68,7 +68,7 @@ unsigned int executeCPU(PCB* pcb) {
     // Return the cpu status of this process. (0 -> finished; 1 -> running; 2 -> Blocked).
     if (pcb->lineCounter == pcb->interruption) {
         return _processBlocked; // Blocked.
-    } else if (pcb->lineCounter == pcb->quantum) {
+    } else if (pcb->lineCounter >= pcb->quantum) {
         return _processFinished; // Finished.
     } else {
         return _processRunning; // Running.
@@ -103,7 +103,7 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
         remainingQuantum--;
 
         // Check for a exceeded quantum.
-        if (remainingQuantum == 0) {
+        if (remainingQuantum <= 0) {
             // Get the process id for the action.
             lastId = ((*cpu)->start)->id;
 
