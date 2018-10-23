@@ -19,45 +19,19 @@ char* getStatus(int status, int id) {
     char *str = (char*) malloc(sizeof(char) * 64);
 
     switch (status) {
-        case 0:
-            sprintf(str, "Nothing happens");
-            break;
-
-        case 1:
-            sprintf(str, "Process %d dispatched", id);
-            break;
-
-        case 2:
-            sprintf(str, "Process %d interrupted", id);
-            break;
-
-        case 3:
-            sprintf(str, "Process %d I/O wait", id);
-            break;
-
-        case 4:
-            sprintf(str, "Process %d exited", id);
-            break;
-
-        case 5:
-            sprintf(str, "Process %d I/O completed", id);
-            break;
-
-        case 6:
-            sprintf(str, "Process %d admitted", id);
-            break;
-
-        case 7:
-            sprintf(str, "Process %d created", id);
-            break;
-
-        default:
-            sprintf(str, "I do not know");
+        case 0: sprintf(str, "Nothing happens"); break;
+        case 1: sprintf(str, "Process %d dispatched", id); break;
+        case 2: sprintf(str, "Process %d interrupted", id); break;
+        case 3: sprintf(str, "Process %d I/O wait", id); break;
+        case 4: sprintf(str, "Process %d exited", id); break;
+        case 5: sprintf(str, "Process %d I/O completed", id); break;
+        case 6: sprintf(str, "Process %d admitted", id); break;
+        case 7: sprintf(str, "Process %d created", id); break;
+        default: sprintf(str, "I do not know");
     }
 
     return str;
 }
-
 
 void renderElement(PCB *pcb) {
     if (pcb != NULL) {
