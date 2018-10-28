@@ -80,17 +80,20 @@ unsigned int executeCPU(PCB* pcb) {
 _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
 
     // When CPU empty, get next process.
-    if ((*cpu)->start == NULL) {
+    if (isEmpty(cpu)) {
 
-        // Move pcb to cpu.
-        if (moveBetweenLists(ready, cpu, _pcbStatusRunning)) {
+        // If ready isn't empty.
+        if (!isEmpty(ready)) {
+            // Move pcb to cpu.
+            moveBetweenLists(ready, cpu, _pcbStatusRunning);
+
             // Set max quantum.
             remainingQuantum = processorQuantum;
 
             // Get the process id for the action.
             lastId = ((*cpu)->start)->id;
 
-            // Set the start time, when it's first execution.
+            // Set the start time, if it's first execution.
             if (((*cpu)->start)->startProcessingTime == 0) {
                 ((*cpu)->start)->startProcessingTime = clockTime;
             }
@@ -101,16 +104,6 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
         // Execute the next instruction.
         unsigned int status = executeCPU((*cpu)->start);
         remainingQuantum--;
-
-        // Check for a exceeded quantum.
-        if (remainingQuantum == 0) {
-            // Get the process id for the action.
-            lastId = ((*cpu)->start)->id;
-
-            // Move pcb to ready.
-            moveBetweenLists(cpu, ready, _pcbStatusReady);
-            return _actionMoveCPUReady;
-        }
 
         // Manage the process if necessary.
         if (status == _processFinished) { // Process finished.
@@ -134,6 +127,14 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
             // Move pcb to blocked.
             moveBetweenLists(cpu, blocked, _pcbStatusBlocked);
             return _actionMoveCPUBlocked;
+
+        } else if (remainingQuantum == 0) { // Check for a exceeded quantum.
+            // Get the process id for the action.
+            lastId = ((*cpu)->start)->id;
+
+            // Move pcb to ready.
+            moveBetweenLists(cpu, ready, _pcbStatusReady);
+            return _actionMoveCPUReady;
         }
     }
 
@@ -167,7 +168,7 @@ _action manageBlocked(List** ready, List** blocked) {
 
 _action manageJobs(List** ready, List** blocked, List** jobs) {
     // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && (*jobs)->end != NULL) {
+    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && !isEmpty(jobs)) {
 
         // Get the process id for the action.
         lastId = ((*jobs)->end)->id;
