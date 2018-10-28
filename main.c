@@ -24,7 +24,7 @@
 #define processorQuantum 45
 #define maxReadySize 10
 #define initialProcessQuantity 10
-#define processDividerMod 40
+#define generationProcessTime 40
 
 // General definitions.
 #define true 1
@@ -191,8 +191,6 @@ _action manageJobs(List** ready, List** blocked, List** jobs) {
         // Insert element in jobs.
         *jobs = listInsertSorted(*jobs, newProcess);
 
-        // Update priority for old elements.
-        *jobs = listUpdatePriority(*jobs, clockTime);
         return _actionCreatePCB;
     }
 
@@ -217,8 +215,10 @@ _action runClock(List** cpu, List** ready, List** blocked, List** jobs, List** f
             action = manageJobs(ready, blocked, jobs);
 
         // One process is created every processDividerMod (40) clocks.
-        if (clockTime % processDividerMod == 0) {
+        if (clockTime % generationProcessTime == 0) {
             processToLoad++;
+            // Update priority for old elements.
+            *jobs = listUpdatePriority(*jobs, clockTime);
         }
 
         // Increment clock.
