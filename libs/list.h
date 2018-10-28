@@ -17,6 +17,7 @@ List* listUpdatePriority(List *list, unsigned int clock);
 int moveBetweenLists(List **from, List **to, unsigned short status);
 int moveElementBetweenLists(List **from, List **to, unsigned int id, unsigned short status);
 unsigned int listCounter(List* list);
+int isEmpty(List **list);
 
 
 #endif //DATA_STRUCTURE_LIST_H

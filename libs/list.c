@@ -190,3 +190,7 @@ int moveBetweenLists(List **from, List **to, unsigned short status) {
     return moveElementBetweenLists(from, to, (*from)->end->id, status);
 }
 
+int isEmpty(List **list) {
+    return (*list)->start == NULL;
+}
+
