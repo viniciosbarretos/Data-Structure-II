@@ -1,0 +1,23 @@
+- REFATORAR FUNÇÕES PARA EXCLUSÃO DE VERIFICAÇÕES DESNECESSÁRIAS - THIAGO
+
+- TRADUZIR ESCALONADOR DA PCB PARA PONTEIRO DE MEMÓRIA - VINO
+
+- MUDAR PARA LISTA DUPLAMENTE ENCADEADA - DAVID *VERIFICAR AS FUNÇÕES PARA LISTA SIMPLES
+
+- CRIAR GERENCIADOR DE MEMÓRIA (ALOCAÇÃO, MERGE, DESALOCAÇÃO) - THIAGO
+
+
+//Tamanho máximo 128w (Endereçamento de 0 até 127)
+typedef struct Memory {
+  struct PCB *pcb;
+  int start, size;
+  struct Memory *next, *prev; 
+} Memory;
+
+typedef struct Schedule {
+  struct Memory;
+  struct Schedule *next, *prev;
+} Schedule;
+
+
+
