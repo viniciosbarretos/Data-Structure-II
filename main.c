@@ -128,6 +128,7 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
             moveBetweenLists(cpu, blocked, _pcbStatusBlocked);
             return _actionMoveCPUBlocked;
 
+
         } else if (remainingQuantum == 0) { // Check for a exceeded quantum.
             // Get the process id for the action.
             lastId = ((*cpu)->start)->id;
