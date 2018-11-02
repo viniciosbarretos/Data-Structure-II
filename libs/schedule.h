@@ -6,8 +6,9 @@
 #ifndef DATA_STRUCTURE_SCHEDULE_H
 #define DATA_STRUCTURE_SCHEDULE_H
 
-#endif //DATA_STRUCTURE_SCHEDULE_H
 typedef struct Schedule {
     struct Memory *memory;
     struct Schedule *next, *prev;
 } Schedule;
+
+#endif //DATA_STRUCTURE_SCHEDULE_H
