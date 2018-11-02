@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "pcb.h"
 #include "list.h"
+#include "schedule.h"
+#include "memory.h"
 
 char* strCopy(char* out, const char* src) {
     unsigned int i;
@@ -33,123 +35,123 @@ char* getStatus(int status, int id) {
     return str;
 }
 
-void renderElement(PCB *pcb) {
-    if (pcb != NULL) {
-        printf(" ID: [%4d%1s]\n", pcb->id, "");
-        printf("%12sQU: [%4d%1s] ", "", pcb->quantum - pcb->lineCounter, "");
+void renderElement(Schedule *schedule) {
+    if (schedule != NULL) {
+        printf(" ID: [%4d%1s]\n", schedule->memory->pcb->id, "");
+        printf("%12sQU: [%4d%1s] ", "", schedule->memory->pcb->quantum - schedule->memory->pcb->lineCounter, "");
     }
 }
 
-void renderProcessingTime(List *list, int maxElements) {
-    PCB *aux = list->start;
+void renderProcessingTime(ScheduleList *scheduleList, int maxElements) {
+    Schedule *aux = scheduleList->start;
     int count = 0;
 
     printf("ET: ");
     if(maxElements != -1) {
         while (aux != NULL && count < maxElements) {
-            printf("[%4d%1s] ", (aux->endProcessingTime - aux->startProcessingTime) + 1, "");
+            printf("[%4d%1s] ", (aux->memory->pcb->startProcessingTime - aux->memory->pcb->startProcessingTime) + 1, "");
             aux = aux->next;
             count++;
         }
     } else {
         while (aux != NULL) {
-            printf("[%4d%1s] ", (aux->endProcessingTime - aux->startProcessingTime) + 1, "");
+            printf("[%4d%1s] ", (aux->memory->pcb->endProcessingTime - aux->memory->pcb->startProcessingTime) + 1, "");
             aux = aux->next;
         }
     }
 }
 
-void renderId(List *list, int maxElements) {
-    PCB *aux = list->start;
+void renderId(ScheduleList *scheduleList, int maxElements) {
+    Schedule *aux = scheduleList->start;
     int count = 0;
 
     printf("ID: ");
     if(maxElements != -1) {
         while (aux != NULL && count < maxElements) {
-            printf("[%4d%1s] ", aux->id, "");
+            printf("[%4d%1s] ", aux->memory->pcb->id, "");
             aux = aux->next;
             count++;
         }
     } else {
         while (aux != NULL) {
-            printf("[%4d%1s] ", aux->id, "");
+            printf("[%4d%1s] ", aux->memory->pcb->id, "");
             aux = aux->next;
         }
     }
 }
 
-void renderInitialQuantum(List *list, int maxElements) {
-    PCB *aux = list->start;
+void renderInitialQuantum(ScheduleList *scheduleList, int maxElements) {
+    Schedule *aux = scheduleList->start;
     int count = 0;
 
     printf("QU: ");
     if (maxElements != -1) {
         while (aux != NULL && count < maxElements) {
-            printf("[%4d%1s] ", aux->quantum, "");
+            printf("[%4d%1s] ", aux->memory->pcb->quantum, "");
             aux = aux->next;
             count++;
         }
     } else {
         while (aux != NULL) {
-            printf("[%4d%1s] ", aux->quantum, "");
+            printf("[%4d%1s] ", aux->memory->pcb->quantum, "");
             aux = aux->next;
         }
     }
 }
 
-void renderQuantum(List *list, int maxElements) {
-    PCB *aux = list->start;
+void renderQuantum(ScheduleList *scheduleList, int maxElements) {
+    Schedule *aux = scheduleList->start;
     int count = 0;
 
     printf("QU: ");
     if (maxElements != -1) {
         while (aux != NULL && count < maxElements) {
-            printf("[%4d%1s] ", aux->quantum - aux->lineCounter, "");
+            printf("[%4d%1s] ", aux->memory->pcb->quantum - aux->memory->pcb->lineCounter, "");
             aux = aux->next;
             count++;
         }
     } else {
         while (aux != NULL) {
-            printf("[%4d%1s] ", aux->quantum - aux->lineCounter, "");
+            printf("[%4d%1s] ", aux->memory->pcb->quantum - aux->memory->pcb->lineCounter, "");
             aux = aux->next;
         }
     }
 }
 
-void renderPriority(List *list, int maxElements) {
-    PCB *aux = list->start;
+void renderPriority(ScheduleList *scheduleList, int maxElements) {
+    Schedule *aux = scheduleList->start;
     int count = 0;
 
     printf("PR: ");
     if(maxElements != -1) {
         while (aux != NULL && count < maxElements) {
-            printf("[%4d%1s] ", aux->priority, "");
+            printf("[%4d%1s] ", aux->memory->pcb->priority, "");
             aux = aux->next;
             count++;
         }
     } else {
         while (aux != NULL) {
-            printf("[%4d%1s] ", aux->priority, "");
+            printf("[%4d%1s] ", aux->memory->pcb->priority, "");
             aux = aux->next;
         }
     }
 }
 
-void renderList(List *list, int maxElements) {
+void renderScheduleList(ScheduleList *scheduleList, int maxElements) {
 
-    if (list->start == NULL)
-        printf("Empty list!\n");
+    if (scheduleList->start == NULL)
+        printf("Empty scheduleList!\n");
     else {
-        renderId(list, maxElements);
+        renderId(scheduleList, maxElements);
         printf("\n");
-        renderPriority(list, maxElements);
+        renderPriority(scheduleList, maxElements);
         printf("\n");
-        renderQuantum(list, maxElements);
+        renderQuantum(scheduleList, maxElements);
         printf("\n");
     }
 }
 
-void renderListFinished(List *list, int maxElements) {
+void renderListFinished(ScheduleList *list, int maxElements) {
     if (list->start == NULL)
         printf("Empty list!\n");
     else {
@@ -170,18 +172,18 @@ void clearScreen() {
 #endif
 }
 
-void renderScreen(List* jobs, List* ready, List* blocked, List* finished, List* cpu, unsigned int clock,
+void renderScreen(ScheduleList* jobs, ScheduleList* ready, ScheduleList* blocked, ScheduleList* finished, ScheduleList* cpu, unsigned int clock,
                   unsigned int time, char* action) {
     // Clear screen.
     clearScreen();
 
     // Printing lists.
     printf("Jobs:       \n");
-    renderList(jobs, -1);
+    renderScheduleList(jobs, -1);
     printf("\nReady:    \n");
-    renderList(ready, -1);
+    renderScheduleList(ready, -1);
     printf("\nBlocked:  \n");
-    renderList(blocked, -1);
+    renderScheduleList(blocked, -1);
     printf("\nFinished: \n");
     renderListFinished(finished, 12);
 

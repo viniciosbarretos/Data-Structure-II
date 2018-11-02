@@ -2,91 +2,82 @@
 #include <stdlib.h>
 #include "list.h"
 #include "pcb.h"
+#include "schedule.h"
 
 /*
- * List Scheme
+ * ScheduleList Scheme
  * 1 -> 2 -> 3 -> 4
  * Start          End
  */
 
 // Create the list pointers.
-List* newList() {
-    List * list = (List *) malloc(sizeof(PCB));
-    list->start = NULL;
-    list->end = NULL;
-    return list;
+ScheduleList* newList() {
+    ScheduleList * scheduleList = (ScheduleList *) malloc(sizeof(Schedule));
+    scheduleList->start = NULL;
+    scheduleList->end = NULL;
+    return scheduleList;
 }
 
 // Insert an element at start of the list
-List* listInsertStart(List *list, PCB *pcb) {
-    if (list->start == NULL) {
-        pcb->next = NULL;
-        pcb->prev = NULL;           //update
-        list->start = pcb;
-        list->end = pcb;
+ScheduleList* listInsertStart(ScheduleList *scheduleList, Schedule *schedule) {
+    if (scheduleList->start == NULL) {
+        schedule->next = NULL;
+        scheduleList->start = schedule;
+        scheduleList->end = schedule;
     } else {
-        pcb->next = list->start;
-        list->start->prev = pcb;    //update
-        pcb->prev = NULL;           //update
-        list->start = pcb;
+        schedule->next = scheduleList->start;
+        scheduleList->start = schedule;
     }
-    return list;
+    return scheduleList;
 }
 
 // Insert an element at end of the list
-List* listInsertEnd(List *list, PCB *pcb) {
-    if (list->start == NULL) {
-        pcb->next = NULL;
-        pcb->prev = NULL;         //update
-        list->start = pcb;
-        list->end = pcb;
+ScheduleList* listInsertEnd(ScheduleList *scheduleList, Schedule *schedule) {
+    if (scheduleList->start == NULL) {
+        schedule->next = NULL;
+        scheduleList->start = schedule;
+        scheduleList->end = schedule;
     } else {
-        list->end->next = pcb;
-        pcb->prev = list->end;    //update
-        pcb->next = NULL;         //update
-        list->end = pcb;
+        scheduleList->end->next = schedule;
+        scheduleList->end = schedule;
     }
-    return list;
+    return scheduleList;
 }
 
 // Insert process at a list sorted by priority
-List* listInsertSorted(List *list, PCB *pcb) {
+ScheduleList* listInsertSorted(ScheduleList *scheduleList, Schedule *schedule) {
     
-    if (list->start == NULL) {
-        pcb->next = NULL;
-        pcb->prev = NULL;   //update
-        list->start = pcb;
-        list->end = pcb;
+    if (scheduleList->start == NULL) {
+        schedule->next = NULL;
+        scheduleList->start = schedule;
+        scheduleList->end = schedule;
     } else {
-        PCB *aux = list->start;
+        Schedule *prev = NULL;
+        Schedule *aux = scheduleList->start;
 
-        while ( (aux != NULL) && (aux->priority < pcb->priority) )
+        while ( (aux != NULL) && (aux->memory->pcb->priority < schedule->memory->pcb->priority) ) {
+            prev = aux;
             aux = aux->next;
+        }
 
-        if (aux == NULL) {
-                list->end->next = pcb;          //update
-                pcb->prev = list->end;          //update
-                list->end = pcb;                //update
+        if (prev == NULL) {
+            schedule->next = scheduleList->start;
+            scheduleList->start = schedule;
         } else {
-            if (aux->prev == NULL) {            //update
-                pcb->next = list->start;        //update
-                list->start->prev = pcb;        //update
-                list->start = pcb;              //update
-            } else {
-                pcb->prev = aux->prev;          //update
-                aux->prev->next = pcb;          //update
-                pcb->next = aux;                //update
-                aux->prev = pcb;                //update
-            }
+            prev->next = schedule;
+            schedule->next = aux;
+            if (aux == NULL)
+                scheduleList->end = schedule;
+        }
     }
-    return list;
+    return scheduleList;
 }
 
-unsigned int listCounter(List* list) {
+unsigned int listCounter(ScheduleList* scheduleList) {
     unsigned int counter = 0;
 
-    // Counter the elements of the list.
-    PCB *aux = list->start;
+    // Counter the elements of the schedule list.
+    Schedule *aux = scheduleList->start;
     while (aux != NULL) {
         counter++;
         aux = aux->next;
@@ -97,66 +88,64 @@ unsigned int listCounter(List* list) {
 
 // To avoid starvation at jobs list
 // this function rearrange old processes
-// inserting them at start(end)
-List* listUpdatePriority(List* list, unsigned int clock) {
-    if(list != NULL) {
-        PCB *aux = list->start;
-        //PCB *prev = NULL;
+// inserting them at start
+ScheduleList* listUpdatePriority(ScheduleList* scheduleList, unsigned int clock) {
+    if(scheduleList != NULL) {
+        Schedule *aux = scheduleList->start;
+        Schedule *prev = NULL;
         while (aux != NULL) {
-            if (((clock - aux->creationTime) >= aux->quantum * 6) && (aux->priority != 2)) { //(possibly starvation : element with priority 2)
-                aux->priority = 2;
-                if (aux != list->end) {
-                    if (aux == list->start) {
-                        aux->next->prev = NULL;             //update
-                        list->start = aux->next;
-                    }
-                    else {
-                        aux->prev->next = aux->next;        //update
-                        aux->next->prev = aux->prev;        //update
-                    }
+            if (((clock - aux->memory->pcb->creationTime) >=aux->memory->pcb->quantum * 6) && (aux->memory->pcb->priority != 2)) {
+                aux->memory->pcb->priority = 2;
+                if (aux != scheduleList->end) {
+                    if (aux == scheduleList->start)
+                        scheduleList->start = aux->next;
+                    else
+                        prev->next = aux->next;
+
                     aux->next = NULL;
-                    aux->prev = list->end;                  //update
-                    list->end->next = aux;
-                    list->end = aux;
+                    scheduleList->end->next = aux;
+                    scheduleList->end = aux;
                 }
             }
+            prev = aux;
             aux = aux->next;
         }
     }
-    return list;
+    return scheduleList;
 }
 
 // Return an element from a list and re-point the elements.
-PCB* _detachElement(List** list, unsigned int targetId) {
-    // Empty list.
-    if ((*list)->start == NULL) return NULL;
+Schedule* _detachElement(ScheduleList** scheduleList, unsigned int targetId) {
+    // Empty schedule List.
+    if ((*scheduleList)->start == NULL) return NULL;
 
     // Search the element.
-    PCB *aux = (*list)->start;
-    while ( (aux->next != NULL) && (aux->id != targetId) )
+    Schedule *aux = (*scheduleList)->start;
+    Schedule *prev = NULL;
+    while ( (aux->next != NULL) && (aux->memory->pcb->id != targetId) ) {
+        prev = aux;
         aux = aux->next;
+    }
 
     // Detach the element and re-point.
-    if (aux->id == targetId) {
-        // Detach the last only list element.
-        if (aux->prev == NULL && aux->next == NULL) {
-            (*list)->start = NULL;
-            (*list)->end = NULL;
+    if (aux->memory->pcb->id == targetId) {
+        // Detach the last only schedule list element.
+        if (prev == NULL && aux->next == NULL) {
+            (*scheduleList)->start = NULL;
+            (*scheduleList)->end = NULL;
         }
         // Detach the first element.
         else if (prev == NULL) {
-            (*list)->start = (*list)->start->next;
-            (*list)->start->prev = NULL;                    //update
+            (*scheduleList)->start = (*scheduleList)->start->next;
         }
         // Detach an middle element.
         else if (aux->next != NULL) {
-            aux->prev->next = aux->next;                    //update
-            aux->next->prev = aux->prev;                    //update
+            prev->next = aux->next;
         }
         // Detach the last element.
         else {
-            aux->prev->next = NULL;                         //update
-            (*list)->end = aux->prev;
+            prev->next = NULL;
+            (*scheduleList)->end = prev;
         }
 
         // Clean element.
@@ -170,28 +159,28 @@ PCB* _detachElement(List** list, unsigned int targetId) {
     return aux;
 }
 
-PCB* _detachLastElement(List** list) {
-    return _detachElement(list, (*list)->end->id);
+Schedule* _detachLastElement(ScheduleList** scheduleList) {
+    return _detachElement(scheduleList, (*scheduleList)->end->memory->pcb->id);
 }
 
 // Remove the last element from a queue.
-List* listRemove(List *list) {
-    if (list->start == NULL) return list; // Nothing to remove.
+ScheduleList* listRemove(ScheduleList *scheduleList) {
+    if (scheduleList->start == NULL) return scheduleList; // Nothing to remove.
 
     // Get last element and delete.
-    free(_detachLastElement(&list));
+    free(_detachLastElement(&scheduleList));
 
-    return list;
+    return scheduleList;
 }
 
-int moveElementBetweenLists(List **from, List **to, unsigned int id, unsigned short status) {
+int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status) {
     if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
 
     // Detach the element specified by id.
-    PCB *element = _detachElement(from, id);
+    Schedule *element = _detachElement(from, id);
 
     // Set new status to pbc.
-    element->status = status;
+    element->memory->pcb->status = status;
 
     // Insert element into the new list.
     (*to) = listInsertStart(*to, element);
@@ -199,12 +188,12 @@ int moveElementBetweenLists(List **from, List **to, unsigned int id, unsigned sh
     return 1;
 }
 
-int moveBetweenLists(List **from, List **to, unsigned short status) {
+int moveBetweenLists(ScheduleList **from, ScheduleList **to, unsigned short status) {
     if ((*from)->end == NULL) return 0;
-    return moveElementBetweenLists(from, to, (*from)->end->id, status);
+    return moveElementBetweenLists(from, to, (*from)->end->memory->pcb->id, status);
 }
 
-int isEmpty(List **list) {
-    return (*list)->start == NULL;
+int isEmpty(ScheduleList **scheduleList) {
+    return (*scheduleList)->start == NULL;
 }
 

@@ -1,23 +1,23 @@
 #ifndef DATA_STRUCTURE_LIST_H
 #define DATA_STRUCTURE_LIST_H
 
-#include "pcb.h"
+#include "schedule.h"
 
-typedef struct List {
-    struct PCB *start;
-    struct PCB *end;
-} List;
+typedef struct ScheduleList {
+    struct Schedule *start;
+    struct Schedule *end;
+} ScheduleList;
 
-List* newList();
-List* listInsertStart(List *list, PCB *pcb);
-List* listInsertEnd(List *list, PCB *pcb);
-List* listRemove(List *list);
-List* listInsertSorted(List *list, PCB *pcb);
-List* listUpdatePriority(List *list, unsigned int clock);
-int moveBetweenLists(List **from, List **to, unsigned short status);
-int moveElementBetweenLists(List **from, List **to, unsigned int id, unsigned short status);
-unsigned int listCounter(List* list);
-int isEmpty(List **list);
+ScheduleList* newList();
+ScheduleList* listInsertStart(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* listInsertEnd(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* listRemove(ScheduleList *scheduleList);
+ScheduleList* listInsertSorted(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* listUpdatePriority(ScheduleList *scheduleList, unsigned int clock);
+int moveBetweenLists(ScheduleList **from, ScheduleList **to, unsigned short status);
+int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status);
+unsigned int listCounter(ScheduleList* scheduleList);
+int isEmpty(ScheduleList **scheduleList);
 
 
 #endif //DATA_STRUCTURE_LIST_H

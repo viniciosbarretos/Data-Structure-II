@@ -20,7 +20,7 @@ PCB* newPCB() {
     return (PCB*) malloc(sizeof(PCB));
 }
 
-// Create the pointer for a PCB.
+// Create the pointer for a Schedule.
 PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     PCB *pcb = newPCB();
 
@@ -30,8 +30,6 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     pcb->status = _pcbStatusNew;
     pcb->lineCounter = 0;
     pcb->interruption = _interruptionGenerator(pcb->quantum);
-    pcb->next = NULL;
-    pcb->next = NULL;
     pcb->startProcessingTime = 0;
     pcb->endProcessingTime = 0;
     pcb->creationTime = creationTime;

@@ -61,14 +61,14 @@ unsigned int remainingQuantum;
 unsigned int processToLoad;
 unsigned int lastId = 0;
 
-unsigned int executeCPU(PCB* pcb) {
+unsigned int executeCPU(Schedule* schedule) {
     // Increment line counter.
-    pcb->lineCounter++;
+    schedule->memory->pcb->lineCounter++;
 
     // Return the cpu status of this process. (0 -> finished; 1 -> running; 2 -> Blocked).
-    if (pcb->lineCounter == pcb->interruption) {
+    if (schedule->memory->pcb->lineCounter == schedule->memory->pcb->interruption) {
         return _processBlocked; // Blocked.
-    } else if (pcb->lineCounter == pcb->quantum) {
+    } else if (schedule->memory->pcb->lineCounter == schedule->memory->pcb->quantum) {
         return _processFinished; // Finished.
     } else {
         return _processRunning; // Running.
@@ -76,8 +76,8 @@ unsigned int executeCPU(PCB* pcb) {
 }
 
 
-// Manage the PCB iteration around cpu and return an action status;
-_action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
+// Manage the Schedule iteration around cpu and return an action status;
+_action manageCPU(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, ScheduleList** finished) {
 
     // When CPU empty, get next process.
     if (isEmpty(cpu)) {
@@ -91,11 +91,11 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
             remainingQuantum = processorQuantum;
 
             // Get the process id for the action.
-            lastId = ((*cpu)->start)->id;
+            lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Set the start time, if it's first execution.
-            if (((*cpu)->start)->startProcessingTime == 0) {
-                ((*cpu)->start)->startProcessingTime = clockTime;
+            if (((*cpu)->start)->memory->pcb->startProcessingTime == 0) {
+                ((*cpu)->start)->memory->pcb->startProcessingTime = clockTime;
             }
 
             return _actionMoveReadyCPU;
@@ -108,10 +108,10 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
         // Manage the process if necessary.
         if (status == _processFinished) { // Process finished.
             // Set end time.
-            ((*cpu)->start)->endProcessingTime = clockTime;
+            ((*cpu)->start)->memory->pcb->endProcessingTime = clockTime;
 
             // Get the process id for the action.
-            lastId = ((*cpu)->start)->id;
+            lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Move pcb to finished.
             moveBetweenLists(cpu, finished, _pcbStatusDone);
@@ -122,7 +122,7 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
             (*cpu)->start = getWaitTime((*cpu)->start);
 
             // Get the process id for the action.
-            lastId = ((*cpu)->start)->id;
+            lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Move pcb to blocked.
             moveBetweenLists(cpu, blocked, _pcbStatusBlocked);
@@ -130,7 +130,7 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
 
         } else if (remainingQuantum == 0) { // Check for a exceeded quantum.
             // Get the process id for the action.
-            lastId = ((*cpu)->start)->id;
+            lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Move pcb to ready.
             moveBetweenLists(cpu, ready, _pcbStatusReady);
@@ -142,20 +142,20 @@ _action manageCPU(List** cpu, List** ready, List** blocked, List** finished) {
 }
 
 // Manage the blocked list and return an action status;
-_action manageBlocked(List** ready, List** blocked) {
+_action manageBlocked(ScheduleList** ready, ScheduleList** blocked) {
     // iterate for each process in blocked queue.
-    PCB *aux = (*blocked)->start;
+    Schedule *aux = (*blocked)->start;
     while (aux != NULL) {
         // Decrement wait time
-        if (aux->waitTime > 0) aux->waitTime--;
+        if (aux->memory->pcb->waitTime > 0) aux->memory->pcb->waitTime--;
 
         // When the wait ends, moves to ready. If not superior action occurs.
-        if (aux->waitTime == 0) {
+        if (aux->memory->pcb->waitTime == 0) {
             // Get the process id for the action.
-            lastId = aux->id;
+            lastId = aux->memory->pcb->id;
 
             // Move pcb to ready.
-            moveElementBetweenLists(blocked, ready, aux->id, _pcbStatusReady);
+            moveElementBetweenLists(blocked, ready, aux->memory->pcb->id, _pcbStatusReady);
             return _actionMoveBlockedReady;
         }
 
@@ -166,12 +166,12 @@ _action manageBlocked(List** ready, List** blocked) {
     return _actionNone;
 }
 
-_action manageJobs(List** ready, List** blocked, List** jobs) {
+_action manageJobs(ScheduleList** ready, ScheduleList** blocked, ScheduleList** jobs) {
     // When ready list allow new data, move it. If not superior action occurs.
     if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && !isEmpty(jobs)) {
 
         // Get the process id for the action.
-        lastId = ((*jobs)->end)->id;
+        lastId = ((*jobs)->end)->memory->pcb->id;
 
         // Move pcb to ready.
         moveBetweenLists(jobs, ready, _pcbStatusReady);
@@ -183,10 +183,10 @@ _action manageJobs(List** ready, List** blocked, List** jobs) {
         processToLoad--;
 
         // Create the new pcb.
-        PCB *newProcess = generatePCB(id++, clockTime);
+        Schedule *newProcess = generatePCB(id++, clockTime);
 
         // Get the process id for the action.
-        lastId = newProcess->id;
+        lastId = newProcess->memory->pcb->id;
 
         // Insert element in jobs.
         *jobs = listInsertSorted(*jobs, newProcess);
@@ -198,7 +198,7 @@ _action manageJobs(List** ready, List** blocked, List** jobs) {
 }
 
 
-_action runClock(List** cpu, List** ready, List** blocked, List** jobs, List** finished) {
+_action runClock(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, ScheduleList** jobs, ScheduleList** finished) {
     int action = _actionNone;
     clockPast = 0;
 
@@ -231,11 +231,11 @@ _action runClock(List** cpu, List** ready, List** blocked, List** jobs, List** f
 
 int main(int argc, const char *argv[]) {
     // Lists
-    List *jobs = newList();
-    List *ready = newList();
-    List *cpu = newList();
-    List *blocked = newList();
-    List *finished = newList();
+    ScheduleList *jobs = newList();
+    ScheduleList *ready = newList();
+    ScheduleList *cpu = newList();
+    ScheduleList *blocked = newList();
+    ScheduleList *finished = newList();
 
     // srand initialization.
     srand((unsigned int)time(NULL));
