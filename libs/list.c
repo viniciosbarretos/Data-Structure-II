@@ -21,10 +21,13 @@ List* newList() {
 List* listInsertStart(List *list, PCB *pcb) {
     if (list->start == NULL) {
         pcb->next = NULL;
+        pcb->prev = NULL;           //update
         list->start = pcb;
         list->end = pcb;
     } else {
         pcb->next = list->start;
+        list->start->prev = pcb;    //update
+        pcb->prev = NULL;           //update
         list->start = pcb;
     }
     return list;
@@ -34,10 +37,13 @@ List* listInsertStart(List *list, PCB *pcb) {
 List* listInsertEnd(List *list, PCB *pcb) {
     if (list->start == NULL) {
         pcb->next = NULL;
+        pcb->prev = NULL;         //update
         list->start = pcb;
         list->end = pcb;
     } else {
         list->end->next = pcb;
+        pcb->prev = list->end;    //update
+        pcb->next = NULL;         //update
         list->end = pcb;
     }
     return list;
@@ -48,26 +54,30 @@ List* listInsertSorted(List *list, PCB *pcb) {
     
     if (list->start == NULL) {
         pcb->next = NULL;
+        pcb->prev = NULL;   //update
         list->start = pcb;
         list->end = pcb;
     } else {
-        PCB *prev = NULL;
         PCB *aux = list->start;
 
-        while ( (aux != NULL) && (aux->priority < pcb->priority) ) {
-            prev = aux;
+        while ( (aux != NULL) && (aux->priority < pcb->priority) )
             aux = aux->next;
-        }
 
-        if (prev == NULL) {
-            pcb->next = list->start;
-            list->start = pcb;
+        if (aux == NULL) {
+                list->end->next = pcb;          //update
+                pcb->prev = list->end;          //update
+                list->end = pcb;                //update
         } else {
-            prev->next = pcb;
-            pcb->next = aux;
-            if (aux == NULL)
-                list->end = pcb;
-        }
+            if (aux->prev == NULL) {            //update
+                pcb->next = list->start;        //update
+                list->start->prev = pcb;        //update
+                list->start = pcb;              //update
+            } else {
+                pcb->prev = aux->prev;          //update
+                aux->prev->next = pcb;          //update
+                pcb->next = aux;                //update
+                aux->prev = pcb;                //update
+            }
     }
     return list;
 }
@@ -87,26 +97,29 @@ unsigned int listCounter(List* list) {
 
 // To avoid starvation at jobs list
 // this function rearrange old processes
-// inserting them at start
+// inserting them at start(end)
 List* listUpdatePriority(List* list, unsigned int clock) {
     if(list != NULL) {
         PCB *aux = list->start;
-        PCB *prev = NULL;
+        //PCB *prev = NULL;
         while (aux != NULL) {
-            if (((clock - aux->creationTime) >= aux->quantum * 6) && (aux->priority != 2)) {
+            if (((clock - aux->creationTime) >= aux->quantum * 6) && (aux->priority != 2)) { //(possibly starvation : element with priority 2)
                 aux->priority = 2;
                 if (aux != list->end) {
-                    if (aux == list->start)
+                    if (aux == list->start) {
+                        aux->next->prev = NULL;             //update
                         list->start = aux->next;
-                    else
-                        prev->next = aux->next;
-
+                    }
+                    else {
+                        aux->prev->next = aux->next;        //update
+                        aux->next->prev = aux->prev;        //update
+                    }
                     aux->next = NULL;
+                    aux->prev = list->end;                  //update
                     list->end->next = aux;
                     list->end = aux;
                 }
             }
-            prev = aux;
             aux = aux->next;
         }
     }
@@ -120,31 +133,30 @@ PCB* _detachElement(List** list, unsigned int targetId) {
 
     // Search the element.
     PCB *aux = (*list)->start;
-    PCB *prev = NULL;
-    while ( (aux->next != NULL) && (aux->id != targetId) ) {
-        prev = aux;
+    while ( (aux->next != NULL) && (aux->id != targetId) )
         aux = aux->next;
-    }
 
     // Detach the element and re-point.
     if (aux->id == targetId) {
         // Detach the last only list element.
-        if (prev == NULL && aux->next == NULL) {
+        if (aux->prev == NULL && aux->next == NULL) {
             (*list)->start = NULL;
             (*list)->end = NULL;
         }
         // Detach the first element.
         else if (prev == NULL) {
             (*list)->start = (*list)->start->next;
+            (*list)->start->prev = NULL;                    //update
         }
         // Detach an middle element.
         else if (aux->next != NULL) {
-            prev->next = aux->next;
+            aux->prev->next = aux->next;                    //update
+            aux->next->prev = aux->prev;                    //update
         }
         // Detach the last element.
         else {
-            prev->next = NULL;
-            (*list)->end = prev;
+            aux->prev->next = NULL;                         //update
+            (*list)->end = aux->prev;
         }
 
         // Clean element.
