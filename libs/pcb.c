@@ -31,6 +31,7 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     pcb->lineCounter = 0;
     pcb->interruption = _interruptionGenerator(pcb->quantum);
     pcb->next = NULL;
+    pcb->next = NULL;
     pcb->startProcessingTime = 0;
     pcb->endProcessingTime = 0;
     pcb->creationTime = creationTime;

@@ -8,7 +8,7 @@
 #define _pcbStatusDone     4
 
 typedef struct PCB {
-    struct PCB *next;
+    struct PCB *next, *prev;
     unsigned int id;
     unsigned int quantum;
     unsigned int lineCounter;
