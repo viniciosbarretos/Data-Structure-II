@@ -183,10 +183,10 @@ _action manageJobs(ScheduleList** ready, ScheduleList** blocked, ScheduleList** 
         processToLoad--;
 
         // Create the new pcb.
-        Schedule *newProcess = generatePCB(id++, clockTime);
+        PCB *newProcess = generatePCB(id++, clockTime);
 
         // Get the process id for the action.
-        lastId = newProcess->memory->pcb->id;
+        lastId = newProcess->id;
 
         // Insert element in jobs.
         *jobs = listInsertSorted(*jobs, newProcess);

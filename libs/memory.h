@@ -10,6 +10,11 @@ typedef struct Memory {
     struct PCB *pcb;
     int start, size;
     struct Memory *next, *prev;
-}Memory;
+} Memory;
+
+typedef struct MemoryList {
+    struct Memory *start;
+    struct Memory *end;
+} MemoryList;
 
 #endif //DATA_STRUCTURE_MEMORY_H

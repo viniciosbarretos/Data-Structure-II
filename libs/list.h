@@ -3,11 +3,6 @@
 
 #include "schedule.h"
 
-typedef struct ScheduleList {
-    struct Schedule *start;
-    struct Schedule *end;
-} ScheduleList;
-
 ScheduleList* newList();
 ScheduleList* listInsertStart(ScheduleList *scheduleList, Schedule *schedule);
 ScheduleList* listInsertEnd(ScheduleList *scheduleList, Schedule *schedule);

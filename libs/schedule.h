@@ -11,4 +11,9 @@ typedef struct Schedule {
     struct Schedule *next, *prev;
 } Schedule;
 
+typedef struct ScheduleList {
+    struct Schedule *start;
+    struct Schedule *end;
+} ScheduleList;
+
 #endif //DATA_STRUCTURE_SCHEDULE_H
