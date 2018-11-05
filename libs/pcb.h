@@ -13,6 +13,7 @@ typedef struct PCB {
     unsigned int lineCounter;
     unsigned short int priority;
     unsigned short int status;
+    unsigned int size;
     unsigned int interruption;
     unsigned int startProcessingTime;
     unsigned int endProcessingTime;
@@ -21,6 +22,6 @@ typedef struct PCB {
 } PCB;
 
 PCB* generatePCB(unsigned int id, unsigned int creationTime);
-PCB* getWaitTime(PCB* pcb);
+unsigned int getWaitTime();
 
 #endif //DATA_STRUCTURE_PCB_H

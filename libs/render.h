@@ -4,12 +4,13 @@
 #include "pcb.h"
 #include "schedule.h"
 #include "memory.h"
-#include "list.h"
+#include "storage.h"
 
 char* getStatus(int status, int id);
 void renderElement(Schedule *schedule);
 void renderScheduleList(ScheduleList *list);
-void renderScreen(ScheduleList* jobs, ScheduleList* ready, ScheduleList* blocked, ScheduleList* finished, ScheduleList* cpu, unsigned int clock,
+void renderScreen(MemoryList *memoryList, StorageList* jobs, ScheduleList* ready, ScheduleList* blocked, StorageList* finished, ScheduleList* cpu, unsigned int clock,
                   unsigned int time, char* action);
+void renderMemoryList(MemoryList *list);
 
 #endif //DATA_STRUCTURE_RENDER_H

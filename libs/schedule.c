@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "schedule.h"
-#include "pcb.h"
 
 /*
  * ScheduleList Scheme
@@ -15,6 +13,12 @@ ScheduleList *newList() {
     scheduleList->start = NULL;
     scheduleList->end = NULL;
     return scheduleList;
+}
+
+Schedule *newSchedule(Memory *mem) {
+    Schedule *schedule = (Schedule *) malloc(sizeof(Schedule));
+    schedule->memory = mem;
+    return schedule;
 }
 
 // Insert an element at the start of the list
@@ -136,41 +140,42 @@ ScheduleList *listUpdatePriority(ScheduleList *scheduleList, unsigned int clock)
 }
 
 // Return an element from a list and re-point the elements.
-Schedule *_detachElement(ScheduleList **scheduleList, unsigned int targetId) {
+Schedule *detachElement(ScheduleList **scheduleList, unsigned int targetId) {
     // Empty schedule List.
-    if ((*scheduleList)->start == NULL) return NULL;
+    if (!(*scheduleList)->start) return NULL;
 
     // Search the element.
     Schedule *aux = (*scheduleList)->start;
-    while ((aux->next != NULL) && (aux->memory->pcb->id != targetId))
+    while ((aux->next) && (aux->memory->pcb->id != targetId)) {
         aux = aux->next;
-
+    }
 
     // Detach the element and re-point.
     if (aux->memory->pcb->id == targetId) {
         // Detach the last only schedule list element.
-        if (aux->prev == NULL && aux->next == NULL) {
+        if (!aux->prev && !aux->next) {
             (*scheduleList)->start = NULL;
             (*scheduleList)->end = NULL;
         }
             // Detach the first element.
-        else if (aux->prev == NULL) {
+        else if (!aux->prev) {
             (*scheduleList)->start = (*scheduleList)->start->next;
             (*scheduleList)->start->prev = NULL;
         }
             // Detach an middle element.
-        else if (aux->next != NULL) {
+        else if (aux->next) {
             aux->prev->next = aux->next;
             aux->next->prev = aux->prev;
         }
             // Detach the last element.
         else {
-            aux->prev->next = NULL;
             (*scheduleList)->end = aux->prev;
+            (*scheduleList)->end->next = NULL;
         }
 
         // Clean element.
         aux->next = NULL;
+        aux->prev = NULL;
     }
         // Element not found.
     else {
@@ -181,12 +186,12 @@ Schedule *_detachElement(ScheduleList **scheduleList, unsigned int targetId) {
 }
 
 Schedule *_detachLastElement(ScheduleList **scheduleList) {
-    return _detachElement(scheduleList, (*scheduleList)->end->memory->pcb->id);
+    return detachElement(scheduleList, (*scheduleList)->end->memory->pcb->id);
 }
 
 // Remove the last element from a queue.
 ScheduleList *listRemove(ScheduleList *scheduleList) {
-    if (scheduleList->start == NULL) return scheduleList; // Nothing to remove.
+    if (!scheduleList->start) return scheduleList; // Nothing to remove.
 
     // Get last element and delete.
     free(_detachLastElement(&scheduleList));
@@ -195,10 +200,11 @@ ScheduleList *listRemove(ScheduleList *scheduleList) {
 }
 
 int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status) {
-    if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
+//    if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
 
     // Detach the element specified by id.
-    Schedule *element = _detachElement(from, id);
+    Schedule *element = detachElement(from, id);
+//    if (!element) return -1;
 
     // Set new status to pbc.
     element->memory->pcb->status = status;
@@ -206,11 +212,12 @@ int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int
     // Insert element into the new list.
     (*to) = listInsertStart(*to, element);
 
-    return 1;
+    return id;
 }
 
 int moveBetweenLists(ScheduleList **from, ScheduleList **to, unsigned short status) {
-    if ((*from)->end == NULL) return 0;
+//    if ((*from)->end == NULL) return -1;
+
     return moveElementBetweenLists(from, to, (*from)->end->memory->pcb->id, status);
 }
 

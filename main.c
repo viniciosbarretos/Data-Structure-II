@@ -50,7 +50,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "libs/list.h"
+#include "libs/storage.h"
 #include "libs/pcb.h"
 #include "libs/render.h"
 
@@ -59,16 +59,16 @@ unsigned int clockTime = 0;
 unsigned int clockPast = 0;
 unsigned int remainingQuantum;
 unsigned int processToLoad;
-unsigned int lastId = 0;
+int lastId = 0;
 
-unsigned int executeCPU(Schedule* schedule) {
+unsigned int executeCPU(PCB* pcb) {
     // Increment line counter.
-    schedule->memory->pcb->lineCounter++;
+    pcb->lineCounter++;
 
     // Return the cpu status of this process. (0 -> finished; 1 -> running; 2 -> Blocked).
-    if (schedule->memory->pcb->lineCounter == schedule->memory->pcb->interruption) {
+    if (pcb->lineCounter == pcb->interruption) {
         return _processBlocked; // Blocked.
-    } else if (schedule->memory->pcb->lineCounter == schedule->memory->pcb->quantum) {
+    } else if (pcb->lineCounter == pcb->quantum) {
         return _processFinished; // Finished.
     } else {
         return _processRunning; // Running.
@@ -77,7 +77,7 @@ unsigned int executeCPU(Schedule* schedule) {
 
 
 // Manage the Schedule iteration around cpu and return an action status;
-_action manageCPU(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, ScheduleList** finished) {
+_action manageCPU(MemoryList **memory, ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, StorageList** finished) {
 
     // When CPU empty, get next process.
     if (isEmpty(cpu)) {
@@ -102,7 +102,7 @@ _action manageCPU(ScheduleList** cpu, ScheduleList** ready, ScheduleList** block
         }
     } else {
         // Execute the next instruction.
-        unsigned int status = executeCPU((*cpu)->start);
+        unsigned int status = executeCPU((*cpu)->start->memory->pcb);
         remainingQuantum--;
 
         // Manage the process if necessary.
@@ -114,12 +114,13 @@ _action manageCPU(ScheduleList** cpu, ScheduleList** ready, ScheduleList** block
             lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Move pcb to finished.
-            moveBetweenLists(cpu, finished, _pcbStatusDone);
+            moveFromScheduleToStorage(memory, cpu, finished, lastId, _pcbStatusDone);
+//            moveBetweenLists(cpu, finished, _pcbStatusDone);
             return _actionMoveCPUFinish;
 
         } else if (status == _processBlocked) { // Process blocked.
             // Get wait time for the pcb i/o interruption and move to blocked.
-            (*cpu)->start = getWaitTime((*cpu)->start);
+            (*cpu)->start->memory->pcb->waitTime = getWaitTime();
 
             // Get the process id for the action.
             lastId = ((*cpu)->start)->memory->pcb->id;
@@ -166,16 +167,19 @@ _action manageBlocked(ScheduleList** ready, ScheduleList** blocked) {
     return _actionNone;
 }
 
-_action manageJobs(ScheduleList** ready, ScheduleList** blocked, ScheduleList** jobs) {
+_action manageJobs(MemoryList **memory, ScheduleList** ready, ScheduleList** blocked, StorageList** jobs) {
     // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && !isEmpty(jobs)) {
+    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && (*jobs)->start) {
 
         // Get the process id for the action.
-        lastId = ((*jobs)->end)->memory->pcb->id;
+        lastId = ((*jobs)->end)->pcb->id;
 
         // Move pcb to ready.
-        moveBetweenLists(jobs, ready, _pcbStatusReady);
-        return _actionMoveJobsReady;
+        // removendo da fila sem ter memória disponível faz com que o processo suma.
+        if (moveFromStorageToSchedule(memory, jobs, ready, (*jobs)->end->pcb->id, _pcbStatusReady) != -1) {
+//        moveBetweenLists(jobs, ready, _pcbStatusReady);
+            return _actionMoveJobsReady;
+        }
     }
 
     // When have process to load, generate then.  If not superior action occurs.
@@ -189,7 +193,7 @@ _action manageJobs(ScheduleList** ready, ScheduleList** blocked, ScheduleList** 
         lastId = newProcess->id;
 
         // Insert element in jobs.
-        *jobs = listInsertSorted(*jobs, newProcess);
+        *jobs = storageListInsertStart(*jobs, newStorage(newProcess));
 
         return _actionCreatePCB;
     }
@@ -198,13 +202,13 @@ _action manageJobs(ScheduleList** ready, ScheduleList** blocked, ScheduleList** 
 }
 
 
-_action runClock(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, ScheduleList** jobs, ScheduleList** finished) {
+_action runClock(MemoryList **memory,ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocked, StorageList** jobs, StorageList** finished) {
     int action = _actionNone;
     clockPast = 0;
 
     while (action == _actionNone) {
         // Execute the CPU manager.
-        action = manageCPU(cpu, ready, blocked, finished);
+        action = manageCPU(memory, cpu, ready, blocked, finished);
 
         // After cpu, manage the blocked queue, if doesn't occur any action before.
         if (action == _actionNone)
@@ -212,13 +216,13 @@ _action runClock(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocke
 
         // For last, manage the jobs queue.
         if (action == _actionNone)
-            action = manageJobs(ready, blocked, jobs);
+            action = manageJobs(memory, ready, blocked, jobs);
 
         // One process is created every processDividerMod (40) clocks.
         if (clockTime % generationProcessTime == 0) {
             processToLoad++;
             // Update priority for old elements.
-            *jobs = listUpdatePriority(*jobs, clockTime);
+//            *jobs = listUpdatePriority(*jobs, clockTime);
         }
 
         // Increment clock.
@@ -230,15 +234,20 @@ _action runClock(ScheduleList** cpu, ScheduleList** ready, ScheduleList** blocke
 }
 
 int main(int argc, const char *argv[]) {
-    // Lists
-    ScheduleList *jobs = newList();
+    // Memory
+    MemoryList *memory = newMemory(128);
+
+    // Schedule
     ScheduleList *ready = newList();
     ScheduleList *cpu = newList();
     ScheduleList *blocked = newList();
-    ScheduleList *finished = newList();
+
+    // Aux Lists.
+    StorageList *jobs = newStorageList();
+    StorageList *finished = newStorageList();
 
     // srand initialization.
-    srand((unsigned int)time(NULL));
+    srand((unsigned int) time(NULL));
 
     // Variables
     _action action;
@@ -248,7 +257,7 @@ int main(int argc, const char *argv[]) {
     processToLoad = initialProcessQuantity;
 
     // Initial render.
-    renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockPast, "Simulation started");
+    renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, "Simulation started");
     printf("\nPress Enter to the next step: ");
     shell = (getchar() != 'e') ? true : false;
     getchar();
@@ -256,10 +265,10 @@ int main(int argc, const char *argv[]) {
     // Control Flux
     while (shell) {
         // Run a clock iteration while doesn't occur an action.
-        action = runClock(&cpu, &ready, &blocked, &jobs, &finished);
+        action = runClock(&memory, &cpu, &ready, &blocked, &jobs, &finished);
 
         // Render screen.
-        renderScreen(jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(action, lastId));
+        renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(action, lastId));
 
         // Print control information.
         printf("\nEnter to next step: ");

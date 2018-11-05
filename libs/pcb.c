@@ -28,6 +28,7 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     pcb->quantum = (unsigned) getRandom(1, 90);
     pcb->priority = (unsigned short) getRandom(0, 3);
     pcb->status = _pcbStatusNew;
+    pcb->size = (unsigned) getRandom(8, 64);
     pcb->lineCounter = 0;
     pcb->interruption = _interruptionGenerator(pcb->quantum);
     pcb->startProcessingTime = 0;
@@ -38,7 +39,6 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
     return pcb;
 }
 
-PCB* getWaitTime(PCB* pcb) {
-    pcb->waitTime = (unsigned) getRandom(10, 200);
-    return pcb;
+unsigned int getWaitTime() {
+    return (unsigned) getRandom(10, 200);
 }
