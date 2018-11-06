@@ -17,16 +17,16 @@ typedef struct ScheduleList {
 } ScheduleList;
 
 Schedule *newSchedule(Memory *mem);
-ScheduleList* newList();
-ScheduleList* listInsertStart(ScheduleList *scheduleList, Schedule *schedule);
-ScheduleList* listInsertEnd(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* newScheduleList();
+ScheduleList* scheduleListInsertStart(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* scheduleListInsertEnd(ScheduleList *scheduleList, Schedule *schedule);
 ScheduleList* listRemove(ScheduleList *scheduleList);
-ScheduleList* listInsertSorted(ScheduleList *scheduleList, Schedule *schedule);
-ScheduleList* listUpdatePriority(ScheduleList *scheduleList, unsigned int clock);
-Schedule *detachElement(ScheduleList **scheduleList, unsigned int targetId);
-int moveBetweenLists(ScheduleList **from, ScheduleList **to, unsigned short status);
-int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status);
-unsigned int listCounter(ScheduleList* scheduleList);
+ScheduleList* scheduleListInsertSorted(ScheduleList *scheduleList, Schedule *schedule);
+ScheduleList* scheduleListUpdatePriority(ScheduleList *scheduleList, unsigned int clock);
+Schedule *detachScheduleElement(ScheduleList **scheduleList, unsigned int targetId);
+int moveBetweenSchedules(ScheduleList **from, ScheduleList **to, unsigned short status);
+int moveElementBetweenSchedules(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status);
+unsigned int scheduleListCounter(ScheduleList *scheduleList);
 int isEmpty(ScheduleList **scheduleList);
 
 #endif //DATA_STRUCTURE_SCHEDULE_H

@@ -85,13 +85,10 @@ _action manageCPU(MemoryList **memory, ScheduleList** cpu, ScheduleList** ready,
         // If ready isn't empty.
         if (!isEmpty(ready)) {
             // Move pcb to cpu.
-            moveBetweenLists(ready, cpu, _pcbStatusRunning);
+            lastId = moveBetweenSchedules(ready, cpu, _pcbStatusRunning);
 
             // Set max quantum.
             remainingQuantum = processorQuantum;
-
-            // Get the process id for the action.
-            lastId = ((*cpu)->start)->memory->pcb->id;
 
             // Set the start time, if it's first execution.
             if (((*cpu)->start)->memory->pcb->startProcessingTime == 0) {
@@ -110,31 +107,21 @@ _action manageCPU(MemoryList **memory, ScheduleList** cpu, ScheduleList** ready,
             // Set end time.
             ((*cpu)->start)->memory->pcb->endProcessingTime = clockTime;
 
-            // Get the process id for the action.
-            lastId = ((*cpu)->start)->memory->pcb->id;
-
             // Move pcb to finished.
-            moveFromScheduleToStorage(memory, cpu, finished, lastId, _pcbStatusDone);
-//            moveBetweenLists(cpu, finished, _pcbStatusDone);
+            lastId = moveFromScheduleToStorage(memory, cpu, finished, ((*cpu)->start)->memory->pcb->id, _pcbStatusDone);
             return _actionMoveCPUFinish;
 
         } else if (status == _processBlocked) { // Process blocked.
             // Get wait time for the pcb i/o interruption and move to blocked.
             (*cpu)->start->memory->pcb->waitTime = getWaitTime();
 
-            // Get the process id for the action.
-            lastId = ((*cpu)->start)->memory->pcb->id;
-
             // Move pcb to blocked.
-            moveBetweenLists(cpu, blocked, _pcbStatusBlocked);
+            lastId = moveBetweenSchedules(cpu, blocked, _pcbStatusBlocked);
             return _actionMoveCPUBlocked;
 
         } else if (remainingQuantum == 0) { // Check for a exceeded quantum.
-            // Get the process id for the action.
-            lastId = ((*cpu)->start)->memory->pcb->id;
-
             // Move pcb to ready.
-            moveBetweenLists(cpu, ready, _pcbStatusReady);
+            lastId = moveBetweenSchedules(cpu, ready, _pcbStatusReady);
             return _actionMoveCPUReady;
         }
     }
@@ -152,11 +139,8 @@ _action manageBlocked(ScheduleList** ready, ScheduleList** blocked) {
 
         // When the wait ends, moves to ready. If not superior action occurs.
         if (aux->memory->pcb->waitTime == 0) {
-            // Get the process id for the action.
-            lastId = aux->memory->pcb->id;
-
             // Move pcb to ready.
-            moveElementBetweenLists(blocked, ready, aux->memory->pcb->id, _pcbStatusReady);
+            lastId = moveElementBetweenSchedules(blocked, ready, aux->memory->pcb->id, _pcbStatusReady);
             return _actionMoveBlockedReady;
         }
 
@@ -168,18 +152,14 @@ _action manageBlocked(ScheduleList** ready, ScheduleList** blocked) {
 }
 
 _action manageJobs(MemoryList **memory, ScheduleList** ready, ScheduleList** blocked, StorageList** jobs) {
-    // When ready list allow new data, move it. If not superior action occurs.
-    if ( listCounter((*ready)) + listCounter((*blocked)) < maxReadySize && (*jobs)->start) {
+    // When jobs is not NULL and memory allows new data, move it.
+    if ( (*jobs)->end && getBestFitNode(*memory, (*jobs)->end->pcb->size) ) {
 
-        // Get the process id for the action.
-        lastId = ((*jobs)->end)->pcb->id;
+        // Moving process to ready.
+        lastId = moveFromStorageToSchedule(memory, jobs, ready, (*jobs)->end->pcb->id, _pcbStatusReady);
 
-        // Move pcb to ready.
-        // removendo da fila sem ter memória disponível faz com que o processo suma.
-        if (moveFromStorageToSchedule(memory, jobs, ready, (*jobs)->end->pcb->id, _pcbStatusReady) != -1) {
-//        moveBetweenLists(jobs, ready, _pcbStatusReady);
-            return _actionMoveJobsReady;
-        }
+        // Returning the action.
+        return _actionMoveJobsReady;
     }
 
     // When have process to load, generate then.  If not superior action occurs.
@@ -193,7 +173,7 @@ _action manageJobs(MemoryList **memory, ScheduleList** ready, ScheduleList** blo
         lastId = newProcess->id;
 
         // Insert element in jobs.
-        *jobs = storageListInsertStart(*jobs, newStorage(newProcess));
+        *jobs = storageListInsertSorted(*jobs, newStorage(newProcess));
 
         return _actionCreatePCB;
     }
@@ -221,8 +201,8 @@ _action runClock(MemoryList **memory,ScheduleList** cpu, ScheduleList** ready, S
         // One process is created every processDividerMod (40) clocks.
         if (clockTime % generationProcessTime == 0) {
             processToLoad++;
-            // Update priority for old elements.
-//            *jobs = listUpdatePriority(*jobs, clockTime);
+            // Update priority for old elements based on oldnes.
+            *jobs = storageListUpdatePriority(*jobs, clockTime);
         }
 
         // Increment clock.
@@ -238,9 +218,9 @@ int main(int argc, const char *argv[]) {
     MemoryList *memory = newMemory(128);
 
     // Schedule
-    ScheduleList *ready = newList();
-    ScheduleList *cpu = newList();
-    ScheduleList *blocked = newList();
+    ScheduleList *ready = newScheduleList();
+    ScheduleList *cpu = newScheduleList();
+    ScheduleList *blocked = newScheduleList();
 
     // Aux Lists.
     StorageList *jobs = newStorageList();

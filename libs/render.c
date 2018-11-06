@@ -76,12 +76,12 @@ void renderQuantum(ScheduleList *scheduleList, int maxElements) {
     }
 }
 
-void renderPriority(ScheduleList *scheduleList, int maxElements) {
-    Schedule *aux = scheduleList->start;
+void renderMemorySize(StorageList *storageList, int maxElements) {
+    Storage *aux = storageList->start;
 
-    printf("PR: ");
+    printf("SZ: ");
     while (aux && maxElements) {
-        printf("[%4d ] ", aux->memory->pcb->priority);
+        printf("[%4d ] ", aux->pcb->size);
         aux = aux->next;
         maxElements--;
     }
@@ -142,8 +142,6 @@ void renderScheduleList(ScheduleList *scheduleList, int maxElements) {
     else {
         renderId(scheduleList, maxElements);
         printf("\n");
-        renderPriority(scheduleList, maxElements);
-        printf("\n");
         renderQuantum(scheduleList, maxElements);
         printf("\n");
     }
@@ -158,6 +156,8 @@ void renderListJobs(StorageList *list, int maxElements) {
         renderStoragePriority(list, maxElements);
         printf("\n");
         renderInitialQuantum(list, maxElements);
+        printf("\n");
+        renderMemorySize(list, maxElements);
         printf("\n");
     }
 }
@@ -209,7 +209,7 @@ void renderScreen(MemoryList *memoryList, StorageList* jobs, ScheduleList* ready
     renderMemoryList(memoryList);
 
     // Printing lists.
-    printf("Jobs:       \n");
+    printf("\nJobs:       \n");
     renderListJobs(jobs, -1);
     printf("\nReady:    \n");
     renderScheduleList(ready, -1);

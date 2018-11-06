@@ -8,7 +8,7 @@
  */
 
 // Create the list pointers.
-ScheduleList *newList() {
+ScheduleList *newScheduleList() {
     ScheduleList *scheduleList = (ScheduleList *) malloc(sizeof(ScheduleList));
     scheduleList->start = NULL;
     scheduleList->end = NULL;
@@ -22,7 +22,7 @@ Schedule *newSchedule(Memory *mem) {
 }
 
 // Insert an element at the start of the list
-ScheduleList *listInsertStart(ScheduleList *scheduleList, Schedule *schedule) {
+ScheduleList *scheduleListInsertStart(ScheduleList *scheduleList, Schedule *schedule) {
     if (scheduleList->start == NULL) {
         schedule->next = NULL;
         schedule->prev = NULL;
@@ -38,7 +38,7 @@ ScheduleList *listInsertStart(ScheduleList *scheduleList, Schedule *schedule) {
 }
 
 // Insert an element at the end of the list
-ScheduleList *listInsertEnd(ScheduleList *scheduleList, Schedule *schedule) {
+ScheduleList *scheduleListInsertEnd(ScheduleList *scheduleList, Schedule *schedule) {
     if (scheduleList->start == NULL) {
         schedule->next = NULL;
         schedule->prev = NULL;
@@ -54,7 +54,7 @@ ScheduleList *listInsertEnd(ScheduleList *scheduleList, Schedule *schedule) {
 }
 
 // Insert process at a list sorted by priority
-ScheduleList *listInsertSorted(ScheduleList *scheduleList, Schedule *schedule) {
+ScheduleList *scheduleListInsertSorted(ScheduleList *scheduleList, Schedule *schedule) {
 
     // Check if the list has no elements.
     if (scheduleList->start == NULL) {
@@ -93,7 +93,7 @@ ScheduleList *listInsertSorted(ScheduleList *scheduleList, Schedule *schedule) {
     return scheduleList;
 }
 
-unsigned int listCounter(ScheduleList *scheduleList) {
+unsigned int scheduleListCounter(ScheduleList *scheduleList) {
     unsigned int counter = 0;
 
     // Counter the elements of the schedule list.
@@ -109,7 +109,7 @@ unsigned int listCounter(ScheduleList *scheduleList) {
 // To avoid starvation at jobs list
 // this function rearrange old processes
 // inserting them at start(end)
-ScheduleList *listUpdatePriority(ScheduleList *scheduleList, unsigned int clock) {
+ScheduleList *scheduleListUpdatePriority(ScheduleList *scheduleList, unsigned int clock) {
     if (scheduleList != NULL) {
         Schedule *aux = scheduleList->start;
         Schedule *prev = NULL;
@@ -140,7 +140,7 @@ ScheduleList *listUpdatePriority(ScheduleList *scheduleList, unsigned int clock)
 }
 
 // Return an element from a list and re-point the elements.
-Schedule *detachElement(ScheduleList **scheduleList, unsigned int targetId) {
+Schedule *detachScheduleElement(ScheduleList **scheduleList, unsigned int targetId) {
     // Empty schedule List.
     if (!(*scheduleList)->start) return NULL;
 
@@ -185,8 +185,8 @@ Schedule *detachElement(ScheduleList **scheduleList, unsigned int targetId) {
     return aux;
 }
 
-Schedule *_detachLastElement(ScheduleList **scheduleList) {
-    return detachElement(scheduleList, (*scheduleList)->end->memory->pcb->id);
+Schedule *_detachLastScheduleElement(ScheduleList **scheduleList) {
+    return detachScheduleElement(scheduleList, (*scheduleList)->end->memory->pcb->id);
 }
 
 // Remove the last element from a queue.
@@ -194,31 +194,26 @@ ScheduleList *listRemove(ScheduleList *scheduleList) {
     if (!scheduleList->start) return scheduleList; // Nothing to remove.
 
     // Get last element and delete.
-    free(_detachLastElement(&scheduleList));
+    free(_detachLastScheduleElement(&scheduleList));
 
     return scheduleList;
 }
 
-int moveElementBetweenLists(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status) {
-//    if ((*from)->start == NULL) return 0; // Impossible to move from a null list.
-
+int moveElementBetweenSchedules(ScheduleList **from, ScheduleList **to, unsigned int id, unsigned short status) {
     // Detach the element specified by id.
-    Schedule *element = detachElement(from, id);
-//    if (!element) return -1;
+    Schedule *element = detachScheduleElement(from, id);
 
     // Set new status to pbc.
     element->memory->pcb->status = status;
 
     // Insert element into the new list.
-    (*to) = listInsertStart(*to, element);
+    (*to) = scheduleListInsertStart(*to, element);
 
     return id;
 }
 
-int moveBetweenLists(ScheduleList **from, ScheduleList **to, unsigned short status) {
-//    if ((*from)->end == NULL) return -1;
-
-    return moveElementBetweenLists(from, to, (*from)->end->memory->pcb->id, status);
+int moveBetweenSchedules(ScheduleList **from, ScheduleList **to, unsigned short status) {
+    return moveElementBetweenSchedules(from, to, (*from)->end->memory->pcb->id, status);
 }
 
 int isEmpty(ScheduleList **scheduleList) {
