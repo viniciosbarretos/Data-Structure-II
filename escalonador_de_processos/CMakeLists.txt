@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(data_structure C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 
 add_executable(data_structure main.c
         libs/storage.c libs/storage.h
