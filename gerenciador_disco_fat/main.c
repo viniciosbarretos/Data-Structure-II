@@ -74,7 +74,7 @@ unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
     unsigned blockAdded = 0, i = 0, first=0;
     int aux = - 1;
     
-    // i<storageSize dont is checked because this code
+    // i<storageSize doesn't is checked because this code
     // will only execute if storage have available space
     while (blockAdded<size) {
         if(fat[i].block == NULL) {
@@ -221,14 +221,23 @@ void printFiles(FAT *fat) {
 
 void deallocateFile(Storage *SSD, FAT *fat, int i) {
     int aux;
+    //If i = -1, then is the end of file.
     while(i != -1) {
+        //Aux turns next address of file in storage.
         aux = fat[i].nextAddress;
+        //Setting 0 on block->fileID, that means free space in storage.
         fat[i].block->fileID = 0;
+        //Setting null for block
         fat[i].block = NULL;
+        //Clearing space
         free(fat[i].fileAddress);
+        //Setting null for fileAddress
         fat[i].fileAddress = NULL;
+        //Setting 0 for next address, that means "no next address"
         fat[i].nextAddress = 0;
+        //Adding one more free space in storage.
         SSD->availableSpace++;
+        //"i" turns the next address storing by aux.
         i = aux;
     }
 }
@@ -241,9 +250,13 @@ void removeFile(Storage *SSD, FAT *fat) {
     printf("\nID of file you want to remove: ");
     scanf("%d", &removeID);
     cleanBuffer();
+
+    //Runs all the storage
     for(i=0; i<storageSize; i++)
+        //Verifies if have a file in this address.
         if(fat[i].fileAddress != NULL)
             if(fat[i].fileAddress->id == removeID) {
+                //If id was found so starts removing.
                 deallocateFile(SSD, fat, i);
                 printf("\n-------------------------------\n");
                 printf("-       File %3d removed      -", removeID);
@@ -255,7 +268,6 @@ void removeFile(Storage *SSD, FAT *fat) {
         printf("-     File does not exist     -");
         printf("\n-------------------------------\n");
     }
-    
 }
 
 int main() {
