@@ -1,9 +1,9 @@
 //
 //  Laboratory of Data Structure II
-//  Vinicios Barretos
-//  Vinicius Martins
 //  David Candelero
 //  Thiago Leal
+//  Vinicios Barretos
+//  Vinicius Martins
 //
 
 #include <stdio.h>
@@ -11,8 +11,8 @@
 #include <string.h>
 
 // Universal variables
-unsigned id = 1;
-unsigned storageSize = 300;
+//unsigned id = 1;
+//unsigned storageSize = 300;
 
 // Clear screen both windows and unix
 void clearScreen() {
@@ -60,14 +60,17 @@ typedef struct FAT {
 } FAT;
 
 // This is like a disk formatting and mount
-Storage* initializeStorage() {
-    Storage *storage = malloc (sizeof (Storage));
-    storage->data = malloc (sizeof (StorageBlock) * storageSize);
-    storage->availableSpace = storageSize;
-    for (unsigned i = 0; i<storageSize; i++) {
+Storage* initializeStorage(unsigned size) {
+
+    Storage *storage = (Storage *) malloc (sizeof(Storage));
+    storage->data = malloc (sizeof(StorageBlock) * size);
+    storage->availableSpace = size;
+
+    for (unsigned i = 0; i<size; i++) {
         storage->data[i].fileID = 0;
         storage->data[i].logicalAddress = i;
     }
+
     return storage;
 }
 
@@ -81,7 +84,7 @@ unsigned fileSize(char *content) {
 }
 
 // Insert data into storage and reference in table
-unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
+unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id) {
     unsigned blockAdded = 0, i = 0, first=0;
     int aux = - 1;
     
@@ -89,8 +92,8 @@ unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
     // will only execute if storage have available space
     while (blockAdded<size) {
         if(fat[i].block == NULL) {
-            SSD->data[i].fileID = id;
-            fat[i].block = &SSD->data[i];
+            disk->data[i].fileID = id;
+            fat[i].block = &disk->data[i];
             fat[i].nextAddress = -1;
 
             if(!blockAdded) {
@@ -102,7 +105,7 @@ unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
             
             aux = i;
             blockAdded++;
-            SSD->availableSpace--;
+            disk->availableSpace--;
         }
         i++;
     }
@@ -112,13 +115,13 @@ unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
 }
 
 // Create file content and call createData function to insert it into storage
-void allocateFile(Storage *SSD, FAT *fat, char *name, char *content, unsigned size) {
+void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id) {
     File *newFile = malloc (sizeof (File));
     strcpy(newFile->name, name);
     strcpy(newFile->content, content);
-    newFile->id = id++;
+    newFile->id = id;
     newFile->size = size;
-    newFile->fatStartPosition = createData(SSD, fat, size, newFile->id);
+    newFile->fatStartPosition = createData(disk, fat, size, newFile->id);
     fat[newFile->fatStartPosition].fileAddress = newFile;
 }
 
@@ -136,7 +139,7 @@ void printOptions() {
 }
 
 // Request to user the informations to create a file
-void createFile(Storage *SSD, FAT *fat) {
+void createFile(Storage *disk, FAT *fat, unsigned id) {
     clearScreen();
     printf("[ Create File ]\n\n");
     char name[20], content[200];
@@ -148,8 +151,8 @@ void createFile(Storage *SSD, FAT *fat) {
     scanf("%[^\n]", content);
     cleanBuffer();
     size = fileSize(content);
-    if (size <= SSD->availableSpace) { // Checks if there is available space at storage
-        allocateFile(SSD, fat, name, content, size);
+    if (size <= disk->availableSpace) { // Checks if there is available space at storage
+        allocateFile(disk, fat, name, content, size, id);
         printf("\n------------------------------\n");
         printf("-  File Created Succesfully  -");
         printf("\n------------------------------\n");
@@ -163,17 +166,18 @@ void createFile(Storage *SSD, FAT *fat) {
     }
 }
 
-void printFileList(FAT *fat) {
+void printFileList(FAT *fat, unsigned storageSize) {
     unsigned i;
     for(i=0; i<storageSize; i++) {
-        
+        if(fat[i].fileAddress != NULL)
+            printf("ID: %d, Name: %s\n", fat[i].fileAddress->id, fat[i].fileAddress->name);
     }
 }
 
 // Initialize the table creating an array of FAT structure.
 // Each position of array represents a table row with direct access.
-FAT* initializeTable() {
-    FAT *fat = malloc (sizeof (FAT) * storageSize);
+FAT* initializeTable(unsigned storageSize) {
+    FAT *fat = malloc (sizeof(FAT) * storageSize);
     for (unsigned i=0; i<storageSize; i++) {
         fat[i].block = NULL;
         fat[i].fileAddress = NULL;
@@ -183,7 +187,7 @@ FAT* initializeTable() {
 }
 
 // Print current table status in a matrix format
-void printTable(FAT *fat) {
+void printTable(FAT *fat, unsigned storageSize) {
     unsigned i, j=0;
     clearScreen();
     printf("[ Table Status ]\n\n");
@@ -198,15 +202,15 @@ void printTable(FAT *fat) {
 }
 
 // Print current storage status in a matrix format
-void printStorage(Storage *ssd) {
+void printStorage(Storage *disk, unsigned storageSize) {
     unsigned i, j=0;
     clearScreen();
     printf("[ SSD Status ]\n\n");
     for (i=0; i<storageSize; i++) {
-        if(ssd->data[i].fileID == 0)
+        if(disk->data[i].fileID == 0)
             printf("   -");
         else
-            printf("%4d", ssd->data[i].fileID);
+            printf("%4d", disk->data[i].fileID);
         j++;
         if(j == 30) {
             printf("\n");
@@ -216,13 +220,13 @@ void printStorage(Storage *ssd) {
 }
 
 // Print available storage space
-void printStorageSpace(Storage *ssd) {
-    printf("\n-------------------------------\n");
-    printf("-  SSD Available Space: %3dw  -", ssd->availableSpace);
-    printf("\n-------------------------------\n");
+void printStorageSpace(Storage *disk) {
+    printf("\n--------------------------------\n");
+    printf("-  Disk Available Space: %3dw  -", disk->availableSpace);
+    printf("\n--------------------------------\n");
 }
 
-// Print all informations of a file
+// Print all information of a file
 void printFileInfo(File *file) {
     printf("\nName: %s\n", file->name);
     printf("ID: %d\n", file->id);
@@ -232,7 +236,7 @@ void printFileInfo(File *file) {
 }
 
 // Print all files allocated at table and storage
-void printFiles(FAT *fat) {
+void printFiles(FAT *fat, unsigned storageSize) {
     unsigned i;
     for(i=0; i<storageSize; i++) {
         if(fat[i].fileAddress != NULL)
@@ -241,7 +245,7 @@ void printFiles(FAT *fat) {
 }
 
 // Remove file in the storage and table
-void deallocateFile(Storage *SSD, FAT *fat, int i) {
+void deallocateFile(Storage *disk, FAT *fat, int i) {
     int aux;
     while(i != -1) {
         aux = fat[i].nextAddress;
@@ -250,24 +254,24 @@ void deallocateFile(Storage *SSD, FAT *fat, int i) {
         free(fat[i].fileAddress);
         fat[i].fileAddress = NULL;
         fat[i].nextAddress = 0;
-        SSD->availableSpace++;
+        disk->availableSpace++;
         i = aux;
     }
 }
 
 // Ask to user what file will be deleted
-void removeFile(Storage *SSD, FAT *fat) {
+void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
     int removeID, i;
     clearScreen();
     printf("[ Remove File ]\n\n");
-    printFiles(fat);
+    printFiles(fat, storageSize);
     printf("\nID of file you want to remove: ");
     scanf("%d", &removeID);
     cleanBuffer();
     for(i=0; i<storageSize; i++)
         if(fat[i].fileAddress != NULL)
             if(fat[i].fileAddress->id == removeID) {
-                deallocateFile(SSD, fat, i);
+                deallocateFile(disk, fat, i);
                 printf("\n-------------------------------\n");
                 printf("-       File %3d removed      -", removeID);
                 printf("\n-------------------------------\n");
@@ -281,45 +285,46 @@ void removeFile(Storage *SSD, FAT *fat) {
 }
 
 int main() {
-    
-    // Initialization of a 300w SSD
-    Storage *SSD = initializeStorage();
-    
-    // File Allocation Table
-    FAT *fat = initializeTable();
-    
     unsigned option;
-    
+    unsigned storageSize = 300;
+    unsigned id = 1;
+
+    // Initialization of a 300w disk
+    Storage *disk = initializeStorage(storageSize);
+
+    // File Allocation Table
+    FAT *fat = initializeTable(storageSize);
+
     do {
         printOptions();
         scanf("%d", &option);
         cleanBuffer();
         switch (option) {
             case 1:
-                createFile(SSD, fat);
+                createFile(disk, fat, id++);
                 break;
+
             case 2:
                 break;
             case 3:
-                removeFile(SSD, fat);
+                removeFile(disk, fat, storageSize);
                 break;
             case 4:
-                printStorage(SSD);
+                printStorage(disk, storageSize);
                 break;
             case 5:
-                printTable(fat);
+                printTable(fat, storageSize);
                 break;
             case 6:
-                printFiles(fat);
+                printFiles(fat, storageSize);
                 break;
             case 7:
-                printStorageSpace(SSD);
+                printStorageSpace(disk);
                 break;
         }
-        printf("\n\nPress enter to continue ");
+        printf("\n\nPress enter to continue... ");
         getchar();
     } while(option);
-    
     
     return 0;
 }
