@@ -1,313 +1,212 @@
 //
 //  Laboratory of Data Structure II
-//  Vinicios Barretos
-//  Vinicius Martins
 //  David Candelero
 //  Thiago Leal
+//  Vinicios Barretos
+//  Vinicius Martins
 //
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "render.h"
+#include "storage.h"
 
-unsigned id = 1;
-unsigned storageSize = 300;
-
-void clearScreen() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
-}
-
+// Clean buffer after a text input
 void cleanBuffer() {
     int i;
     while ((i = getchar()) != '\n' && i != EOF);
 }
 
-// Each block have 1w size
-typedef struct StorageBlock {
-    unsigned fileID;
-    unsigned logicalAddress;
-} StorageBlock;
-
-typedef struct Storage {
-    StorageBlock *data;
-    unsigned availableSpace;
-} Storage;
-
-typedef struct File {
-    char name[40];
-    char content[200];
-    unsigned size;
-    unsigned id;
-    unsigned data;
-} File;
-
-typedef struct FAT {
-    StorageBlock *block;
-    File *fileAddress;
-    int nextAddress;
-} FAT;
-
-Storage* initializeStorage() {
-    Storage *storage = malloc (sizeof (Storage));
-    storage->data = malloc (sizeof (StorageBlock) * storageSize);
-    storage->availableSpace = storageSize;
-    for (unsigned i = 0; i<storageSize; i++) {
-        storage->data[i].fileID = 0;
-        storage->data[i].logicalAddress = i;
-    }
-    return storage;
-}
-
-unsigned fileSize(char *content) {
-    unsigned size = (unsigned) strlen(content);
-    if(size + 2 <= 20)
-        return size + 2;
-    else
-        return 20;
-}
-
-unsigned createData(Storage *SSD, FAT *fat, unsigned size, unsigned id) {
-    unsigned blockAdded = 0, i = 0, first=0;
-    int aux = - 1;
-    
-    // i<storageSize doesn't is checked because this code
-    // will only execute if storage have available space
-    while (blockAdded<size) {
-        if(fat[i].block == NULL) {
-            SSD->data[i].fileID = id;
-            fat[i].block = &SSD->data[i];
-            fat[i].nextAddress = -1;
-
-            if(!blockAdded) {
-                first = i;
-            }
-            else {
-                fat[aux].nextAddress = i;
-            }
-            
-            aux = i;
-            blockAdded++;
-            SSD->availableSpace--;
-        }
-        i++;
-    }
-    
-    return first;
-}
-
-File* allocateFile(Storage *SSD, FAT *fat, char *name, char *content, unsigned size) {
-    File *newFile = malloc (sizeof (File));
-    strcpy(newFile->name, name);
-    strcpy(newFile->content, content);
-    newFile->id = id++;
-    newFile->size = size;
-    newFile->data = createData(SSD, fat, size, newFile->id);
-    fat[newFile->data].fileAddress = newFile;
-    return newFile;
-}
-
+// Options in main menu
 void printOptions() {
     clearScreen();
-    printf("\n0 -> End Simulation\n");
-    printf("1 -> Create File\n");
-    printf("2 -> Open File\n");
-    printf("3 -> Delete File\n");
-    printf("4 -> Show Storage\n");
-    printf("5 -> Show Table\n");
-    printf("6 -> Show Storage, Table and Files\n");
-    printf("7 -> Show Available Storage Space ");
+    printf("\n1 - Create File\n");
+    printf("2 - Open File\n");
+    printf("3 - Delete File\n");
+    printf("4 - Show Storage\n");
+    printf("5 - Show Table\n");
+    printf("6 - Show Storage, Table and Files\n");
+    printf("7 - Show Available Storage Space \n");
+    printf("0 - End Simulation\n");
+
+    printf("\nSelect your option: ");
 }
 
-void createFile(Storage *SSD, FAT *fat) {
-    clearScreen();
-    printf("[ Create File ]\n\n");
+// Request to user the information to create a file
+void createFile(Storage *disk, FAT *fat, unsigned id) {
     char name[20], content[200];
     unsigned size;
-    printf("File name: ");
-    scanf("%s", name);
+
+    clearScreen();
+    printf("[ Create File ]\n");
+    printf(" > File name: ");
+    scanf("%[^\n]", name);
     cleanBuffer();
-    printf("Content: ");
+
+    printf(" > Content: ");
     scanf("%[^\n]", content);
     cleanBuffer();
+
     size = fileSize(content);
-    if (size <= SSD->availableSpace) {
-        allocateFile(SSD, fat, name, content, size);
-        printf("\n------------------------------\n");
-        printf("-  File Created Succesfully  -");
-        printf("\n------------------------------\n");
+    // Checks if there is available space on storage.
+    if (size <= disk->availableSpace) {
+
+        //Creating command to move file for Files directory
+        char command[100];
+        strcpy(command, "mv " );
+        strcat(command, name);
+        strcat(command, "\t");
+        strcat(command, " Files");
+
+        //Creating real file in disk
+        FILE *file;
+        file = fopen(name, "w");
+        fprintf(file, "%s", content);
+        fclose(file);
+
+        //Moving created file to directory Files
+        system(command); //Only for linux
+
+        allocateFile(disk, fat, name, content, size, id);
+        printHeader("File created successfully");
         printf(" - Name: %s\n", name);
+
         printf(" - Size: %dw\n", size);
     }
     else {
-        printf("\n-------------------------------------------\n");
-        printf("- There is no Space to add file. Sorry :( -");
-        printf("\n-------------------------------------------\n");
+        printHeader("Not enough space to add file. Sorry ;-;");
     }
 }
 
-void printFileList(FAT *fat) {
-    unsigned i;
-    for(i=0; i<storageSize; i++) {
-        
-    }
-}
-
-FAT* initializeTable() {
-    FAT *fat = malloc (sizeof (FAT) * storageSize);
-    for (unsigned i=0; i<storageSize; i++) {
-        fat[i].block = NULL;
-        fat[i].fileAddress = NULL;
-        fat[i].nextAddress = 0;
-    }
-    return fat;
-}
-
-void printTable(FAT *fat) {
-    unsigned i, j=0;
+// Ask to user what file will be deleted
+void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
+    unsigned removeID, i;
+    char option;
     clearScreen();
-    printf("[ Table Status ]\n\n");
-    for (i=0; i<storageSize; i++) {
-        printf("%4d", fat[i].nextAddress);
-        j++;
-        if(j == 30) {
-            printf("\n");
-            j = 0;
-        }
-    }
-}
 
-void printStorage(Storage *ssd) {
-    unsigned i, j=0;
-    clearScreen();
-    printf("[ SSD Status ]\n\n");
-    for (i=0; i<storageSize; i++) {
-        if(ssd->data[i].fileID == 0)
-            printf("   -");
-        else
-            printf("%4d", ssd->data[i].fileID);
-        j++;
-        if(j == 30) {
-            printf("\n");
-            j = 0;
-        }
-    }
-}
+    printf("[ Files on storage ]\n");
+    printFileList(fat, storageSize);
 
-void printStorageSpace(Storage *ssd) {
-    printf("\n-------------------------------\n");
-    printf("-  SSD Available Space: %3dw  -", ssd->availableSpace);
-    printf("\n-------------------------------\n");
-}
-
-void printFileInfo(File *file) {
-    printf("\nName: %s\n", file->name);
-    printf("ID: %d\n", file->id);
-    printf("Size: %d\n", file->size);
-    printf("Content: %s\n", file->content);
-    printf("Data Start on Table: %d\n", file->data);
-}
-
-void printFiles(FAT *fat) {
-    unsigned i;
-    for(i=0; i<storageSize; i++) {
-        if(fat[i].fileAddress != NULL)
-            printFileInfo(fat[i].fileAddress);
-    }
-}
-
-void deallocateFile(Storage *SSD, FAT *fat, int i) {
-    int aux;
-    //If i = -1, then is the end of file.
-    while(i != -1) {
-        //Aux turns next address of file in storage.
-        aux = fat[i].nextAddress;
-        //Setting 0 on block->fileID, that means free space in storage.
-        fat[i].block->fileID = 0;
-        //Setting null for block
-        fat[i].block = NULL;
-        //Clearing space
-        free(fat[i].fileAddress);
-        //Setting null for fileAddress
-        fat[i].fileAddress = NULL;
-        //Setting 0 for next address, that means "no next address"
-        fat[i].nextAddress = 0;
-        //Adding one more free space in storage.
-        SSD->availableSpace++;
-        //"i" turns the next address storing by aux.
-        i = aux;
-    }
-}
-
-void removeFile(Storage *SSD, FAT *fat) {
-    int removeID, i;
-    clearScreen();
-    printf("[ Remove File ]\n\n");
-    printFiles(fat);
-    printf("\nID of file you want to remove: ");
+    printf("\n[ Remove a file ]\n");
+    printf(" > File id: ");
     scanf("%d", &removeID);
     cleanBuffer();
 
-    //Runs all the storage
-    for(i=0; i<storageSize; i++)
-        //Verifies if have a file in this address.
-        if(fat[i].fileAddress != NULL)
-            if(fat[i].fileAddress->id == removeID) {
-                //If id was found so starts removing.
-                deallocateFile(SSD, fat, i);
-                printf("\n-------------------------------\n");
-                printf("-       File %3d removed      -", removeID);
-                printf("\n-------------------------------\n");
-                removeID = -1;
+    printf("\nFile %d will be removed. Are you sure? [y/n]: ", removeID);
+    scanf("%c", &option);
+
+    // Check with user really agree with that.
+    if(option == 'y' || option == 'Y') {
+        cleanBuffer();
+        for(i=0; i<storageSize; i++) {
+            if(fat[i].fileAddress != NULL) {
+                if(fat[i].fileAddress->id == removeID) {
+
+                    //Accessing files directory for remove successful
+                    char dir[30];
+                    strcpy(dir, "Files/");
+                    strcat(dir, fat[i].fileAddress->name);
+
+                    //Removing real file from directory 'Files'.
+                    FILE *file;
+                    file = fopen(dir, "r");
+                    fclose(file);
+                    remove(dir);
+
+                    deallocateFile(disk, fat, i);
+                    // Delete file
+                    free(fat[i].fileAddress);
+                    printHeader("File removed successfully");
+                    removeID = 0; // Control variable
+                }
             }
-    if(removeID != -1) {
-        printf("\n-------------------------------\n");
-        printf("-     File does not exist     -");
-        printf("\n-------------------------------\n");
+        }
+        if(removeID != 0) {
+            printHeader("File does not exist");
+        }
+    }
+    else {
+        printHeader("Removal canceled");
+    }
+
+}
+
+void showFile(FAT *fat, unsigned storageSize) {
+    unsigned i, id;
+    clearScreen();
+
+    printf("[ Files on storage ]\n");
+    printFileList(fat, storageSize);
+
+    printf("\n[ Select a file to open ]\n");
+    printf(" > File id: ");
+    scanf("%d", &id);
+    cleanBuffer();
+
+    // Search for file on table.
+    for(i=0; i<storageSize; i++) {
+        if(fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
+            printFileContent(fat[i].fileAddress);
+        }
     }
 }
 
 int main() {
-    
-    // Initialization of a 300w SSD
-    Storage *SSD = initializeStorage();
-    
-    // File Allocation Table
-    FAT *fat = initializeTable();
-    
     unsigned option;
-    
+    unsigned storageSize = 300;
+    unsigned id = 1;
+
+    // Initialization of a 300w disk
+    Storage *disk = initializeStorage(storageSize);
+
+    // File Allocation Table
+    FAT *fat = initializeTable(storageSize);
+
     do {
         printOptions();
         scanf("%d", &option);
         cleanBuffer();
         switch (option) {
+            case 0:
+                printf("\n\nBye bye :)\n");
+                break;
             case 1:
-                createFile(SSD, fat);
+                createFile(disk, fat, id++);
+                break;
+            case 2:
+                showFile(fat, storageSize);
                 break;
             case 3:
-                removeFile(SSD, fat);
+                removeFile(disk, fat, storageSize);
                 break;
             case 4:
-                printStorage(SSD);
+                printf("\n[ Storage ]\n\n");
+                printStorage(disk, storageSize);
                 break;
             case 5:
-                printTable(fat);
+                printf("\n\n[ Table ]\n\n");
+                printTable(fat, storageSize);
                 break;
             case 6:
-                printFiles(fat);
+                printf("\n[ Storage ]\n\n");
+                printStorage(disk, storageSize);
+
+                printf("\n\n[ Table ]\n\n");
+                printTable(fat, storageSize);
+
+                printf("\n\n[ Files ]\n");
+                printFiles(fat, storageSize);
                 break;
             case 7:
-                printStorageSpace(SSD);
+                printStorageSpace(disk);
                 break;
+            default:
+                printf("Invalid Option! Try again.");
         }
-        printf("\n\nPress enter to continue ");
+        printf("\n\nPress enter to continue... ");
         getchar();
     } while(option);
-    
     
     return 0;
 }
