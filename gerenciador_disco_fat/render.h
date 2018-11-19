@@ -3,10 +3,10 @@
 
 #include "storage.h"
 
-
 void clearScreen();
+void printHeader(const char *str);
 void printStorageSpace(Storage *disk);
-void printFileInfo(File *file);
+void printFileInfo(FAT *fat, File *file);
 void printFileList(FAT *fat, unsigned storageSize);
 void printFiles(FAT *fat, unsigned storageSize);
 void printTable(FAT *fat, unsigned storageSize);

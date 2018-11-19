@@ -3,8 +3,8 @@
 
 // Each block have 1w size and a logical address
 typedef struct StorageBlock {
-    unsigned fileID;
     unsigned logicalAddress;
+    unsigned fileID;
 } StorageBlock;
 
 // Structure of a disk, containing data blocks
@@ -26,9 +26,9 @@ typedef struct File {
 
 // Structure to represent a row of storage table
 typedef struct FAT {
-    StorageBlock *block; // Logical address of storage block
-    File *fileAddress; // Point to file address
-    int nextAddress; // Next fat address of a file
+    StorageBlock *block;  // Logical address of storage block
+    File *fileAddress;   // Point to file address
+    int nextAddress;    // Next fat address of a file
 } FAT;
 
 

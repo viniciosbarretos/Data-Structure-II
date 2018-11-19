@@ -21,69 +21,84 @@ void cleanBuffer() {
 // Options in main menu
 void printOptions() {
     clearScreen();
-    printf("\n0 -> End Simulation\n");
-    printf("1 -> Create File\n");
-    printf("2 -> Open File\n");
-    printf("3 -> Delete File\n");
-    printf("4 -> Show Storage\n");
-    printf("5 -> Show Table\n");
-    printf("6 -> Show Storage, Table and Files\n");
-    printf("7 -> Show Available Storage Space \n");
+    printf("\n1 - Create File\n");
+    printf("2 - Open File\n");
+    printf("3 - Delete File\n");
+    printf("4 - Show Storage\n");
+    printf("5 - Show Table\n");
+    printf("6 - Show Storage, Table and Files\n");
+    printf("7 - Show Available Storage Space \n");
+    printf("0 - End Simulation\n");
 
-    printf("Select your option: ");
+    printf("\nSelect your option: ");
 }
 
-// Request to user the informations to create a file
+// Request to user the information to create a file
 void createFile(Storage *disk, FAT *fat, unsigned id) {
-    clearScreen();
-    printf("[ Create File ]\n\n");
     char name[20], content[200];
     unsigned size;
-    printf("File name: ");
+
+    clearScreen();
+
+    printf("[ Create File ]\n");
+    printf(" > File name: ");
     scanf("%s", name);
     cleanBuffer();
-    printf("Content: ");
+
+    printf(" > Content: ");
     scanf("%[^\n]", content);
     cleanBuffer();
+
     size = fileSize(content);
-    if (size <= disk->availableSpace) { // Checks if there is available space at storage
+    // Checks if there is available space on storage.
+    if (size <= disk->availableSpace) {
         allocateFile(disk, fat, name, content, size, id);
-        printf("\n------------------------------\n");
-        printf("-  File Created Succesfully  -");
-        printf("\n------------------------------\n");
+        printHeader("File created successfully");
         printf(" - Name: %s\n", name);
         printf(" - Size: %dw\n", size);
     }
     else {
-        printf("\n-------------------------------------------\n");
-        printf("- There is no Space to add file. Sorry :( -");
-        printf("\n-------------------------------------------\n");
+        printHeader("Not enough space to add file. Sorry ;-;");
     }
 }
 
 // Ask to user what file will be deleted
 void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
-    int removeID, i;
+    unsigned removeID, i;
+    char option;
     clearScreen();
-    printf("[ Remove File ]\n\n");
-    printFiles(fat, storageSize);
-    printf("\nID of file you want to remove: ");
+
+    printf("[ Files on storage ]\n");
+    printFileList(fat, storageSize);
+
+    printf("\n[ Remove a file ]\n");
+    printf(" > File id: ");
     scanf("%d", &removeID);
     cleanBuffer();
-    for(i=0; i<storageSize; i++)
-        if(fat[i].fileAddress != NULL)
-            if(fat[i].fileAddress->id == removeID) {
-                deallocateFile(disk, fat, i);
-                printf("\n-------------------------------\n");
-                printf("-       File %3d removed      -", removeID);
-                printf("\n-------------------------------\n");
-                removeID = -1; // Control variable
+
+    printf("\nFile %d will be removed. Are you sure? [y/n]: ", removeID);
+    scanf("%c", &option);
+
+    // Check with user really agree with that.
+    if(option == 'y' || option == 'Y') {
+        cleanBuffer();
+        for(i=0; i<storageSize; i++) {
+            if(fat[i].fileAddress != NULL) {
+                if(fat[i].fileAddress->id == removeID) {
+                    deallocateFile(disk, fat, i);
+                    printHeader("File removed successfully");
+                    removeID = 0; // Control variable
+                }
             }
-    if(removeID != -1) {
-        printf("\n-------------------------------\n");
-        printf("-     File does not exist     -");
-        printf("\n-------------------------------\n");
+        }
+        if(removeID != 0) {
+            printHeader("File does not exist");
+        }
     }
+    else {
+        printHeader("Removal canceled");
+    }
+
 }
 
 int main() {
@@ -105,19 +120,27 @@ int main() {
             case 1:
                 createFile(disk, fat, id++);
                 break;
-
             case 2:
                 break;
             case 3:
                 removeFile(disk, fat, storageSize);
                 break;
             case 4:
+                printf("\n[ Storage ]\n\n");
                 printStorage(disk, storageSize);
                 break;
             case 5:
+                printf("\n\n[ Table ]\n\n");
                 printTable(fat, storageSize);
                 break;
             case 6:
+                printf("\n[ Storage ]\n\n");
+                printStorage(disk, storageSize);
+
+                printf("\n\n[ Table ]\n\n");
+                printTable(fat, storageSize);
+
+                printf("\n\n[ Files ]\n");
                 printFiles(fat, storageSize);
                 break;
             case 7:
