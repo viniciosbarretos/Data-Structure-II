@@ -8,7 +8,7 @@ void clearScreen();
 void printHeader(const char *str);
 void printStorageSpace(Storage *disk);
 void printDetailedFileInfo(FAT *fat, File *file);
-void printFileContent(FAT *fat, File *file);
+void printFileContent(File *file);
 void printFileList(FAT *fat, unsigned storageSize);
 void printFiles(FAT *fat, unsigned storageSize);
 void printTable(FAT *fat, unsigned storageSize);

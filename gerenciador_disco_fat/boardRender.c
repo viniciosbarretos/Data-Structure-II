@@ -14,6 +14,7 @@ typedef struct Trace {
     unsigned size;
 } Trace;
 
+
 void strcpyfrgm(char *buffer, const char *input, int start, int size) {
     int i;
     // if copy can be made.
@@ -26,6 +27,7 @@ void strcpyfrgm(char *buffer, const char *input, int start, int size) {
         buffer[i] = '\0';
     }
 }
+
 
 int splitTrace(Trace traces[100], const char *string, char divider){
     int i=0, j=0, lenght=0, start=0;
@@ -57,6 +59,7 @@ int splitTrace(Trace traces[100], const char *string, char divider){
     return j;
 }
 
+
 void zeroFill(char board[r][c], int row, int col) {
     int i, j;
     for (i=0; i<row; i++) {
@@ -66,6 +69,7 @@ void zeroFill(char board[r][c], int row, int col) {
     }
 }
 
+
 void printBoard(char board[r][c], int row) {
     int i;
 
@@ -74,6 +78,7 @@ void printBoard(char board[r][c], int row) {
     }
 
 }
+
 
 void renderFatNode(char board[r][c], int x, int y, int row, int col, FAT *fat) {
     int a=4, b=13;
@@ -97,6 +102,7 @@ void renderFatNode(char board[r][c], int x, int y, int row, int col, FAT *fat) {
     }
 }
 
+
 void renderFileNode(char board[r][c], int x, int y, int row, int col, File *file) {
     int a=5, b=30;
     char aux[a][b];
@@ -119,6 +125,7 @@ void renderFileNode(char board[r][c], int x, int y, int row, int col, File *file
         }
     }
 }
+
 
 void renderArrow(char board[r][c], int x, int y, int row, int col, const char *trace) {
     int traceCount;
@@ -157,6 +164,7 @@ void renderArrow(char board[r][c], int x, int y, int row, int col, const char *t
         }
     }
 }
+
 
 void cleanBoard(char board[r][c], int row, int col) {
     int i;

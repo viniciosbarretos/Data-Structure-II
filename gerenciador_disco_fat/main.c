@@ -116,7 +116,7 @@ void showFile(FAT *fat, unsigned storageSize) {
     // Search for file on table.
     for(i=0; i<storageSize; i++) {
         if(fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
-            printFileContent(fat, fat[i].fileAddress);
+            printFileContent(fat[i].fileAddress);
         }
     }
 }

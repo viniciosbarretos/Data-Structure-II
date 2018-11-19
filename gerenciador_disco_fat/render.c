@@ -82,15 +82,10 @@ void printDetailedFileInfo(FAT *fat, File *file) {
     }
 
     printBoard(board, lines);
-
-//    printf("\nName: %s\n", file->name);
-//    printf("ID: %d\n", file->id);
-//    printf("Size: %d\n", file->size);
-//    printf("Content: %s\n", file->content);
-//    printf("Data Start on Table: %d\n", file->fatStartPosition);
 }
 
-void printFileContent(FAT *fat, File *file) {
+
+void printFileContent(File *file) {
     printSequence("-", 80);
     printf("\nName: \n%s\n", file->name);
     printf("\nContent: \n%s\n", file->content);
