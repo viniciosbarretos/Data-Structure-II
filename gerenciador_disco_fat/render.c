@@ -14,7 +14,7 @@ void clearScreen() {
 #endif
 }
 
-const char *printSequence(const char *str, int times) {
+void printSequence(const char *str, int times) {
     while( times > 0 ) {
         printf("%s", str);
         times--;
@@ -38,7 +38,7 @@ void printStorageSpace(Storage *disk) {
 }
 
 // Print all information of a file
-void printFileInfo(FAT *fat, File *file) {
+void printDetailedFileInfo(FAT *fat, File *file) {
     // Initiate control variables
     int x = 0;
     int y = 0;
@@ -90,6 +90,13 @@ void printFileInfo(FAT *fat, File *file) {
 //    printf("Data Start on Table: %d\n", file->fatStartPosition);
 }
 
+void printFileContent(FAT *fat, File *file) {
+    printSequence("-", 80);
+    printf("\nName: \n%s\n", file->name);
+    printf("\nContent: \n%s\n", file->content);
+    printSequence("-", 80);
+}
+
 
 // Print a list of all files allocated at table and storage
 void printFileList(FAT *fat, unsigned storageSize) {
@@ -108,7 +115,7 @@ void printFiles(FAT *fat, unsigned storageSize) {
 
     for(i=0; i<storageSize; i++) {
         if(fat[i].fileAddress != NULL) {
-            printFileInfo(fat, fat[i].fileAddress);
+            printDetailedFileInfo(fat, fat[i].fileAddress);
         }
     }
 }

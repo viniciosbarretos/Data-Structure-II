@@ -101,6 +101,26 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
 
 }
 
+void showFile(FAT *fat, unsigned storageSize) {
+    unsigned i, id;
+    clearScreen();
+
+    printf("[ Files on storage ]\n");
+    printFileList(fat, storageSize);
+
+    printf("\n[ Select a file to open ]\n");
+    printf(" > File id: ");
+    scanf("%d", &id);
+    cleanBuffer();
+
+    // Search for file on table.
+    for(i=0; i<storageSize; i++) {
+        if(fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
+            printFileContent(fat, fat[i].fileAddress);
+        }
+    }
+}
+
 int main() {
     unsigned option;
     unsigned storageSize = 300;
@@ -121,6 +141,7 @@ int main() {
                 createFile(disk, fat, id++);
                 break;
             case 2:
+                showFile(fat, storageSize);
                 break;
             case 3:
                 removeFile(disk, fat, storageSize);
