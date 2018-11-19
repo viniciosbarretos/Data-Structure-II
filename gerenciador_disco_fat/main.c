@@ -58,20 +58,15 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
         strcat(command, name);
         strcat(command, "\t");
         strcat(command, " Files");
-        //command = "mv 'name' Files"  (Only for linux)
 
         //Creating real file in disk
-        FILE *arq;
-
-        //Writing file
-        arq = fopen(name, "w");
-        fprintf(arq, "%s", content);
-
-        //Ending operation
-        fclose(arq);
+        FILE *file;
+        file = fopen(name, "w");
+        fprintf(file, "%s", content);
+        fclose(file);
 
         //Moving created file to directory Files
-        system(command);
+        system(command); //Only for linux
 
         allocateFile(disk, fat, name, content, size, id);
         printHeader("File created successfully");
@@ -107,7 +102,21 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
         for(i=0; i<storageSize; i++) {
             if(fat[i].fileAddress != NULL) {
                 if(fat[i].fileAddress->id == removeID) {
+
+                    //Accessing files directory for remove successful
+                    char dir[30];
+                    strcpy(dir, "Files/");
+                    strcat(dir, fat[i].fileAddress->name);
+
+                    //Removing real file from directory 'Files'.
+                    FILE *file;
+                    file = fopen(dir, "r");
+                    fclose(file);
+                    remove(dir);
+
                     deallocateFile(disk, fat, i);
+                    // Delete file
+                    free(fat[i].fileAddress);
                     printHeader("File removed successfully");
                     removeID = 0; // Control variable
                 }

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "storage.h"
@@ -108,9 +109,6 @@ void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned s
 // Remove file in the storage and table
 void deallocateFile(Storage *disk, FAT *fat, int i) {
     int next;
-
-    // Delete file
-    free(fat[i].fileAddress);
 
     // While isn't the last portion of table, clean it.
     while(i != -1) {
