@@ -117,6 +117,9 @@ int main() {
         scanf("%d", &option);
         cleanBuffer();
         switch (option) {
+            case 0:
+                printf("\n\nBye bye :)\n");
+                break;
             case 1:
                 createFile(disk, fat, id++);
                 break;
