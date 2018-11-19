@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "storage.h"
 
 
@@ -84,11 +85,18 @@ void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned s
     // Allocate file node on memory
     File *newFile = malloc( sizeof(File) );
 
+//Not working
+//    struct tm * Date;
+//    time_t Time;
+//    time( &Time );
+//    Date = gmtime( &Time );
+
     // Save information on file.
     strcpy(newFile->name, name);
     strcpy(newFile->content, content);
     newFile->id = id;
     newFile->size = size;
+//    newFile->creationTime = Date->tm_sec; Not working
 
     // Allocate file on disk.
     newFile->fatStartPosition = createData(disk, fat, size, newFile->id);

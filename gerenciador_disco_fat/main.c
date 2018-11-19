@@ -39,10 +39,9 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
     unsigned size;
 
     clearScreen();
-
     printf("[ Create File ]\n");
     printf(" > File name: ");
-    scanf("%s", name);
+    scanf("%[^\n]", name);
     cleanBuffer();
 
     printf(" > Content: ");
@@ -52,9 +51,32 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
     size = fileSize(content);
     // Checks if there is available space on storage.
     if (size <= disk->availableSpace) {
+
+        //Creating command to move file for Files directory
+        char command[100];
+        strcpy(command, "mv " );
+        strcat(command, name);
+        strcat(command, "\t");
+        strcat(command, " Files");
+        //command = "mv 'name' Files"  (Only for linux)
+
+        //Creating real file in disk
+        FILE *arq;
+
+        //Writing file
+        arq = fopen(name, "w");
+        fprintf(arq, "%s", content);
+
+        //Ending operation
+        fclose(arq);
+
+        //Moving created file to directory Files
+        system(command);
+
         allocateFile(disk, fat, name, content, size, id);
         printHeader("File created successfully");
         printf(" - Name: %s\n", name);
+
         printf(" - Size: %dw\n", size);
     }
     else {
