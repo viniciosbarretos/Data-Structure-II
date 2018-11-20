@@ -167,6 +167,9 @@ int main() {
     // File Allocation Table
     FAT *fat = initializeTable(storageSize);
 
+    // Create files folder
+    system("mkdir files");
+
     do {
         printOptions();
         scanf("%d", &option);
@@ -174,7 +177,8 @@ int main() {
         switch (option) {
             case 0:
                 printf("\n\nBye bye :)\n");
-                system("rm files/*"); // Clear files folder
+                if(disk->availableSpace < storageSize) // Checks if there are files
+                    system("rm files/*"); // Clear files folder
                 break;
             case 1:
                 createFile(disk, fat, id++);
