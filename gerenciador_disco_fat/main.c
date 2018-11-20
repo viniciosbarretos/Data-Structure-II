@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "render.h"
-#include "storage.h"
+#include "libs/render.h"
+#include "libs/storage.h"
 
 // Clean buffer after a text input
 void cleanBuffer() {
@@ -57,7 +57,7 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
         strcpy(command, "mv " );
         strcat(command, name);
         strcat(command, "\t");
-        strcat(command, " Files");
+        strcat(command, " files");
 
         //Creating real file in disk
         FILE *file;
@@ -104,8 +104,8 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
                 if(fat[i].fileAddress->id == removeID) {
 
                     //Accessing files directory for remove successful
-                    char dir[30];
-                    strcpy(dir, "Files/");
+                    char dir[50];
+                    strcpy(dir, "files/");
                     strcat(dir, fat[i].fileAddress->name);
 
                     //Removing real file from directory 'Files'.
@@ -133,7 +133,7 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
 }
 
 void showFile(FAT *fat, unsigned storageSize) {
-    unsigned i, id;
+    unsigned i, id, found = 0;
     clearScreen();
 
     printf("[ Files on storage ]\n");
@@ -148,8 +148,12 @@ void showFile(FAT *fat, unsigned storageSize) {
     for(i=0; i<storageSize; i++) {
         if(fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
             printFileContent(fat[i].fileAddress);
+            found = 1;
         }
     }
+
+    if(!found)
+        printHeader("File does not exist");
 }
 
 int main() {
@@ -170,15 +174,26 @@ int main() {
         switch (option) {
             case 0:
                 printf("\n\nBye bye :)\n");
+                system("rm files/*"); // Clear files folder
                 break;
             case 1:
                 createFile(disk, fat, id++);
                 break;
             case 2:
-                showFile(fat, storageSize);
+                if(disk->availableSpace < storageSize)
+                    showFile(fat, storageSize);
+                else {
+                    clearScreen();
+                    printf("\n[ There is no file to be shown ]\n");
+                }
                 break;
             case 3:
-                removeFile(disk, fat, storageSize);
+                if(disk->availableSpace < storageSize)
+                    removeFile(disk, fat, storageSize);
+                else {
+                    clearScreen();
+                    printf("\n[ There is no file to be deleted ]\n");
+                }
                 break;
             case 4:
                 printf("\n[ Storage ]\n\n");
