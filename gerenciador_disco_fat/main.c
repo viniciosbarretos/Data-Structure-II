@@ -33,7 +33,7 @@ void printOptions() {
     printf("\nSelect your option: ");
 }
 
-// Request to user the information to create a file
+// Request the information to create a file
 void createFile(Storage *disk, FAT *fat, unsigned id) {
     char name[20], content[200];
     unsigned size;

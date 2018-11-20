@@ -121,7 +121,10 @@ void printTable(FAT *fat, unsigned storageSize) {
     unsigned i, j=0;
 
     for (i=0; i<storageSize; i++) {
-        printf("%4d", fat[i].nextAddress);
+        if(fat[i].nextAddress == 0)
+            printf("   -");
+        else
+            printf("%4d", fat[i].nextAddress);
         j++;
         if(j == 30) {
             printf("\n");
