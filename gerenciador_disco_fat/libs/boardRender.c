@@ -39,7 +39,7 @@ int splitTrace(Trace traces[100], const char *string, char divider){
     int size;
 
     // Iterate over string finding the dividers.
-    for(i=0; i<n; i++){
+    for (i=0; i<n; i++){
         if (string[i] == divider) {
             // Copy the fragment of trace.
             strcpyfrgm(aux, string, start, lenght);

@@ -97,11 +97,11 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
     scanf("%c", &option);
 
     // Check with user really agree with that.
-    if(option == 'y' || option == 'Y') {
+    if (option == 'y' || option == 'Y') {
         cleanBuffer();
-        for(i=0; i<storageSize; i++) {
-            if(fat[i].fileAddress != NULL) {
-                if(fat[i].fileAddress->id == removeID) {
+        for (i=0; i<storageSize; i++) {
+            if (fat[i].fileAddress != NULL) {
+                if (fat[i].fileAddress->id == removeID) {
 
                     //Accessing files directory for remove successful
                     char dir[50];
@@ -122,7 +122,7 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
                 }
             }
         }
-        if(removeID != 0) {
+        if (removeID != 0) {
             printHeader("File does not exist");
         }
     }
@@ -145,14 +145,14 @@ void showFile(FAT *fat, unsigned storageSize) {
     cleanBuffer();
 
     // Search for file on table.
-    for(i=0; i<storageSize; i++) {
-        if(fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
+    for (i=0; i<storageSize; i++) {
+        if (fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
             printFileContent(fat[i].fileAddress);
             found = 1;
         }
     }
 
-    if(!found)
+    if (!found)
         printHeader("File does not exist");
 }
 
@@ -225,7 +225,7 @@ int main() {
         }
         printf("\n\nPress enter to continue... ");
         getchar();
-    } while(option);
+    } while (option);
     
     return 0;
 }

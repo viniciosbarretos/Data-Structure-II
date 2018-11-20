@@ -15,7 +15,7 @@ void clearScreen() {
 }
 
 void printSequence(const char *str, int times) {
-    while( times > 0 ) {
+    while ( times > 0 ) {
         printf("%s", str);
         times--;
     }
@@ -97,8 +97,8 @@ void printFileContent(File *file) {
 void printFileList(FAT *fat, unsigned storageSize) {
     unsigned i;
 
-    for(i=0; i<storageSize; i++) {
-        if(fat[i].fileAddress != NULL)
+    for (i=0; i<storageSize; i++) {
+        if (fat[i].fileAddress != NULL)
             printf("ID: %d, Name: %s\n", fat[i].fileAddress->id, fat[i].fileAddress->name);
     }
 }
@@ -108,8 +108,8 @@ void printFileList(FAT *fat, unsigned storageSize) {
 void printFiles(FAT *fat, unsigned storageSize) {
     unsigned i;
 
-    for(i=0; i<storageSize; i++) {
-        if(fat[i].fileAddress != NULL) {
+    for (i=0; i<storageSize; i++) {
+        if (fat[i].fileAddress != NULL) {
             printDetailedFileInfo(fat, fat[i].fileAddress);
         }
     }
@@ -121,12 +121,12 @@ void printTable(FAT *fat, unsigned storageSize) {
     unsigned i, j=0;
 
     for (i=0; i<storageSize; i++) {
-        if(fat[i].nextAddress == 0)
+        if (fat[i].nextAddress == 0)
             printf("   -");
         else
             printf("%4d", fat[i].nextAddress);
         j++;
-        if(j == 30) {
+        if (j == 30) {
             printf("\n");
             j = 0;
         }
@@ -139,12 +139,12 @@ void printStorage(Storage *disk, unsigned storageSize) {
     unsigned i, j=0;
 
     for (i=0; i<storageSize; i++) {
-        if(disk->data[i].fileID == 0)
+        if (disk->data[i].fileID == 0)
             printf("   -");
         else
             printf("%4d", disk->data[i].fileID);
         j++;
-        if(j == 30) {
+        if (j == 30) {
             printf("\n");
             j = 0;
         }
