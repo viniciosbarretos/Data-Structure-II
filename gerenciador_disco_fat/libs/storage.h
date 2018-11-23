@@ -11,6 +11,7 @@ typedef struct StorageBlock {
 // and a counter specifying your available space
 typedef struct Storage {
     StorageBlock *data;
+    char
     unsigned availableSpace;
 } Storage;
 
@@ -23,6 +24,17 @@ typedef struct File {
     unsigned id;
     unsigned fatStartPosition;
 } File;
+
+
+// Structure of files list and his fragmentation's
+typedef struct Node {
+    unsigned startPosition;
+    unsigned size;
+    struct Node *next;
+    File *fileInfos;
+} Node;
+
+
 
 // Structure to represent a row of storage table
 typedef struct FAT {
