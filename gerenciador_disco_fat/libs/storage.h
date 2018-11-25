@@ -11,45 +11,67 @@ typedef struct StorageBlock {
 // and a counter specifying your available space
 typedef struct Storage {
     StorageBlock *data;
-    char
     unsigned availableSpace;
 } Storage;
 
+/*
 // Structure of a file with an unique ID and the
 // position of start at storage table to direct access
-typedef struct File {
+typedef struct File_old_ {
     char name[40];
     char content[200];
     unsigned size;
     unsigned id;
     unsigned fatStartPosition;
-} File;
+} File_old_;
+*/
+
+typedef struct Metadata {
+    char *name;
+    unsigned size;
+    unsigned id;
+    // Security
+    unsigned owner;
+    short unsigned protection;
+    // Time controllers
+    int creationTime;
+    int uptateTime;
+    int accessTime;
+} Metadata;
 
 
-// Structure of files list and his fragmentation's
+// Structure of files list and his fragments
 typedef struct Node {
     unsigned startPosition;
     unsigned size;
     struct Node *next;
-    File *fileInfos;
+    Metadata *metadata;
 } Node;
 
+// List of nodes.
+typedef struct NodeList {
+    struct Node *start;
+    struct Node *end;
+} NodeList;
 
-
+/*
 // Structure to represent a row of storage table
-typedef struct FAT {
+typedef struct FAT_old_ {
     StorageBlock *block;  // Logical address of storage block
     File *fileAddress;   // Point to file address
     int nextAddress;    // Next fat address of a file
-} FAT;
+} FAT_old_;
+*/
 
-
+NodeList *newNodeList();
 Storage* initializeStorage(unsigned size);
 unsigned fileSize(char *content);
-unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id);
-void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id);
-FAT* initializeTable(unsigned storageSize);
-void deallocateFile(Storage *disk, FAT *fat, int i);
+void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned id, char *name, char *content, unsigned size);
+int deallocateFile(Storage *storage, NodeList **list, unsigned id);
+//unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id);
+//void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id);
+//FAT* initializeTable(unsigned storageSize);
+//void deallocateFile(Storage *disk, FAT *fat, int i);
 
 
 #endif //DATA_STRUCTURE_STORAGE_H

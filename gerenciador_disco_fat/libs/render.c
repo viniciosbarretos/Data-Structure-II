@@ -38,7 +38,7 @@ void printStorageSpace(Storage *disk) {
 }
 
 // Print all information of a file
-void printDetailedFileInfo(FAT *fat, File *file) {
+void printDetailedFileInfo(Node *node) {
     // Initiate control variables
     int x = 0;
     int y = 0;
@@ -51,7 +51,7 @@ void printDetailedFileInfo(FAT *fat, File *file) {
     cleanBoard(board, r, c);
 
     // Render file info's.
-    renderFileNode(board, x, y, r, c, file);
+    renderMetadata(board, x, y, r, c, node->metadata);
     x+=30;
     lines +=5;
 
@@ -59,64 +59,79 @@ void printDetailedFileInfo(FAT *fat, File *file) {
     renderArrow(board, x, y+2, r, c, "R3,");
 
     // Iterate over pointer ons FAT's table.
-    int aux = file->fatStartPosition;
-    while (aux != -1) {
+    Node *aux = node;
+    while (aux && aux->metadata->id == node->metadata->id) {
         if (x + 16 < c) {
             if (!isFirstArrow) {
                 renderArrow(board, x, y+2, r, c, "R3,");
             } else {
                 isFirstArrow = 0;
             }
-            renderFatNode(board, x+3, y, r, c, &fat[aux]);
+            renderFileNode(board, x + 3, y, r, c, aux);
             x+=16;
-            aux = fat[aux].nextAddress;
         } else {
             sprintf(trace, "R3,D2,L%d,D3,R1,", x-29);
             renderArrow(board, x, y+2, r, c, trace);
             y += 5;
             x = 30;
-            renderFatNode(board, x+3, y, r, c, &fat[aux]);
+            renderFileNode(board, x + 3, y, r, c, aux);
             isFirstArrow=1;
             lines += 5;
         }
+        aux = aux->next;
     }
 
-    printBoard(board, lines);
+    printBoard(board, max(6, lines));
 }
 
 
-void printFileContent(File *file) {
+void printFileContent(Metadata *metadata) {
     printSequence("-", 80);
-    printf("\nName: \n%s\n", file->name);
-    printf("\nContent: \n%s\n", file->content);
+    printf("\nName: \n%s\n", metadata->name);
+    printf("\nContent: \n%s\n", "test content");
     printSequence("-", 80);
 }
 
 
 // Print a list of all files allocated at table and storage
-void printFileList(FAT *fat, unsigned storageSize) {
-    unsigned i;
+void printFileList(NodeList *list) {
+    int oldId = -1;
+    int id;
 
-    for (i=0; i<storageSize; i++) {
-        if (fat[i].fileAddress != NULL)
-            printf("ID: %d, Name: %s\n", fat[i].fileAddress->id, fat[i].fileAddress->name);
+    // Iterate over list
+    Node *aux = list->start;
+    while (aux) {
+        id = aux->metadata->id;
+        if (oldId != id) {
+            oldId = id;
+            printf("ID: %d, Name: %s\n", id, aux->metadata->name);
+        }
+
+        aux = aux->next;
     }
 }
 
 
 // Print detailed all files allocated at table and storage
-void printFiles(FAT *fat, unsigned storageSize) {
-    unsigned i;
+void printFiles(NodeList *list) {
+    int oldId = -1;
+    int id;
 
-    for (i=0; i<storageSize; i++) {
-        if (fat[i].fileAddress != NULL) {
-            printDetailedFileInfo(fat, fat[i].fileAddress);
+    // Iterate over list
+    Node *aux = list->start;
+    while (aux) {
+        id = aux->metadata->id;
+        if (oldId != id) {
+            oldId = id;
+            printDetailedFileInfo(aux);
         }
+        aux = aux->next;
     }
 }
 
 
 // Print current table status in a matrix format
+/*
 void printTable(FAT *fat, unsigned storageSize) {
     unsigned i, j=0;
 
@@ -132,7 +147,7 @@ void printTable(FAT *fat, unsigned storageSize) {
         }
     }
 }
-
+*/
 
 // Print current storage status in a matrix format
 void printStorage(Storage *disk, unsigned storageSize) {

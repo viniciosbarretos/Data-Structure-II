@@ -34,7 +34,7 @@ void printOptions() {
 }
 
 // Request the information to create a file
-void createFile(Storage *disk, FAT *fat, unsigned id) {
+void createFile(Storage *disk, NodeList **files, unsigned diskSize, unsigned id) {
     char name[20], content[200];
     unsigned size;
 
@@ -68,7 +68,7 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
         //Moving created file to directory Files
         system(command); //Only for linux
 
-        allocateFile(disk, fat, name, content, size, id);
+        allocateFile(disk, files, diskSize, id, name, content, size);
         printHeader("File created successfully");
         printf(" - Name: %s\n", name);
 
@@ -80,13 +80,13 @@ void createFile(Storage *disk, FAT *fat, unsigned id) {
 }
 
 // Ask to user what file will be deleted
-void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
-    unsigned removeID, i;
+void removeFile(Storage *storage, NodeList **files) {
+    unsigned removeID;
     char option;
     clearScreen();
 
     printf("[ Files on storage ]\n");
-    printFileList(fat, storageSize);
+    printFileList(*files);
 
     printf("\n[ Remove a file ]\n");
     printf(" > File id: ");
@@ -99,30 +99,33 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
     // Check with user really agree with that.
     if (option == 'y' || option == 'Y') {
         cleanBuffer();
-        for (i=0; i<storageSize; i++) {
-            if (fat[i].fileAddress != NULL) {
-                if (fat[i].fileAddress->id == removeID) {
 
-                    //Accessing files directory for remove successful
-                    char dir[50];
-                    strcpy(dir, "files/");
-                    strcat(dir, fat[i].fileAddress->name);
+        removeID = (unsigned) deallocateFile(storage, files, removeID);
 
-                    //Removing real file from directory 'Files'.
-                    FILE *file;
-                    file = fopen(dir, "r");
-                    fclose(file);
-                    remove(dir);
-
-                    deallocateFile(disk, fat, i);
-                    // Delete file
-                    free(fat[i].fileAddress);
-                    printHeader("File removed successfully");
-                    removeID = 0; // Control variable
-                }
-            }
-        }
-        if (removeID != 0) {
+//        for (i=0; i<storageSize; i++) {
+//            if (fat[i].fileAddress != NULL) {
+//                if (fat[i].fileAddress->id == removeID) {
+//
+//                    //Accessing files directory for remove successful
+//                    char dir[50];
+//                    strcpy(dir, "files/");
+//                    strcat(dir, fat[i].fileAddress->name);
+//
+//                    //Removing real file from directory 'Files'.
+//                    FILE *file;
+//                    file = fopen(dir, "r");
+//                    fclose(file);
+//                    remove(dir);
+//
+//                    deallocateFile(disk, fat, i);
+//                    // Delete file
+//                    free(fat[i].fileAddress);
+//                    printHeader("File removed successfully");
+//                    removeID = 0; // Control variable
+//                }
+//            }
+//        }
+        if (removeID == 0) {
             printHeader("File does not exist");
         }
     }
@@ -132,12 +135,12 @@ void removeFile(Storage *disk, FAT *fat, unsigned storageSize) {
 
 }
 
-void showFile(FAT *fat, unsigned storageSize) {
+void showFile(NodeList *files) {
     unsigned i, id, found = 0;
     clearScreen();
 
     printf("[ Files on storage ]\n");
-    printFileList(fat, storageSize);
+    printFileList(files);
 
     printf("\n[ Select a file to open ]\n");
     printf(" > File id: ");
@@ -145,15 +148,18 @@ void showFile(FAT *fat, unsigned storageSize) {
     cleanBuffer();
 
     // Search for file on table.
-    for (i=0; i<storageSize; i++) {
-        if (fat[i].fileAddress != NULL && fat[i].fileAddress->id == id) {
-            printFileContent(fat[i].fileAddress);
+    Node *aux = files->start;
+    while (aux && !found) {
+        if (aux->metadata->id == id) {
+            printFileContent(aux->metadata);
             found = 1;
         }
+        aux = aux->next;
     }
 
-    if (!found)
+    if (!found) {
         printHeader("File does not exist");
+    }
 }
 
 int main() {
@@ -164,11 +170,19 @@ int main() {
     // Initialization of a 300w disk
     Storage *disk = initializeStorage(storageSize);
 
-    // File Allocation Table
-    FAT *fat = initializeTable(storageSize);
+    // Initialize Node list
+    NodeList *files = newNodeList();
 
     // Create files folder
     system("mkdir files");
+
+    // automated test.
+    allocateFile(disk, &files, storageSize, id++, "amor", "asdfasdfasdf", 3);
+    allocateFile(disk, &files, storageSize, id++, "Belinha", "asdfasdfasdf", 3);
+    allocateFile(disk, &files, storageSize, id++, "coracao", "asdfasdfasdf", 3);
+    allocateFile(disk, &files, storageSize, id++, "dedo", "asdfasdfasdf", 3);
+    deallocateFile(disk, &files, 1);
+    deallocateFile(disk, &files, 3);
 
     do {
         printOptions();
@@ -177,15 +191,15 @@ int main() {
         switch (option) {
             case 0:
                 printf("\n\nBye bye :)\n");
-                if(disk->availableSpace < storageSize) // Checks if there are files
-                    system("rm files/*"); // Clear files folder
+//                if(disk->availableSpace < storageSize) // Checks if there are files
+//                    system("rm files/*"); // Clear files folder
                 break;
             case 1:
-                createFile(disk, fat, id++);
+                createFile(disk, &files, storageSize, id++);
                 break;
             case 2:
                 if(disk->availableSpace < storageSize)
-                    showFile(fat, storageSize);
+                    showFile(files);
                 else {
                     clearScreen();
                     printf("\n[ There is no file to be shown ]\n");
@@ -193,7 +207,7 @@ int main() {
                 break;
             case 3:
                 if(disk->availableSpace < storageSize)
-                    removeFile(disk, fat, storageSize);
+                    removeFile(disk, &files);
                 else {
                     clearScreen();
                     printf("\n[ There is no file to be deleted ]\n");
@@ -204,18 +218,15 @@ int main() {
                 printStorage(disk, storageSize);
                 break;
             case 5:
-                printf("\n\n[ Table ]\n\n");
-                printTable(fat, storageSize);
+                printf("\n[ Files in disk ]\n\n");
+                printFileList(files);
                 break;
             case 6:
                 printf("\n[ Storage ]\n\n");
                 printStorage(disk, storageSize);
 
-                printf("\n\n[ Table ]\n\n");
-                printTable(fat, storageSize);
-
                 printf("\n\n[ Files ]\n");
-                printFiles(fat, storageSize);
+                printFiles(files);
                 break;
             case 7:
                 printStorageSpace(disk);

@@ -3,15 +3,17 @@
 
 #include "storage.h"
 
+#define max(a, b) ((a)>(b) ? (a) : (b))
+
 void printSequence(const char *str, int times);
 void clearScreen();
 void printHeader(const char *str);
 void printStorageSpace(Storage *disk);
-void printDetailedFileInfo(FAT *fat, File *file);
-void printFileContent(File *file);
-void printFileList(FAT *fat, unsigned storageSize);
-void printFiles(FAT *fat, unsigned storageSize);
-void printTable(FAT *fat, unsigned storageSize);
+void printDetailedFileInfo(Node *node);
+void printFileContent(Metadata *metadata);
+void printFileList(NodeList *list);
+void printFiles(NodeList *list);
+//void printTable(FAT *fat, unsigned storageSize);
 void printStorage(Storage *disk, unsigned storageSize);
 
 

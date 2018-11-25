@@ -8,8 +8,8 @@
 
 void cleanBoard(char board[r][c], int row, int col);
 void printBoard(char board[r][c], int row);
-void renderFatNode(char board[r][c], int x, int y, int row, int col, FAT *fat);
-void renderFileNode(char board[r][c], int x, int y, int row, int col, File *file);
+void renderFileNode(char board[r][c], int x, int y, int row, int col, Node *node);
+void renderMetadata(char board[r][c], int x, int y, int row, int col, Metadata *info);
 void renderArrow(char board[r][c], int x, int y, int row, int col, const char *trace);
 
 
