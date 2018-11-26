@@ -52,21 +52,22 @@ void createFile(Storage *disk, NodeList **files, unsigned diskSize, unsigned id)
     // Checks if there is available space on storage.
     if (size <= disk->availableSpace) {
 
-        //Creating command to move file for Files directory
-        char command[100];
-        strcpy(command, "mv " );
-        strcat(command, name);
-        strcat(command, "\t");
-        strcat(command, " files");
 
-        //Creating real file in disk
-        FILE *file;
-        file = fopen(name, "w");
-        fprintf(file, "%s", content);
-        fclose(file);
-
-        //Moving created file to directory Files
-        system(command); //Only for linux
+//        //Creating command to move file for Files directory
+//        char command[100];
+//        strcpy(command, "mv " );
+//        strcat(command, name);
+//        strcat(command, "\t");
+//        strcat(command, " files");
+//
+//        //Creating real file in disk
+//        FILE *file;
+//        file = fopen(name, "w");
+//        fprintf(file, "%s", content);
+//        fclose(file);
+//
+//        //Moving created file to directory Files
+//        system(command); //Only for linux
 
         allocateFile(disk, files, diskSize, id, name, content, size);
         printHeader("File created successfully");
