@@ -221,6 +221,8 @@ int main() {
             case 5:
                 printf("\n[ Files in disk ]\n\n");
                 printFileList(files);
+                dehidrate(disk, files);
+
                 break;
             case 6:
                 printf("\n[ Storage ]\n\n");

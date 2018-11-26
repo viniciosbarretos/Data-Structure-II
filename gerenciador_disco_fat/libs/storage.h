@@ -1,5 +1,6 @@
 #ifndef DATA_STRUCTURE_STORAGE_H
 #define DATA_STRUCTURE_STORAGE_H
+#include <stdio.h>
 
 // Each block have 1w size and a logical address
 typedef struct StorageBlock {
@@ -68,6 +69,11 @@ Storage* initializeStorage(unsigned size);
 unsigned fileSize(char *content);
 void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned id, char *name, char *content, unsigned size);
 int deallocateFile(Storage *storage, NodeList **list, unsigned id);
+void dehidrate(Storage *storage, NodeList *nodeList);
+void dehydrateNodeList(FILE *file, NodeList *nodeList);
+void dehydrateStorage(FILE *file, Storage *storage);
+Storage* hydrateStorage(FILE *file, Storage *storage);
+NodeList hydrateNodeList(FILE *file);
 //unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id);
 //void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id);
 //FAT* initializeTable(unsigned storageSize);

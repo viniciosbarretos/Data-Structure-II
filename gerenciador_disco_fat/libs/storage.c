@@ -23,50 +23,84 @@
 
 //Saving StorageState in a real file storage.txt
 void dehydrateStorage(FILE *file, Storage *storage) {
-    file = fopen("storage.txt","w");
+    file = fopen("save_state.txt", "wb");
 
-    fwrite(storage, sizeof(storage),1,file);
-
-//    for(int i = 0; i < 300; i++) {
-//        fprintf(file, "%d,%d\n", storage->data[i].logicalAddress, storage->data[i].fileID);
-//    }
+    if(file == NULL) {
+        printf("Error while saving file state.\n");
+        getchar();
+    }
+    else {
+        fwrite(storage, sizeof(Storage), 1, file);
+    }
     fclose(file);
 }
 
+//Not working, verify "fwrite" and "fread" while.
 void dehydrateNodeList(FILE *file, NodeList *nodeList) {
-    file = fopen("node.txt","w");
+
+    //Writing node file state
+    file = fopen("save_state.txt", "wb");
+
     Node *aux = nodeList->start;
+
     while(aux != NULL) {
-        fwrite(aux, sizeof(Node),1,file);
-        //fprintf(file, "%d, %s, %d, %d, %d, %d\n", aux->metadata->id, aux->metadata->name, aux->metadata->size, aux->metadata->creationTime, aux->startPosition, aux->size);
+        if(file == NULL) {
+            printf("Error while saving file state.\n");
+            getchar();
+            break;
+        }
+        else {
+            fwrite(aux, sizeof(Node),1,file);
+            //fprintf(file, "%d, %s, %d, %d, %d, %d\n", aux->metadata->id, aux->metadata->name, aux->metadata->size, aux->metadata->creationTime, aux->startPosition, aux->size);
+            aux = aux->next;
+        }
+    }
+    fclose(file);
+
+    //Reading file tests.
+    file = fopen("storage.txt", "rb");
+    if(file == NULL) {
+        printf("Erro");
+        getchar();
+    }
+    aux = nodeList->start;
+    while(aux != NULL) {
+        fread(aux, sizeof(Node), 1, file);
         aux = aux->next;
     }
     fclose(file);
 }
 
 void dehidrate(Storage *storage, NodeList *nodeList) {
-    FILE *file1 = NULL, *file2 = NULL;
-
-    dehydrateStorage(file1,storage);
-    dehydrateNodeList(file2,nodeList);
+    FILE *file = NULL;
+    dehydrateStorage(file,storage);
+    dehydrateNodeList(file,nodeList);
 }
 
 /*
  * Hydrate the storage data.
  * */
 
-Storage* hydrateStorage(FILE *file) {
+Storage* hydrateStorage(FILE *file, Storage *storage) {
 
+//    file = fopen("storage.txt", "rb");
+//    if(file == NULL) {
+//        printf("Erro");
+//        getchar();
+//        exit(1);
+//    }
+//    fread(storage, sizeof(Storage), 1, file);
+//    printf("\nEspaço livre: %d\n", storage->availableSpace);
 }
 
 NodeList hydrateNodeList(FILE *file) {
 
 }
 
-void hidrate(Storage **pStorage, NodeList **pNodeList) {
-    *pStorage = hydrateStorage();
-    *pNodeList = hydrateNodeList();
-}
+//void hidrate(Storage **pStorage, NodeList **pNodeList) {
+//    *pStorage = hydrateStorage();
+//    *pNodeList = hydrateNodeList();
+//}
 
 // Count file size based at amount of character typed
 unsigned fileSize(char *content) {
