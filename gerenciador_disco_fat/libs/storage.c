@@ -164,14 +164,17 @@ void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned
     metadata->creationTime = (int) t;
     metadata->uptateTime = (int) t;
 
-    // Save file.
-//    FILE *file;
-//    char dir[50] = "/temp/";
-//    strcat(dir, name);
-//    file = fopen(dir, "w");
-//
-//    fprintf(file, "%s", content);
-//    fclose(file);
+    //Saving real file in disk
+    FILE *file;
+    //Setting directory of file
+    char dir[50] = "Files/";
+    strcat(dir, name);
+
+    file = fopen(dir, "w");
+
+    //Writing file
+    fprintf(file, "%s", content);
+    fclose(file);
 
     // Save the file in disk
     unsigned remaining = size;
@@ -216,6 +219,22 @@ int deallocateFile(Storage *storage, NodeList **list, unsigned id) {
 
     // If node is searched.
     if (aux && aux->metadata->id == id) {
+
+        //Next lines for remove real files from disk works on linux only
+
+        //Removing real file in disk
+        FILE *file;
+        //Setting directory of file to remove
+        char dir[50] = "Files/";
+        strcat(dir, aux->metadata->name);
+
+        file = fopen(dir, "r");
+
+        //Removing file
+        remove(dir);
+        fclose(file);
+
+
         // Save temp metadata.
         tempInfo = aux->metadata;
 
