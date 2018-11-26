@@ -4,6 +4,51 @@
 #include <stdio.h>
 #include "storage.h"
 
+/*
+ * system.dat
+ * ---------------------------------------------------
+ * 1;1;1;1;1;1;2;2;2;5;5;4;4;4;4;5;5;5;5;\n // storage
+ * 1{metadata}
+ * 0{node}
+ * 0{node}
+ * 1{metadata}
+ * 0{node}
+ * 1{metadata}
+ * 0{node}
+ */
+
+/*
+ * Dehydrate the storage data.
+ * */
+void dehydrateStorage(FILE *file, Storage *storage) {
+
+}
+
+void dehydrateNodeList(FILE *file, NodeList *nodeList) {
+
+}
+
+void dehidrate(Storage *storage, NodeList *nodeList) {
+    dehydrateStorage();
+    dehydrateNodeList();
+}
+
+
+/*
+ * Hydrate the storage data.
+ * */
+Storage* hydrateStorage(FILE *file) {
+
+}
+
+NodeList hydrateNodeList(FILE *file) {
+
+}
+
+void hidrate(Storage **pStorage, NodeList **pNodeList) {
+    *pStorage = hydrateStorage();
+    *pNodeList = hydrateNodeList();
+}
 
 // Count file size based at amount of character typed
 unsigned fileSize(char *content) {
