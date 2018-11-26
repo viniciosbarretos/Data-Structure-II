@@ -37,36 +37,32 @@ void dehydrateStorage(FILE *file, Storage *storage) {
 
 //Not working, verify "fwrite" and "fread" while.
 void dehydrateNodeList(FILE *file, NodeList *nodeList) {
-
-    //Writing node file state
-    file = fopen("save_state.txt", "wb");
+    int count = 0;
+    int total_writing;
 
     Node *aux = nodeList->start;
 
     while(aux != NULL) {
-        if(file == NULL) {
-            printf("Error while saving file state.\n");
-            getchar();
-            break;
-        }
-        else {
-            fwrite(aux, sizeof(Node),1,file);
-            //fprintf(file, "%d, %s, %d, %d, %d, %d\n", aux->metadata->id, aux->metadata->name, aux->metadata->size, aux->metadata->creationTime, aux->startPosition, aux->size);
-            aux = aux->next;
-        }
+        count++;
+        aux = aux->next;
     }
-    fclose(file);
 
-    //Reading file tests.
-    file = fopen("storage.txt", "rb");
+    //Writing node file state
+    file = fopen("save_state.txt", "wb");
     if(file == NULL) {
-        printf("Erro");
+        printf("Error while saving file state.\n");
         getchar();
     }
-    aux = nodeList->start;
-    while(aux != NULL) {
-        fread(aux, sizeof(Node), 1, file);
-        aux = aux->next;
+    else {
+        total_writing = fwrite(aux, sizeof(Node), count, file);
+
+        if(total_writing == count) {
+            printf("Writing successful");
+        }
+        else {
+            printf("Error");
+        }
+
     }
     fclose(file);
 }
