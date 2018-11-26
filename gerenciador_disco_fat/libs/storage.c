@@ -20,10 +20,12 @@
 /*
  * Dehydrate the storage data.
  * */
+
+//Saving StorageState in a real file storage.txt
 void dehydrateStorage(FILE *file, Storage *storage) {
     file = fopen("storage.txt","w");
 
-    fwrite(&storage, sizeof(storage),1,file);
+    fwrite(storage, sizeof(storage),1,file);
 
 //    for(int i = 0; i < 300; i++) {
 //        fprintf(file, "%d,%d\n", storage->data[i].logicalAddress, storage->data[i].fileID);
@@ -35,7 +37,7 @@ void dehydrateNodeList(FILE *file, NodeList *nodeList) {
     file = fopen("node.txt","w");
     Node *aux = nodeList->start;
     while(aux != NULL) {
-        fwrite(&aux, sizeof(Node),1,file);
+        fwrite(aux, sizeof(Node),1,file);
         //fprintf(file, "%d, %s, %d, %d, %d, %d\n", aux->metadata->id, aux->metadata->name, aux->metadata->size, aux->metadata->creationTime, aux->startPosition, aux->size);
         aux = aux->next;
     }
