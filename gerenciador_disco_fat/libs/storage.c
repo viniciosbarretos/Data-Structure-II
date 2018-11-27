@@ -257,12 +257,11 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
     while (aux) {
         aux2 = aux;
         aux = aux->next;
-        free(aux2->metadata);
+        //free(aux2->metadata);
         free(aux2);
     }
     system("files /rm *");
     system("save /rm *");
-
 
     nodeList->start = NULL;
     nodeList->end = NULL;
