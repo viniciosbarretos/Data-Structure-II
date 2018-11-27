@@ -26,8 +26,8 @@ void printOptions() {
     printf("2 - Open File\n");
     printf("3 - Delete File\n");
     printf("4 - Show Storage\n");
-    printf("5 - Show Table\n");
-    printf("6 - Show Storage, Table and Files\n");
+    printf("5 - Show Files\n");
+    printf("6 - Show Storage and Files\n");
     printf("7 - Show Available Storage Space \n");
     printf("8 - Erase disk\n");
     printf("0 - End Simulation\n");
@@ -54,10 +54,14 @@ void createFile(Storage *disk, NodeList **files, unsigned diskSize, unsigned id)
     // Checks if there is available space on storage.
     if (size <= disk->availableSpace) {
 
+        // Allocate file in disk
         allocateFile(disk, files, diskSize, id, name, content, size);
+
+        // Persist disk state.
+        dehydrate(disk, *files, id, diskSize);
+
         printHeader("File created successfully");
         printf(" - Name: %s\n", name);
-
         printf(" - Size: %dw\n", size);
     }
     else {
@@ -66,7 +70,7 @@ void createFile(Storage *disk, NodeList **files, unsigned diskSize, unsigned id)
 }
 
 // Ask to user what file will be deleted
-void removeFile(Storage *storage, NodeList **files) {
+void removeFile(Storage *storage, NodeList **files, int id, int diskSize) {
     unsigned removeID;
     char option;
     clearScreen();
@@ -86,7 +90,11 @@ void removeFile(Storage *storage, NodeList **files) {
     if (option == 'y' || option == 'Y') {
         cleanBuffer();
 
+        // Deallocate file from disk.
         removeID = (unsigned) deallocateFile(storage, files, removeID);
+
+        // Persist disk state.
+        dehydrate(storage, *files, id, diskSize);
 
         if (removeID == 0) {
             printHeader("File does not exist");
@@ -173,7 +181,7 @@ int main() {
                 break;
             case 3:
                 if(disk->availableSpace < storageSize)
-                    removeFile(disk, &files);
+                    removeFile(disk, &files, id, storageSize);
                 else {
                     clearScreen();
                     printf("\n[ There is no file to be deleted ]\n");
@@ -186,8 +194,6 @@ int main() {
             case 5:
                 printf("\n[ Files in disk ]\n\n");
                 printFileList(files);
-                dehydrate(disk, files, id, storageSize);
-
                 break;
             case 6:
                 printf("\n[ Storage ]\n\n");
