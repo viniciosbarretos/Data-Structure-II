@@ -78,7 +78,7 @@ Storage* hydrateStorage(FILE *file, int *id, int size) {
     return storage;
 }
 
-NodeList* hydrateNodeList(FILE *file) {
+NodeList* hydrateNodeList(Storage *storage, FILE *file) {
     // Starting an empty list.
     NodeList *list = newNodeList();
 
@@ -97,6 +97,9 @@ NodeList* hydrateNodeList(FILE *file) {
 
             // Read the node.
             fscanf(file, "%d,%d;", &aux->startPosition, &aux->size);
+
+            // Down size of the disk.
+            storage->availableSpace -= aux->size;
 
             // Point to metadata.
             aux->metadata = metaTemp;
@@ -128,7 +131,7 @@ void hydrate(Storage **pStorage, NodeList **pNodeList, int *id, int storageSize)
     // If file can be opened, rehydrate him.
     if (file) {
         *pStorage = hydrateStorage(file, id, storageSize);
-        *pNodeList = hydrateNodeList(file);
+        *pNodeList = hydrateNodeList(*pStorage, file);
     } else { // Else, initialize a new one.
         *pStorage = initializeStorage((unsigned int) storageSize);
         *pNodeList = newNodeList();
