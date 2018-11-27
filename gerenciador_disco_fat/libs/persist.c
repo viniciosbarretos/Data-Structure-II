@@ -132,7 +132,7 @@ void hydrate(Storage **pStorage, NodeList **pNodeList, int *id, int storageSize)
     if (file) {
         *pStorage = hydrateStorage(file, id, storageSize);
         *pNodeList = hydrateNodeList(*pStorage, file);
-        fclose(file); // This need to be here because linux.
+        fclose(file);
     } else { // Else, initialize a new one.
         *pStorage = initializeStorage((unsigned int) storageSize);
         *pNodeList = newNodeList();

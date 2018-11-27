@@ -145,8 +145,6 @@ int main() {
     NodeList *files;
 
     // Create files folder
-    system("mkdir files");
-    system("mkdir save");
 
     // Restore the persisted disk and list.
     hydrate(&disk, &files, (int *) &id, storageSize);
