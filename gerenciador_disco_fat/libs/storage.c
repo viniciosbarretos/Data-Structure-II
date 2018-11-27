@@ -209,7 +209,6 @@ int deallocateFile(Storage *storage, NodeList **list, unsigned id) {
         remove(dir);
         fclose(file);
 
-
         // Save temp metadata.
         tempInfo = aux->metadata;
 
@@ -249,7 +248,7 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
     storage->availableSpace = (unsigned int) size;
     for (unsigned i = 0; i<size; i++) {
         storage->data[i].fileID = 0;
-        storage->data[i].logicalAddress = i;
+//        storage->data[i].logicalAddress = i;
     }
 
     Node *aux = nodeList->start;

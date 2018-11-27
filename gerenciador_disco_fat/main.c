@@ -140,8 +140,6 @@ int main() {
 
     // Initialization of disk and files.
     Storage *disk;
-//    Storage *disk = initializeStorage(storageSize);
-//    NodeList *files = newNodeList();
     NodeList *files;
 
     // Create files folder
@@ -151,31 +149,6 @@ int main() {
     // Restore the persisted disk and list.
     hydrate(&disk, &files, &id, storageSize);
 
-
-
-    // automated test.
-//    allocateFile(disk, &files, storageSize, id++, "a", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "b", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "c", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "d", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "e", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "f", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "g", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "h", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "i", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "j", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "k", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "l", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "m", "a", 2);
-//    allocateFile(disk, &files, storageSize, id++, "n", "a", 2);
-//    deallocateFile(disk, &files, 1);
-//    deallocateFile(disk, &files, 3);
-//    deallocateFile(disk, &files, 5);
-//    deallocateFile(disk, &files, 7);
-//    deallocateFile(disk, &files, 9);
-//    deallocateFile(disk, &files, 11);
-//    deallocateFile(disk, &files, 13);
-
     do {
         printOptions();
         scanf("%d", &option);
@@ -183,8 +156,6 @@ int main() {
         switch (option) {
             case 0:
                 printf("\n\nBye bye :)\n");
-//                if(disk->availableSpace < storageSize) // Checks if there are files
-//                    system("rm files/*"); // Clear files folder
                 break;
             case 1:
                 createFile(disk, &files, storageSize, ++id);
@@ -224,7 +195,7 @@ int main() {
                 printStorageSpace(disk);
                 break;
             case 8:
-                if(disk->availableSpace < storageSize)
+                if(disk->availableSpace < storageSize && disk->data->fileID)
                     eraseDisk(disk, files, storageSize);
                 else
                     printHeader("Empty Disk");
