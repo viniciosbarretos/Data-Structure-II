@@ -144,11 +144,14 @@ int main() {
 //    NodeList *files = newNodeList();
     NodeList *files;
 
+    // Create files folder
+    system("mkdir files");
+    system("mkdir save");
+
     // Restore the persisted disk and list.
     hydrate(&disk, &files, (int *) &id, storageSize);
 
-    // Create files folder
-    system("mkdir files");
+
 
     // automated test.
 //    allocateFile(disk, &files, storageSize, id++, "amor", "asdfasdfasdf", 3);
