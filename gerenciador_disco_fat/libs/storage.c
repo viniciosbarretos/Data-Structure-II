@@ -23,49 +23,29 @@
 
 //Saving StorageState in a real file storage.txt
 void dehydrateStorage(FILE *file, Storage *storage) {
-    file = fopen("save_state.txt", "wb");
+    file = fopen("storage.txt","w");
 
-    if(file == NULL) {
-        printf("Error while saving file state.\n");
-        getchar();
-    }
-    else {
-        fwrite(storage, sizeof(Storage), 1, file);
+    for(int i = 0; i < 300; i++) {
+        fprintf(file, "%d,%d\n", storage->data[i].logicalAddress, storage->data[i].fileID);
     }
     fclose(file);
 }
 
-//Not working, verify "fwrite" and "fread" while.
 void dehydrateNodeList(FILE *file, NodeList *nodeList) {
-    int total_writing = 0;
-
+    file = fopen("node.txt","w");
     Node *aux = nodeList->start;
-    Node *teste;
-
-    //Writing node file state
-    file = fopen("save_state.txt", "wb");
-    fwrite(aux, sizeof(Node), 1, file);
+    while(aux != NULL) {
+        fprintf(file, "%d, %s, %d, %d, %d, %d\n", aux->metadata->id, aux->metadata->name, aux->metadata->size, aux->metadata->creationTime, aux->startPosition, aux->size);
+        aux = aux->next;
+    }
     fclose(file);
-
-    file = fopen("save_state.txt", "rb");
-    fread(teste, sizeof(Node), 1, file);
-    printf("%s", teste->metadata->name);
-    fclose(file);
-
-//    while(aux != NULL) {
-//        fclose(file);
-//        aux = aux->next;
-//    }
-
-    //Teste de leitura
-    //aux = nodeList->start;
-
 }
 
 void dehidrate(Storage *storage, NodeList *nodeList) {
-    FILE *file = NULL;
-    dehydrateStorage(file,storage);
-    dehydrateNodeList(file,nodeList);
+    FILE *file1 = NULL, *file2 = NULL;
+
+    dehydrateStorage(file1,storage);
+    dehydrateNodeList(file2,nodeList);
 }
 
 /*
