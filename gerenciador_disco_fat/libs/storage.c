@@ -4,87 +4,6 @@
 #include <stdio.h>
 #include "storage.h"
 
-/*
- * system.dat
- * ---------------------------------------------------
- * 1;1;1;1;1;1;2;2;2;5;5;4;4;4;4;5;5;5;5;\n // storage
- * 1{metadata}
- * 0{node}
- * 0{node}
- * 1{metadata}
- * 0{node}
- * 1{metadata}
- * 0{node}
- */
-
-/*
- * Dehydrate the storage data.
- * */
-
-
-//Saving StorageState in a real file storage.txt
-void dehydrateStorage(FILE *file, Storage *storage) {
-    file = fopen("storage.txt","w");
-
-    for(int i = 0; i < 300; i++) {
-        fprintf(file, "%d,%d\n", storage->data[i].logicalAddress, storage->data[i].fileID);
-    }
-    fclose(file);
-}
-
-void dehydrateNodeList(FILE *file, NodeList *nodeList) {
-    file = fopen("node.txt","w");
-    Node *aux = nodeList->start;
-
-    int id = -1;
-
-    while(aux != NULL) {
-        //Metadata information - 0: Start of a metadata.
-        if(aux->metadata->id != id) {
-            fprintf(file, "0;%s,%d,%d,%d;", aux->metadata->name, aux->metadata->size, aux->metadata->id, aux->metadata->creationTime);
-            id = aux->metadata->id;
-        }
-
-        //Nodes information - 1: Start of a node.
-        else {
-            fprintf(file, "1;%d,%d;", aux->startPosition, aux->size);
-            aux = aux->next;
-        }
-    }
-    fclose(file);
-}
-
-void dehidrate(Storage *storage, NodeList *nodeList) {
-    FILE *file1 = NULL, *file2 = NULL;
-
-    dehydrateStorage(file1,storage);
-    dehydrateNodeList(file2,nodeList);
-}
-
-/*
- * Hydrate the storage data.
- * */
-
-Storage* hydrateStorage(FILE *file, Storage *storage) {
-
-//    file = fopen("storage.txt", "rb");
-//    if(file == NULL) {
-//        printf("Erro");
-//        getchar();
-//        exit(1);
-//    }
-//    fread(storage, sizeof(Storage), 1, file);
-//    printf("\nEspaço livre: %d\n", storage->availableSpace);
-}
-
-NodeList hydrateNodeList(FILE *file) {
-
-}
-
-//void hidrate(Storage **pStorage, NodeList **pNodeList) {
-//    *pStorage = hydrateStorage();
-//    *pNodeList = hydrateNodeList();
-//}
 
 // Count file size based at amount of character typed
 unsigned fileSize(char *content) {
@@ -146,44 +65,6 @@ void saveOnDisk (Storage *storage, unsigned id, unsigned startPosition, unsigned
     }
 }
 
-//Node* getFreeGap(NodeList *list, unsigned size) {
-//    // start range
-//    unsigned start = 0;
-//    unsigned end = size;
-//
-//    // Locate start of the gap.
-//    Node *aux = list->start;
-//    while (aux) {
-//        if (aux->startPosition == start) {
-//            // Move start.
-//            start += aux->size;
-//            aux = list->start;
-//        } else {
-//            aux = aux->next;
-//        }
-//    }
-//
-//    // Locate end of the gap.
-//    aux = list->start;
-//    while (aux) {
-//        if (end > aux->startPosition && start < aux->startPosition) {
-//            // move end.
-//            end = aux->startPosition;
-//        }
-//        aux = aux->next;
-//    }
-//
-//    // Save free gap
-//    Node *gap = malloc(sizeof(Node));
-//    gap->startPosition = start;
-//    gap->size = end - start;
-//    gap->next = NULL;
-//    gap->metadata = NULL;
-//
-//    return gap;
-//}
-
-
 // Get free allocation space.
 Node* getFreeGap(NodeList *list, unsigned size) {
     // start range
@@ -238,7 +119,7 @@ void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned
 
     // Save metadata
     Metadata *metadata = malloc(sizeof(Metadata));
-    metadata->name = (char*) malloc(sizeof(strlen(name) + 1));
+    metadata->name = (char*) malloc(sizeof(char) * (strlen(name) + 1));
     strcpy(metadata->name, name);
     metadata->size = size;
     metadata->id = id;

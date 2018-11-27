@@ -11,6 +11,7 @@
 #include <string.h>
 #include "libs/render.h"
 #include "libs/storage.h"
+#include "libs/persist.h"
 
 // Clean buffer after a text input
 void cleanBuffer() {
@@ -168,22 +169,23 @@ int main() {
     unsigned storageSize = 300;
     unsigned id = 1;
 
-    // Initialization of a 300w disk
-    Storage *disk = initializeStorage(storageSize);
+    // Initialization of disk and files.
+    Storage *disk;
+    NodeList *files;
 
-    // Initialize Node list
-    NodeList *files = newNodeList();
+    // Restore the persisted disk and list.
+    hydrate(&disk, &files, storageSize);
 
     // Create files folder
     system("mkdir files");
 
     // automated test.
-    allocateFile(disk, &files, storageSize, id++, "amor", "asdfasdfasdf", 3);
-    allocateFile(disk, &files, storageSize, id++, "Belinha", "asdfasdfasdf", 3);
-    allocateFile(disk, &files, storageSize, id++, "coracao", "asdfasdfasdf", 3);
-    allocateFile(disk, &files, storageSize, id++, "dedo", "asdfasdfasdf", 3);
-    deallocateFile(disk, &files, 1);
-    deallocateFile(disk, &files, 3);
+//    allocateFile(disk, &files, storageSize, id++, "amor", "asdfasdfasdf", 3);
+//    allocateFile(disk, &files, storageSize, id++, "Belinha", "asdfasdfasdf", 3);
+//    allocateFile(disk, &files, storageSize, id++, "coracao", "asdfasdfasdf", 3);
+//    allocateFile(disk, &files, storageSize, id++, "dedo", "asdfasdfasdf", 3);
+//    deallocateFile(disk, &files, 1);
+//    deallocateFile(disk, &files, 3);
 
     do {
         printOptions();
@@ -221,7 +223,7 @@ int main() {
             case 5:
                 printf("\n[ Files in disk ]\n\n");
                 printFileList(files);
-                dehidrate(disk, files);
+                dehydrate(disk, files, storageSize);
 
                 break;
             case 6:
@@ -240,6 +242,6 @@ int main() {
         printf("\n\nPress enter to continue... ");
         getchar();
     } while (option);
-    
+
     return 0;
 }
