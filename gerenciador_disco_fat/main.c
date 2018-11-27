@@ -136,7 +136,7 @@ void showFile(NodeList *files) {
 int main() {
     unsigned option;
     unsigned storageSize = 300;
-    unsigned id = 5;
+    unsigned id = 1;
 
     // Initialization of disk and files.
     Storage *disk;
