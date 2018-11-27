@@ -86,43 +86,6 @@ char * getFileContent (char name[]) {
     }
 }
 
-//Node* getFreeGap(NodeList *list, unsigned size) {
-//    // start range
-//    unsigned start = 0;
-//    unsigned end = size;
-//
-//    // Locate start of the gap.
-//    Node *aux = list->start;
-//    while (aux) {
-//        if (aux->startPosition == start) {
-//            // Move start.
-//            start += aux->size;
-//            aux = list->start;
-//        } else {
-//            aux = aux->next;
-//        }
-//    }
-//
-//    // Locate end of the gap.
-//    aux = list->start;
-//    while (aux) {
-//        if (end > aux->startPosition && start < aux->startPosition) {
-//            // move end.
-//            end = aux->startPosition;
-//        }
-//        aux = aux->next;
-//    }
-//
-//    // Save free gap
-//    Node *gap = malloc(sizeof(Node));
-//    gap->startPosition = start;
-//    gap->size = end - start;
-//    gap->next = NULL;
-//    gap->metadata = NULL;
-//
-//    return gap;
-//}
-
 
 // Get free allocation space.
 Node* getFreeGap(NodeList *list, unsigned size) {
@@ -160,15 +123,6 @@ Node* getFreeGap(NodeList *list, unsigned size) {
 
     return gap;
 }
-
-//void stringCopy(char *out, const char *in) {
-//    unsigned i = 0;
-//    while (in[i] != '\0') {
-//        out[i] = in[i];
-//        i++;
-//    }
-//    out[i] = '\0';
-//}
 
 // Allocate blanks spaces on disk and save the information.
 void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned id, char *name, char *content, unsigned size) {
@@ -313,108 +267,3 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
     nodeList->start = NULL;
     nodeList->end = NULL;
 }
-
-
-/*
-// Create file content and call createData function to insert it into storage
-void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id) {
-    // Allocate file node on memory
-    File *newFile = malloc( sizeof(File) );
-
-    // Save information on file.
-    strcpy(newFile->name, name);
-    strcpy(newFile->content, content);
-    newFile->id = id;
-    newFile->size = size;
-
-    // Allocate file on disk.
-    newFile->fatStartPosition = createData(disk, fat, size, newFile->id);
-    // Save file pointer on its first entry on fat table.
-    fat[newFile->fatStartPosition].fileAddress = newFile;
-}
-*/
-
-
-/*
-// Initialize the table creating an array of FAT structure.
-// Each position of array represents a table row with direct access.
-FAT* initializeTable(unsigned storageSize) {
-    // Allocate the Fat table on memory.
-    FAT *fat = malloc (sizeof(FAT) * storageSize);
-
-    // Clears all FAT positions.
-    for (unsigned i=0; i<storageSize; i++) {
-        fat[i].block = NULL;
-        fat[i].fileAddress = NULL;
-        fat[i].nextAddress = 0;
-    }
-
-    return fat;
-}
-*/
-
-
-
-/*
-// Insert data into storage and reference in table
-unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id) {
-    unsigned blockAdded = 0, i = 0, first=0;
-    int prevAddress = - 1;
-
-    // i<storageSize don't is checked because this code
-    // will only execute if storage have available space
-
-    // Add blocks for first available position.
-    while (blockAdded<size) {
-        if (fat[i].block == NULL) {
-            // Save information in the disk and in the table.
-            disk->data[i].fileID = id;
-            fat[i].block = &disk->data[i];
-            fat[i].nextAddress = -1;
-
-            if (!blockAdded) {
-                first = i;
-            } else {
-                fat[prevAddress].nextAddress = i;
-            }
-
-            // Update flags.
-            prevAddress = i;
-            blockAdded++;
-            disk->availableSpace--;
-        }
-        i++;
-    }
-
-    // Return the position that files start on table
-    return first;
-}
-*/
-
-/*
-// Remove file in the storage and table
-void deallocateFile(Storage *disk, FAT *fat, int i) {
-    int next;
-
-    // Delete file
-    free(fat[i].fileAddress);
-
-    // While isn't the last portion of table, clean it.
-    while(i != -1) {
-        next = fat[i].nextAddress;
-        // Remove references from disk.
-        fat[i].block->fileID = 0;
-        fat[i].block = NULL;
-
-        // Remove references from table.
-        fat[i].fileAddress = NULL;
-        fat[i].nextAddress = 0;
-
-        // Increase disk space.
-        disk->availableSpace++;
-
-        // Go to next portion of file.
-        i = next;
-    }
-}
- */

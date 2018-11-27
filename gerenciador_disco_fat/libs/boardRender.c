@@ -167,9 +167,6 @@ void renderMetadata(char board[r][c], int x, int y, int row, int col, Metadata *
     }
 }
 
-
-
-
 void printBoard(char board[r][c], int row) {
     int i;
 

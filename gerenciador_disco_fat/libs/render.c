@@ -130,25 +130,6 @@ void printFiles(NodeList *list) {
 }
 
 
-// Print current table status in a matrix format
-/*
-void printTable(FAT *fat, unsigned storageSize) {
-    unsigned i, j=0;
-
-    for (i=0; i<storageSize; i++) {
-        if (fat[i].nextAddress == 0)
-            printf("   -");
-        else
-            printf("%4d", fat[i].nextAddress);
-        j++;
-        if (j == 30) {
-            printf("\n");
-            j = 0;
-        }
-    }
-}
-*/
-
 // Print current storage status in a matrix format
 void printStorage(Storage *disk, unsigned storageSize) {
     unsigned i, j=0;

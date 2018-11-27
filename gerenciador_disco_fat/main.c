@@ -54,23 +54,6 @@ void createFile(Storage *disk, NodeList **files, unsigned diskSize, unsigned id)
     // Checks if there is available space on storage.
     if (size <= disk->availableSpace) {
 
-
-//        //Creating command to move file for Files directory
-//        char command[100];
-//        strcpy(command, "mv " );
-//        strcat(command, name);
-//        strcat(command, "\t");
-//        strcat(command, " files");
-//
-//        //Creating real file in disk
-//        FILE *file;
-//        file = fopen(name, "w");
-//        fprintf(file, "%s", content);
-//        fclose(file);
-//
-//        //Moving created file to directory Files
-//        system(command); //Only for linux
-
         allocateFile(disk, files, diskSize, id, name, content, size);
         printHeader("File created successfully");
         printf(" - Name: %s\n", name);
@@ -105,29 +88,6 @@ void removeFile(Storage *storage, NodeList **files) {
 
         removeID = (unsigned) deallocateFile(storage, files, removeID);
 
-//        for (i=0; i<storageSize; i++) {
-//            if (fat[i].fileAddress != NULL) {
-//                if (fat[i].fileAddress->id == removeID) {
-//
-//                    //Accessing files directory for remove successful
-//                    char dir[50];
-//                    strcpy(dir, "files/");
-//                    strcat(dir, fat[i].fileAddress->name);
-//
-//                    //Removing real file from directory 'Files'.
-//                    FILE *file;
-//                    file = fopen(dir, "r");
-//                    fclose(file);
-//                    remove(dir);
-//
-//                    deallocateFile(disk, fat, i);
-//                    // Delete file
-//                    free(fat[i].fileAddress);
-//                    printHeader("File removed successfully");
-//                    removeID = 0; // Control variable
-//                }
-//            }
-//        }
         if (removeID == 0) {
             printHeader("File does not exist");
         }

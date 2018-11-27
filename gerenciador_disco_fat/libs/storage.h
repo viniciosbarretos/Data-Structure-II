@@ -15,17 +15,6 @@ typedef struct Storage {
     unsigned availableSpace;
 } Storage;
 
-/*
-// Structure of a file with an unique ID and the
-// position of start at storage table to direct access
-typedef struct File_old_ {
-    char name[40];
-    char content[200];
-    unsigned size;
-    unsigned id;
-    unsigned fatStartPosition;
-} File_old_;
-*/
 
 typedef struct Metadata {
     char *name;
@@ -55,37 +44,14 @@ typedef struct NodeList {
     struct Node *end;
 } NodeList;
 
-/*
-// Structure to represent a row of storage table
-typedef struct FAT_old_ {
-    StorageBlock *block;  // Logical address of storage block
-    File *fileAddress;   // Point to file address
-    int nextAddress;    // Next fat address of a file
-} FAT_old_;
-*/
-
 NodeList *newNodeList();
 NodeList *nodeListInsertEnd(NodeList *nodeList, Node *node);
 Storage* initializeStorage(unsigned size);
 unsigned fileSize(char *content);
 void allocateFile(Storage *storage, NodeList **list, unsigned diskSize, unsigned id, char *name, char *content, unsigned size);
 int deallocateFile(Storage *storage, NodeList **list, unsigned id);
-//void dehydrate(Storage *storage, NodeList *nodeList);
-//void dehydrateNodeList(FILE *file, NodeList *nodeList);
-//void dehydrateStorage(FILE *file, Storage *storage);
-//Storage* hydrateStorage(FILE *file, Storage *storage);
-//NodeList* hydrateNodeList(FILE *file);
-//void dehidrate(Storage *storage, NodeList *nodeList);
-//void dehydrateNodeList(FILE *file, NodeList *nodeList);
-//void dehydrateStorage(FILE *file, Storage *storage);
-//Storage* hydrateStorage(FILE *file, Storage *storage);
-//NodeList hydrateNodeList(FILE *file);
 void eraseDisk (Storage *storage, NodeList *nodeList, int size);
 char * getFileContent (char name[]);
-//unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id);
-//void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id);
-//FAT* initializeTable(unsigned storageSize);
-//void deallocateFile(Storage *disk, FAT *fat, int i);
 
 
 #endif //DATA_STRUCTURE_STORAGE_H
