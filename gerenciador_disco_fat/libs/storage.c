@@ -246,7 +246,7 @@ int deallocateFile(Storage *storage, NodeList **list, unsigned id) {
 
 void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
 
-    storage->availableSpace = size;
+    storage->availableSpace = (unsigned int) size;
     for (unsigned i = 0; i<size; i++) {
         storage->data[i].fileID = 0;
         storage->data[i].logicalAddress = i;
@@ -254,14 +254,14 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
 
     Node *aux = nodeList->start;
     Node *aux2;
-    while(!aux) {
+    while (aux) {
         aux2 = aux;
         aux = aux->next;
         free(aux2->metadata);
         free(aux2);
     }
-    system("Files /rm *");
-    system("Save /rm *");
+    system("files /rm *");
+    system("save /rm *");
 
 
     nodeList->start = NULL;
