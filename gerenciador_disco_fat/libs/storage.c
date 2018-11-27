@@ -146,6 +146,27 @@ void saveOnDisk (Storage *storage, unsigned id, unsigned startPosition, unsigned
     }
 }
 
+char * getFileContent (char name[]) {
+    FILE *file;
+
+    char dir[50];
+    strcpy(dir, "Files/");
+    strcat(dir, name);
+
+    file = fopen(dir, "r");
+    char *content = malloc(sizeof(char)*200);
+
+    if (file == NULL)
+    {
+        return "You have to close file first, to access content.";
+    }
+    else {
+        fgets(content, 200, file);
+        fclose(file);
+        return content;
+    }
+}
+
 //Node* getFreeGap(NodeList *list, unsigned size) {
 //    // start range
 //    unsigned start = 0;
@@ -348,6 +369,27 @@ int deallocateFile(Storage *storage, NodeList **list, unsigned id) {
     }
 
     return 0;
+}
+
+void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
+
+    storage->availableSpace = size;
+    for (unsigned i = 0; i<size; i++) {
+        storage->data[i].fileID = 0;
+        storage->data[i].logicalAddress = i;
+    }
+
+    Node *aux = nodeList->start;
+    Node *aux2;
+    while(!aux) {
+        aux2 = aux;
+        aux = aux->next;
+        free(aux2->metadata);
+        free(aux2);
+    }
+
+    nodeList->start = NULL;
+    nodeList->end = NULL;
 }
 
 

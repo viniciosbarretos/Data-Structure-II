@@ -74,6 +74,8 @@ void dehydrateNodeList(FILE *file, NodeList *nodeList);
 void dehydrateStorage(FILE *file, Storage *storage);
 Storage* hydrateStorage(FILE *file, Storage *storage);
 NodeList hydrateNodeList(FILE *file);
+void eraseDisk (Storage *storage, NodeList *nodeList, int size);
+char * getFileContent (char name[]);
 //unsigned createData(Storage *disk, FAT *fat, unsigned size, unsigned id);
 //void allocateFile(Storage *disk, FAT *fat, char *name, char *content, unsigned size, unsigned id);
 //FAT* initializeTable(unsigned storageSize);
