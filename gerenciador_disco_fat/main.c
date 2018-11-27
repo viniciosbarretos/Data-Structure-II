@@ -29,6 +29,7 @@ void printOptions() {
     printf("5 - Show Table\n");
     printf("6 - Show Storage, Table and Files\n");
     printf("7 - Show Available Storage Space \n");
+    printf("8 - Erase disk\n");
     printf("0 - End Simulation\n");
 
     printf("\nSelect your option: ");
@@ -153,7 +154,7 @@ void showFile(NodeList *files) {
     Node *aux = files->start;
     while (aux && !found) {
         if (aux->metadata->id == id) {
-            printFileContent(aux->metadata);
+            printFileContent(aux->metadata, getFileContent(aux->metadata->name));
             found = 1;
         }
         aux = aux->next;
@@ -235,6 +236,9 @@ int main() {
                 break;
             case 7:
                 printStorageSpace(disk);
+                break;
+            case 8:
+                eraseDisk(disk, files, storageSize);
                 break;
             default:
                 printf("Invalid Option! Try again.");

@@ -84,11 +84,11 @@ void printDetailedFileInfo(Node *node) {
     printBoard(board, max(6, lines));
 }
 
-
-void printFileContent(Metadata *metadata) {
+//Print file content.
+void printFileContent(Metadata *metadata, char content[]) {
     printSequence("-", 80);
     printf("\nName: \n%s\n", metadata->name);
-    printf("\nContent: \n%s\n", "test content");
+    printf("\nContent: \n%s\n", content);
     printSequence("-", 80);
 }
 

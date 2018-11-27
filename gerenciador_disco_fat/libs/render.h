@@ -10,7 +10,7 @@ void clearScreen();
 void printHeader(const char *str);
 void printStorageSpace(Storage *disk);
 void printDetailedFileInfo(Node *node);
-void printFileContent(Metadata *metadata);
+void printFileContent(Metadata *metadata, char name[]);
 void printFileList(NodeList *list);
 void printFiles(NodeList *list);
 //void printTable(FAT *fat, unsigned storageSize);
