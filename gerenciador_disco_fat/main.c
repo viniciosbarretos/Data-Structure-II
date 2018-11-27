@@ -230,7 +230,7 @@ int main() {
                     printHeader("Empty Disk");
                 break;
             default:
-                printf("Invalid Option! Try again.");
+                printf("\nInvalid Option! Try again.");
         }
         printf("\n\nPress enter to continue... ");
         getchar();
