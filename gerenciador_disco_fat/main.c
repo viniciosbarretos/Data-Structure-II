@@ -147,7 +147,7 @@ int main() {
     // Create files folder
 
     // Restore the persisted disk and list.
-    hydrate(&disk, &files, (int *) &id, storageSize);
+    hydrate(&disk, &files, &id, storageSize);
 
 
 
@@ -185,7 +185,7 @@ int main() {
 //                    system("rm files/*"); // Clear files folder
                 break;
             case 1:
-                createFile(disk, &files, storageSize, id++);
+                createFile(disk, &files, storageSize, ++id);
                 break;
             case 2:
                 if(disk->availableSpace < storageSize)

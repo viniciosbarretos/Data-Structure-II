@@ -16,7 +16,7 @@
  * Dehydrate the storage data.
  * */
 //Saving StorageState in a real file storage.txt
-void dehydrateStorage(FILE *file, Storage *storage, int id, int storageSize) {
+void dehydrateStorage(FILE *file, Storage *storage, unsigned id, int storageSize) {
     // Save the last id.
     fprintf(file, "%d;", id);
 
@@ -46,7 +46,7 @@ void dehydrateNodeList(FILE *file, NodeList *nodeList) {
     }
 }
 
-void dehydrate(Storage *storage, NodeList *nodeList, int id, int storageSize) {
+void dehydrate(Storage *storage, NodeList *nodeList, unsigned id, int storageSize) {
     FILE *file = fopen("save/storage.txt", "w");
 
     if (file) {
@@ -60,7 +60,7 @@ void dehydrate(Storage *storage, NodeList *nodeList, int id, int storageSize) {
 /*
  * Hydrate the storage data.
  */
-Storage* hydrateStorage(FILE *file, int *id, int size) {
+Storage* hydrateStorage(FILE *file, unsigned *id, int size) {
     // Creates the storage and all its positions.
     Storage *storage = (Storage *) malloc (sizeof(Storage));   // Allocate the storage object.
     storage->data = malloc (sizeof(StorageBlock) * size);     // Allocate all positions.
@@ -125,7 +125,7 @@ NodeList* hydrateNodeList(Storage *storage, FILE *file) {
     return list;
 }
 
-void hydrate(Storage **pStorage, NodeList **pNodeList, int *id, int storageSize) {
+void hydrate(Storage **pStorage, NodeList **pNodeList, unsigned *id, int storageSize) {
     FILE *file = fopen("save/storage.txt", "r");
 
     // If file can be opened, rehydrate him.
