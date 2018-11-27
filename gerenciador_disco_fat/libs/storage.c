@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "storage.h"
-
+#include "render.h"
 
 // Count file size based at amount of character typed
 unsigned fileSize(char *content) {
@@ -264,9 +264,11 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
         }
         free(aux2);
     }
-    system("files /rm*");
-    system("save /rm*");
+    system("rm Files/*");
+    system("rm save/*");
 
     nodeList->start = NULL;
     nodeList->end = NULL;
+
+    printHeader("Disk erased successfully");
 }

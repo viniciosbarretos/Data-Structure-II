@@ -145,6 +145,8 @@ int main() {
     NodeList *files;
 
     // Create files folder
+    system("mkdir Files");
+    system("mkdir save");
 
     // Restore the persisted disk and list.
     hydrate(&disk, &files, &id, storageSize);
@@ -222,7 +224,10 @@ int main() {
                 printStorageSpace(disk);
                 break;
             case 8:
-                eraseDisk(disk, files, storageSize);
+                if(disk->availableSpace < storageSize)
+                    eraseDisk(disk, files, storageSize);
+                else
+                    printHeader("Empty Disk");
                 break;
             default:
                 printf("Invalid Option! Try again.");
