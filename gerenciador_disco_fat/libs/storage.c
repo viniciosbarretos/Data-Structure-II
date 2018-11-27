@@ -235,6 +235,9 @@ int deallocateFile(Storage *storage, NodeList **list, unsigned id) {
             }
         } else {
             (*list)->start = aux;
+            if ( !aux ) {
+                (*list)->end = NULL;
+            }
         }
 
         return 1;
