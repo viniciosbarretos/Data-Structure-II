@@ -195,7 +195,7 @@ int main() {
                 printStorageSpace(disk);
                 break;
             case 8:
-                if(disk->availableSpace < storageSize && disk->data->fileID)
+                if(disk->availableSpace < storageSize || disk->data->fileID)
                     eraseDisk(disk, files, storageSize);
                 else
                     printHeader("Empty Disk");
