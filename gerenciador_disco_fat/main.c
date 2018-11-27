@@ -168,14 +168,16 @@ void showFile(NodeList *files) {
 int main() {
     unsigned option;
     unsigned storageSize = 300;
-    unsigned id = 1;
+    unsigned id = 5;
 
     // Initialization of disk and files.
     Storage *disk;
+//    Storage *disk = initializeStorage(storageSize);
+//    NodeList *files = newNodeList();
     NodeList *files;
 
     // Restore the persisted disk and list.
-    hydrate(&disk, &files, storageSize);
+    hydrate(&disk, &files, (int *) &id, storageSize);
 
     // Create files folder
     system("mkdir files");
@@ -224,7 +226,7 @@ int main() {
             case 5:
                 printf("\n[ Files in disk ]\n\n");
                 printFileList(files);
-                dehydrate(disk, files, storageSize);
+                dehydrate(disk, files, id, storageSize);
 
                 break;
             case 6:

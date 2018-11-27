@@ -68,7 +68,7 @@ void printDetailedFileInfo(Node *node) {
                 isFirstArrow = 0;
             }
             renderFileNode(board, x + 3, y, r, c, aux);
-            x+=16;
+            x+=17;
         } else {
             sprintf(trace, "R3,D2,L%d,D3,R1,", x-29);
             renderArrow(board, x, y+2, r, c, trace);
