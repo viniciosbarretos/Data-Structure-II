@@ -47,7 +47,7 @@ void dehydrateNodeList(FILE *file, NodeList *nodeList) {
 }
 
 void dehydrate(Storage *storage, NodeList *nodeList, int id, int storageSize) {
-    FILE *file = fopen("storage.txt", "w");
+    FILE *file = fopen("Save/storage.txt", "w");
 
     dehydrateStorage(file, storage, id, storageSize);
     dehydrateNodeList(file, nodeList);
@@ -121,7 +121,7 @@ NodeList* hydrateNodeList(FILE *file) {
 }
 
 void hydrate(Storage **pStorage, NodeList **pNodeList, int *id, int storageSize) {
-    FILE *file = fopen("storage.txt", "r");
+    FILE *file = fopen("Save/storage.txt", "r");
 
     // If file can be opened, rehydrate him.
     if (file) {

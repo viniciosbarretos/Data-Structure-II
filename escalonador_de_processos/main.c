@@ -213,48 +213,48 @@ _action runClock(MemoryList **memory,ScheduleList** cpu, ScheduleList** ready, S
     return action;
 }
 
-int main(int argc, const char *argv[]) {
-    // Memory
-    MemoryList *memory = newMemory(128);
-
-    // Schedule
-    ScheduleList *ready = newScheduleList();
-    ScheduleList *cpu = newScheduleList();
-    ScheduleList *blocked = newScheduleList();
-
-    // Aux Lists.
-    StorageList *jobs = newStorageList();
-    StorageList *finished = newStorageList();
-
-    // srand initialization.
-    srand((unsigned int) time(NULL));
-
-    // Variables
-    _action action;
-    int shell;
-
-    // Start simulation with 10 process to load.
-    processToLoad = initialProcessQuantity;
-
-    // Initial render.
-    renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, "Simulation started");
-    printf("\nPress Enter to the next step: ");
-    shell = (getchar() != 'e') ? true : false;
-    getchar();
-
-    // Control Flux
-    while (shell) {
-        // Run a clock iteration while doesn't occur an action.
-        action = runClock(&memory, &cpu, &ready, &blocked, &jobs, &finished);
-
-        // Render screen.
-        renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(action, lastId));
-
-        // Print control information.
-        printf("\nEnter to next step: ");
-        shell = (getchar() != 'e') ? true: false;
-        getchar();
-    }
-
-    return 0;
-}
+//int main(int argc, const char *argv[]) {
+//    // Memory
+//    MemoryList *memory = newMemory(128);
+//
+//    // Schedule
+//    ScheduleList *ready = newScheduleList();
+//    ScheduleList *cpu = newScheduleList();
+//    ScheduleList *blocked = newScheduleList();
+//
+//    // Aux Lists.
+//    StorageList *jobs = newStorageList();
+//    StorageList *finished = newStorageList();
+//
+//    // srand initialization.
+//    srand((unsigned int) time(NULL));
+//
+//    // Variables
+//    _action action;
+//    int shell;
+//
+//    // Start simulation with 10 process to load.
+//    processToLoad = initialProcessQuantity;
+//
+//    // Initial render.
+//    renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, "Simulation started");
+//    printf("\nPress Enter to the next step: ");
+//    shell = (getchar() != 'e') ? true : false;
+//    getchar();
+//
+//    // Control Flux
+//    while (shell) {
+//        // Run a clock iteration while doesn't occur an action.
+//        action = runClock(&memory, &cpu, &ready, &blocked, &jobs, &finished);
+//
+//        // Render screen.
+//        renderScreen(memory, jobs, ready, blocked, finished, cpu, clockTime, clockPast, getStatus(action, lastId));
+//
+//        // Print control information.
+//        printf("\nEnter to next step: ");
+//        shell = (getchar() != 'e') ? true: false;
+//        getchar();
+//    }
+//
+//    return 0;
+//}
