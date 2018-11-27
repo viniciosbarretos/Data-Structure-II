@@ -154,12 +154,27 @@ int main() {
 
 
     // automated test.
-//    allocateFile(disk, &files, storageSize, id++, "amor", "asdfasdfasdf", 3);
-//    allocateFile(disk, &files, storageSize, id++, "Belinha", "asdfasdfasdf", 3);
-//    allocateFile(disk, &files, storageSize, id++, "coracao", "asdfasdfasdf", 3);
-//    allocateFile(disk, &files, storageSize, id++, "dedo", "asdfasdfasdf", 3);
+//    allocateFile(disk, &files, storageSize, id++, "a", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "b", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "c", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "d", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "e", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "f", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "g", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "h", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "i", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "j", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "k", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "l", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "m", "a", 2);
+//    allocateFile(disk, &files, storageSize, id++, "n", "a", 2);
 //    deallocateFile(disk, &files, 1);
 //    deallocateFile(disk, &files, 3);
+//    deallocateFile(disk, &files, 5);
+//    deallocateFile(disk, &files, 7);
+//    deallocateFile(disk, &files, 9);
+//    deallocateFile(disk, &files, 11);
+//    deallocateFile(disk, &files, 13);
 
     do {
         printOptions();

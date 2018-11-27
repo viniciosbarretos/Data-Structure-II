@@ -70,13 +70,13 @@ void printDetailedFileInfo(Node *node) {
             renderFileNode(board, x + 3, y, r, c, aux);
             x+=17;
         } else {
-            sprintf(trace, "R3,D2,L%d,D3,R1,", x-29);
+            sprintf(trace, "R3,D3,L%d,D3,R1,", x-29);
             renderArrow(board, x, y+2, r, c, trace);
-            y += 5;
+            y += 6;
             x = 30;
             renderFileNode(board, x + 3, y, r, c, aux);
             isFirstArrow=1;
-            lines += 5;
+            lines += 6;
         }
         aux = aux->next;
     }
