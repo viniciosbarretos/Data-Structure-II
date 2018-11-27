@@ -14,7 +14,20 @@ typedef struct Trace {
     unsigned size;
 } Trace;
 
+//typedef struct
 
+// Clean a board.
+void zeroFill(char board[r][c], int row, int col) {
+    int i, j;
+    for (i=0; i<row; i++) {
+        for (j=0; j<col; j++) {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+
+// Copy from input to buffer in a certain range.
 void strcpyfrgm(char *buffer, const char *input, int start, int size) {
     int i;
     // if copy can be made.
@@ -28,7 +41,7 @@ void strcpyfrgm(char *buffer, const char *input, int start, int size) {
     }
 }
 
-
+// Split line trace string on a vector of Trace.
 int splitTrace(Trace traces[100], const char *string, char divider){
     int i=0, j=0, lenght=0, start=0;
     int n = (int) strlen(string);
@@ -39,7 +52,7 @@ int splitTrace(Trace traces[100], const char *string, char divider){
     int size;
 
     // Iterate over string finding the dividers.
-    for(i=0; i<n; i++){
+    for (i=0; i<n; i++){
         if (string[i] == divider) {
             // Copy the fragment of trace.
             strcpyfrgm(aux, string, start, lenght);
@@ -59,74 +72,7 @@ int splitTrace(Trace traces[100], const char *string, char divider){
     return j;
 }
 
-
-void zeroFill(char board[r][c], int row, int col) {
-    int i, j;
-    for (i=0; i<row; i++) {
-        for (j=0; j<col; j++) {
-            board[i][j] = ' ';
-        }
-    }
-}
-
-
-void printBoard(char board[r][c], int row) {
-    int i;
-
-    for (i=0; i<row; i++) {
-        printf("%s\n", board[i]);
-    }
-
-}
-
-
-void renderFatNode(char board[r][c], int x, int y, int row, int col, FAT *fat) {
-    int a=4, b=13;
-    char aux[a][b];
-    int i, j;
-
-    // Print on aux board.
-    sprintf(aux[0], "+-----------+");
-    sprintf(aux[1], "| id:   %3d |", fat->block->logicalAddress);
-    sprintf(aux[2], "| next: %3d |", fat->nextAddress);
-    sprintf(aux[3], "+-----------+");
-
-    // Check if copy is possible.
-    if (a+y <= row && b + x <= col) {
-        // Copy for board.
-        for (i=0; i<a; i++) {
-            for (j=0; j<b; j++) {
-                board[y+i][x+j] = aux[i][j];
-            }
-        }
-    }
-}
-
-
-void renderFileNode(char board[r][c], int x, int y, int row, int col, File *file) {
-    int a=5, b=30;
-    char aux[a][b];
-    int i, j;
-
-    // Print on aux board.
-    sprintf(aux[0], "+----------------------------+");
-    sprintf(aux[1], "| id:   %3d                  |", file->id);
-    sprintf(aux[2], "| name: %-20s |", file->name);
-    sprintf(aux[3], "| size: %3d                  |", file->size);
-    sprintf(aux[4], "+----------------------------+");
-
-    // Check if copy is possible.
-    if (a+y <= row && b + x <= col) {
-        // Copy for board.
-        for (i=0; i<a; i++) {
-            for (j=0; j<b; j++) {
-                board[y+i][x+j] = aux[i][j];
-            }
-        }
-    }
-}
-
-
+// Render a arrow line.
 void renderArrow(char board[r][c], int x, int y, int row, int col, const char *trace) {
     int traceCount;
     Trace traces[50];
@@ -165,6 +111,73 @@ void renderArrow(char board[r][c], int x, int y, int row, int col, const char *t
     }
 }
 
+
+//void copybetweenboards(char **buffer, char **input, int x, int y, );
+
+
+// Render the file fragment node.
+void renderFileNode(char board[r][c], int x, int y, int row, int col, Node *node) {
+    int a=6, b=14;
+    char aux[a][b];
+    int i, j;
+
+    // Print on aux board.
+    sprintf(aux[0], "+------------+");
+    sprintf(aux[1], "| id:    %3d |", node->metadata->id);
+    sprintf(aux[2], "| start: %3d |", node->startPosition);
+    sprintf(aux[3], "| size:  %3d |", node->size);
+    sprintf(aux[4], "+------------+");
+
+    // Check if copy is possible.
+    if (a+y <= row && b + x <= col) {
+        // Copy for board.
+        for (i=0; i<a; i++) {
+            for (j=0; j<b; j++) {
+                board[y+i][x+j] = aux[i][j];
+            }
+        }
+    }
+}
+
+
+void renderMetadata(char board[r][c], int x, int y, int row, int col, Metadata *info) {
+    int a=6, b=30;
+    char aux[a][b];
+    int i, j;
+    char k, z;
+
+    // Print on aux board.
+    sprintf(aux[0], "+----------------------------+");
+    sprintf(aux[1], "| id:   %3d                  |", info->id);
+    sprintf(aux[2], "| name: %-20s |", info->name);
+    sprintf(aux[3], "| size: %3d                  |", info->size);
+    sprintf(aux[4], "| creation time: %10d  |", info->creationTime);
+    sprintf(aux[5], "+----------------------------+");
+
+    // Check if copy is possible.
+    if (a+y <= row && b + x <= col) {
+        // Copy for board.
+        for (i=0; i<a; i++) {
+            for (j=0; j<b; j++) {
+                k = aux[i][j];
+                z = board[y+i][x+j];
+                board[y+i][x+j] = aux[i][j];
+            }
+        }
+    }
+}
+
+
+
+
+void printBoard(char board[r][c], int row) {
+    int i;
+
+    for (i=0; i<row; i++) {
+        printf("%s\n", board[i]);
+    }
+
+}
 
 void cleanBoard(char board[r][c], int row, int col) {
     int i;
