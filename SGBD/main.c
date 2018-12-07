@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "customer.h"
-#include "render.h"
+#include "libs/customer.h"
+#include "libs/render.h"
 
 
 // Clean buffer after a text input
