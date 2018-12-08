@@ -7,7 +7,7 @@
 typedef struct customer {
     unsigned accountNumber;
     char *name;
-    char customerType;
+    char *customerType;
     unsigned overbalance;
 } customer;
 
@@ -17,10 +17,12 @@ typedef struct array[4] {
 } array;
 
 typedef struct bucket {
+    unsigned localDepth;
     struct array[4];
 } bucket;
 
 typedef struct directory {
+    unsigned globalDepth;
     bucket *bucketx;
 } directory;
 
@@ -29,6 +31,7 @@ void newDirectory();
 void duplicateDirectory();
 void newBucket();
 void duplicateBucket();
+customer newCostumer();
 void registerCustomer();
 void removeCustomer();
 void searchCustomer();
