@@ -10,5 +10,12 @@ typedef struct customer {
     char customerType;
     unsigned overbalance;
 };
+typedef struct bucket {
+
+};
+
+void registerCustomer();
+void removeCustomer();
+void searchCustomer();
 
 #endif //SGBD_CUSTOMER_H

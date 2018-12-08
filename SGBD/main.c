@@ -23,8 +23,38 @@ void printOptions() {
     printf("\nSelect your option: ");
 }
 int main() {
+    unsigned option;
 
-    printOptions();
+    do {
+        printOptions();
+        scanf("%d", &option);
+        cleanBuffer();
+        switch (option) {
+            case 0:
+                break;
+            case 1:
+                registerCustomer();
+                break;
+            case 2:
+                //check if is empty
+                removeCustomer();
+                break;
+            case 3:
+                //check if is empty
+                searchCustomer();
+                break;
+            case 4:
+                //check if is empty
+                showHashTable();
+                break;
+            default:
+                printf("\nInvalid Option! Try again.");
+
+        }
+
+    } while (option);
+
+
 
     return 0;
 }
