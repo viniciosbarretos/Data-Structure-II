@@ -3,4 +3,4 @@ project(SGBD C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(SGBD main.c libs/customer.c libs/customer.h libs/render.c libs/render.h)
+add_executable(SGBD main.c libs/customer.c libs/customer.h libs/render.c libs/render.h libs/hashing.c libs/hashing.h)

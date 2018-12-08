@@ -12,15 +12,15 @@ void newBucket() {
 
 customer newCostumer() {
 
-    customer c = (customer*) malloc(sizeof(customer));
+    customer *c = (customer*) malloc(sizeof(customer));
     printf("\nAcount Number:");
-    scanf("%d ", &c.accountNumber);
+    scanf("%d ", &c->accountNumber);
     printf("\nName:");
-    scanf("%s ", c.name);
+    scanf("%s ", c->name);
     printf("\nType(F/J):");
-    scanf("%s ", c.customerType);
+    scanf("%s ", c->customerType);
     printf("\nOverbalance:");
-    scanf("%d", &c.overbalance);
+    scanf("%d", &c->overbalance);
 
     return c;
 }

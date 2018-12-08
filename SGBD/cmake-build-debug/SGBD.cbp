@@ -8,88 +8,98 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug"/>
+				<Option working_dir="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug"/>
+				<Option working_dir="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="SGBD">
-				<Option output="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/SGBD.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug"/>
+				<Option output="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug/SGBD" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 SGBD"/>
-					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 SGBD"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="SGBD/fast">
-				<Option output="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/SGBD.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug"/>
+				<Option output="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug/SGBD" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 SGBD/fast"/>
-					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 SGBD/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug"/>
+				<Option working_dir="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vinicius/Desktop/CIÊNCIA\ DA\ COMPUTAÇÃO/2018/2º\ SEMESTRE\ -\ 2018/data_structure_2/SGBD/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/customer.c">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/customer.c">
 			<Option target="SGBD"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/customer.h">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/customer.h">
 			<Option target="SGBD"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/render.c">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/hashing.c">
 			<Option target="SGBD"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/render.h">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/hashing.h">
 			<Option target="SGBD"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/main.c">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/render.c">
 			<Option target="SGBD"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/CMakeLists.txt">
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/libs/render.h">
+			<Option target="SGBD"/>
+		</Unit>
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/main.c">
+			<Option target="SGBD"/>
+		</Unit>
+		<Unit filename="/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

@@ -1,1 +1,1 @@
-/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/SGBD.dir/main.c.o CMakeFiles/SGBD.dir/libs/customer.c.o CMakeFiles/SGBD.dir/libs/render.c.o  -o SGBD.exe -Wl,--out-implib,libSGBD.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
+/usr/bin/cc -g   CMakeFiles/SGBD.dir/main.c.o CMakeFiles/SGBD.dir/libs/customer.c.o CMakeFiles/SGBD.dir/libs/render.c.o CMakeFiles/SGBD.dir/libs/hashing.c.o  -o SGBD 

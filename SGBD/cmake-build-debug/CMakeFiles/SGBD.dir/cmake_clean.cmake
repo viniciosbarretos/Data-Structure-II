@@ -2,9 +2,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/SGBD.dir/main.c.o"
   "CMakeFiles/SGBD.dir/libs/customer.c.o"
   "CMakeFiles/SGBD.dir/libs/render.c.o"
+  "CMakeFiles/SGBD.dir/libs/hashing.c.o"
   "SGBD.pdb"
-  "SGBD.exe"
-  "libSGBD.dll.a"
+  "SGBD"
 )
 
 # Per-language clean rules from dependency scanning.

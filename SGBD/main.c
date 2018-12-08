@@ -13,6 +13,16 @@ void cleanBuffer() {
 
 //Menu options
 void printOptions() {
+
+    int operator;
+
+    //Costumer features:
+    unsigned accountNumber;
+    char name[40];
+    char customerType;
+    unsigned overbalance;
+    //---------------------
+
     //clearScreen();
     printf("\n1 - Register Customer\n");
     printf("2 - Remove Customer\n");
@@ -21,6 +31,36 @@ void printOptions() {
     printf("0 - End Simulation\n");
 
     printf("\nSelect your option: ");
+
+    switch(operator) {
+        case 1:
+            //clearScreen();
+            printf("Account number: ");
+            scanf("%d", &accountNumber);
+
+            printf("Name: ");
+            scanf("%[^\n]", name);
+
+            registerCostumer(accountNumber, name, customerType, overbalance);
+            break;
+
+        case 2:
+
+            break;
+
+        case 3:
+
+            break;
+
+        case 4:
+
+            break;
+
+        case 0:
+
+            system("exit");
+            break;
+    }
 }
 int main() {
     unsigned option;
