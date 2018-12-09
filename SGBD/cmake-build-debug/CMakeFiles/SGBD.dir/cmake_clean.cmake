@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/SGBD.dir/libs/customer.c.o"
   "CMakeFiles/SGBD.dir/libs/render.c.o"
   "CMakeFiles/SGBD.dir/libs/hashing.c.o"
+  "CMakeFiles/SGBD.dir/libs/file.c.o"
   "SGBD.pdb"
   "SGBD"
 )

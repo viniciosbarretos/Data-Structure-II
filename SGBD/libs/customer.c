@@ -1,24 +1,29 @@
 #include "customer.h"
+#include "file.h"
 #include <math.h>
 
-double hashFunction(unsigned accountNumber, unsigned globalDepth) {
-    int x = pow(2,globalDepth);
-    return (accountNumber % x);
-}
-
-void newBucket() {
-
-}
-
-customer newCostumer() {
+customer * newCostumer() {
 
     customer *c = (customer*) malloc(sizeof(customer));
     printf("\nAcount Number:");
     scanf("%d ", &c->accountNumber);
     printf("\nName:");
     scanf("%s ", c->name);
-    printf("\nType(F/J):");
-    scanf("%s ", c->customerType);
+
+    //Validating customer type.
+    do {
+        //clearScreen();
+        //P: Person, O: Organization
+        printf("\nType('P' or 'O'):");
+        scanf("%c ", &c->customerType);
+
+        if(c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o') {
+            printf("\nWrong value.");
+            getchar();
+        }
+
+    } while (c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o');
+
     printf("\nOverbalance:");
     scanf("%d", &c->overbalance);
 
@@ -26,13 +31,14 @@ customer newCostumer() {
 }
 
 void registerCustomer() {
-    customer c = newCostumer();
+    customer *c = newCostumer();
 
 
 }
 
 void removeCustomer() {
-
+    int line;
+    removeFileLine(line);
 }
 
 void searchCustomer() {

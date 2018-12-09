@@ -8,30 +8,10 @@ typedef struct customer {
     unsigned accountNumber;
     char *name;
     char *customerType;
-    unsigned overbalance;
+    double overbalance;
 } customer;
 
-typedef struct array[4] {
-    unsigned id;
-    customer *customerx;
-} array;
-
-typedef struct bucket {
-    unsigned localDepth;
-    struct array[4];
-} bucket;
-
-typedef struct directory {
-    unsigned globalDepth;
-    bucket *bucketx;
-} directory;
-
-double hashFunction(unsigned accountNumber, unsigned globalDepth);
-void newDirectory();
-void duplicateDirectory();
-void newBucket();
-void duplicateBucket();
-customer newCostumer();
+customer * newCostumer();
 void registerCustomer();
 void removeCustomer();
 void searchCustomer();

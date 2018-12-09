@@ -3,4 +3,6 @@
 //
 #include "hashing.h"
 
+void newBucket() {
 
+}

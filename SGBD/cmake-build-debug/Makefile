@@ -150,6 +150,33 @@ libs/customer.c.s:
 	$(MAKE) -f CMakeFiles/SGBD.dir/build.make CMakeFiles/SGBD.dir/libs/customer.c.s
 .PHONY : libs/customer.c.s
 
+libs/file.o: libs/file.c.o
+
+.PHONY : libs/file.o
+
+# target to build an object file
+libs/file.c.o:
+	$(MAKE) -f CMakeFiles/SGBD.dir/build.make CMakeFiles/SGBD.dir/libs/file.c.o
+.PHONY : libs/file.c.o
+
+libs/file.i: libs/file.c.i
+
+.PHONY : libs/file.i
+
+# target to preprocess a source file
+libs/file.c.i:
+	$(MAKE) -f CMakeFiles/SGBD.dir/build.make CMakeFiles/SGBD.dir/libs/file.c.i
+.PHONY : libs/file.c.i
+
+libs/file.s: libs/file.c.s
+
+.PHONY : libs/file.s
+
+# target to generate assembly for a file
+libs/file.c.s:
+	$(MAKE) -f CMakeFiles/SGBD.dir/build.make CMakeFiles/SGBD.dir/libs/file.c.s
+.PHONY : libs/file.c.s
+
 libs/hashing.o: libs/hashing.c.o
 
 .PHONY : libs/hashing.o
@@ -243,6 +270,9 @@ help:
 	@echo "... libs/customer.o"
 	@echo "... libs/customer.i"
 	@echo "... libs/customer.s"
+	@echo "... libs/file.o"
+	@echo "... libs/file.i"
+	@echo "... libs/file.s"
 	@echo "... libs/hashing.o"
 	@echo "... libs/hashing.i"
 	@echo "... libs/hashing.s"

@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/SGBD.dir/main.c.o CMakeFiles/SGBD.dir/libs/customer.c.o CMakeFiles/SGBD.dir/libs/render.c.o CMakeFiles/SGBD.dir/libs/hashing.c.o  -o SGBD 
+/usr/bin/cc -g   CMakeFiles/SGBD.dir/main.c.o CMakeFiles/SGBD.dir/libs/customer.c.o CMakeFiles/SGBD.dir/libs/render.c.o CMakeFiles/SGBD.dir/libs/hashing.c.o CMakeFiles/SGBD.dir/libs/file.c.o  -o SGBD 
