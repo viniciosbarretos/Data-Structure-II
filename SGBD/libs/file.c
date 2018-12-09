@@ -52,8 +52,13 @@ void removeFileLine (int line) {
         if(line_progress != line) {
             fputs(text, output);
         }
+        //***Putting blank spaces, (if we don't put 'else' we lose blank spaces) ***
+//        else {
+//            fputs('\n', output);
+//        }
         memset(text, 0, sizeof(char) * 1000);
         line_progress++;
+
     }
     fclose(input);
     fclose(output);
