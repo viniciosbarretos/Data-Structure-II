@@ -32,13 +32,11 @@ int lineCounter (unsigned accountNumber) {
     file = fopen("Files/SGBD.txt", "r");
 
     do {
-        char aux;
+        int aux;
 
-        fscanf(file, "%ld", aux_account);
-        fscanf(file, "%c", aux);
+        fscanf(file, "%d, %d",aux, aux_account);
 
         counter++;
-
     } while(!feof(file) && aux_account != accountNumber);
 
     return counter;
