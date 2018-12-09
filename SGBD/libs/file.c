@@ -65,3 +65,27 @@ void removeFileLine (int line) {
     remove(input);
     rename("Files/output.txt", "Files/SGBD.txt");
 }
+
+//Write file in first blank space.
+void createFile2 (unsigned line, unsigned account_number, char *name, char *customer_type, double overbalance) {
+    FILE *input = fopen("Files/SGBD.txt", "r");
+    FILE *output = fopen("Files/output.txt", "w");
+    int flag = 0;
+
+    char text[1000] = "";
+    int line_progress = 1;
+    while(fgets(text, 1000, input) != NULL) {
+        if(!strcmp(text, '\n') && !flag) {
+            fprintf(output, "%d, %d, %s, %c, %ld", line, account_number, name, customer_type, overbalance);
+            flag = 1; //Customer added.
+
+        } else { //Copy old file
+            fputs(text, output);
+        }
+        memset(text, 0, sizeof(char) * 1000);
+    }
+    fclose(input);
+    fclose(output);
+    remove(input);
+    rename("Files/output.txt", "Files/SGBD.txt");
+}
