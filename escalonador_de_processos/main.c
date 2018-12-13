@@ -24,7 +24,7 @@
 #define processorQuantum 45
 #define maxReadySize 10
 #define initialProcessQuantity 10
-#define generationProcessTime 40
+#define generationProcessTime 45
 
 // General definitions.
 #define true 1

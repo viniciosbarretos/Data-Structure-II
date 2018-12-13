@@ -6,7 +6,7 @@
 
 typedef struct customer {
     unsigned accountNumber;
-    char *name;
+    char name[40];
     char *customerType;
     double overbalance;
 } customer;

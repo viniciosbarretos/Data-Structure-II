@@ -1,0 +1,3 @@
+/home/vinocabra/CLionProjects/data-structure2/SGBD/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/vinocabra/CLionProjects/data-structure2/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir
+/home/vinocabra/CLionProjects/data-structure2/SGBD/cmake-build-debug/CMakeFiles/edit_cache.dir

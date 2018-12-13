@@ -21,7 +21,7 @@ typedef struct MemoryList {
 
 MemoryList *newMemory(unsigned size);
 Memory *memoryAlloc(MemoryList **memoryList, Memory *min, PCB *pcb);
-void *memoryFree(MemoryList **memory, Memory *mem);
+void memoryFree(MemoryList **memory, Memory *mem);
 Memory *getBestFitNode(MemoryList *memoryList, unsigned size);
 
 #endif //DATA_STRUCTURE_MEMORY_H

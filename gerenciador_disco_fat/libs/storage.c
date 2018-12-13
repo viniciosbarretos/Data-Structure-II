@@ -254,6 +254,7 @@ void eraseDisk (Storage *storage, NodeList *nodeList, int size) {
 //        storage->data[i].logicalAddress = i;
     }
 
+
     Node *aux = nodeList->start;
     Node *aux2;
     while (aux) {

@@ -40,5 +40,5 @@ PCB* generatePCB(unsigned int id, unsigned int creationTime) {
 }
 
 unsigned int getWaitTime() {
-    return (unsigned) getRandom(10, 200);
+    return (unsigned) getRandom(10, 100);
 }

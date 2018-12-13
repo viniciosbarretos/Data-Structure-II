@@ -14,15 +14,15 @@ customer * newCostumer() {
     do {
         //clearScreen();
         //P: Person, O: Organization
-        printf("\nType('P' or 'O'):");
+        printf("\nType('I' or 'B'):");
         scanf("%c ", &c->customerType);
 
-        if(c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o') {
+        if(c->customerType != 'I' && c->customerType != 'i' && c->customerType != 'B' && c->customerType != 'b') {
             printf("\nWrong value.");
             getchar();
         }
 
-    } while (c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o');
+    } while (c->customerType != 'I' && c->customerType != 'i' && c->customerType != 'B' && c->customerType != 'B');
 
     printf("\nOverbalance:");
     scanf("%d", &c->overbalance);

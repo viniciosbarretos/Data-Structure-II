@@ -103,7 +103,6 @@ void removeFile(Storage *storage, NodeList **files, int id, int diskSize) {
     else {
         printHeader("Removal canceled");
     }
-
 }
 
 void showFile(NodeList *files) {
