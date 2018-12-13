@@ -1,3 +1,0 @@
-/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir
-/home/vinicius/Desktop/CIÊNCIA DA COMPUTAÇÃO/2018/2º SEMESTRE - 2018/data_structure_2/SGBD/cmake-build-debug/CMakeFiles/edit_cache.dir
