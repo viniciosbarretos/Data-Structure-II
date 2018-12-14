@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libs/customer.h"
+#include "libs/hashing.h"
 #include "libs/render.h"
+#include "math.h"
 
 
 // Clean buffer after a text input
@@ -41,7 +43,7 @@ void printOptions() {
             printf("Name: ");
             scanf("%[^\n]", name);
 
-            registerCostumer(accountNumber, name, customerType, overbalance);
+//            registerCostumer(accountNumber, name, customerType, overbalance);
             break;
 
         case 2:
@@ -62,37 +64,101 @@ void printOptions() {
             break;
     }
 }
-int main() {
-    unsigned option;
 
-    do {
-        printOptions();
-        scanf("%d", &option);
-        cleanBuffer();
-        switch (option) {
-            case 0:
-                break;
-            case 1:
-                registerCustomer();
-                break;
-            case 2:
-                //check if is empty
-                removeCustomer();
-                break;
-            case 3:
-                //check if is empty
-                searchCustomer();
-                break;
-            case 4:
-                //check if is empty
-                showHashTable();
-                break;
-            default:
-                printf("\nInvalid Option! Try again.");
+void render(Dir *dir) {
+    int n = (int) pow(2, dir->globalDepth);
+    int i, j;
 
+    printf("Directory\n");
+    for (i=0; i<n; i++) {
+        if (dir->key[i]) {
+            printf("{");
+            for (j=0; j<4; j++) {
+                printf("%d|", dir->key[i]->items[j].id);
+
+            }
+            printf("}");
+
+        } else {
+            printf(" NULL ");
         }
 
-    } while (option);
+    }
+}
+
+int main() {
+    // Create the directory
+    Dir *dir = newDirectory();
+    int id = 0;
+
+    Customer customer = {0, "teste", "o", 21.5, };
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    id++;
+    insertOnDir(dir, &id, customer);
+    render(dir);
+
+
+
+//    unsigned option;
+//
+//    do {
+//        printOptions();
+//        scanf("%d", &option);
+//        cleanBuffer();
+//        switch (option) {
+//            case 0:
+//                break;
+//            case 1:
+//                registerCustomer();
+//                break;
+//            case 2:
+//                //check if is empty
+//                removeCustomer();
+//                break;
+//            case 3:
+//                //check if is empty
+//                searchCustomer();
+//                break;
+//            case 4:
+//                //check if is empty
+//                showHashTable();
+//                break;
+//            default:
+//                printf("\nInvalid Option! Try again.");
+//
+//        }
+//
+//    } while (option);
 
 
 
