@@ -2,11 +2,11 @@
 #include "file.h"
 #include <math.h>
 
-customer * newCostumer() {
+Customer * newCostumer() {
 
-    customer *c = (customer*) malloc(sizeof(customer));
+    Customer *c = (Customer*) malloc(sizeof(Customer));
     printf("\nAcount Number:");
-    scanf("%d ", &c->accountNumber);
+    scanf("%d ", &c->id);
     printf("\nName:");
     scanf("%s ", c->name);
 
@@ -15,23 +15,23 @@ customer * newCostumer() {
         //clearScreen();
         //P: Person, O: Organization
         printf("\nType('P' or 'O'):");
-        scanf("%c ", &c->customerType);
+        scanf("%c ", c->customerType);
 
-        if(c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o') {
+        if(*(c->customerType) != 'P' && *(c->customerType) != 'p' && *(c->customerType) != 'O' && *(c->customerType) != 'o') {
             printf("\nWrong value.");
             getchar();
         }
 
-    } while (c->customerType != 'P' && c->customerType != 'p' && c->customerType != 'O' && c->customerType != 'o');
+    } while (*(c->customerType) != 'P' && *(c->customerType) != 'p' && *(c->customerType) != 'O' && *(c->customerType) != 'o');
 
     printf("\nOverbalance:");
-    scanf("%d", &c->overbalance);
+    scanf("%f", &c->overbalance);
 
     return c;
 }
 
 void registerCustomer() {
-    customer *c = newCostumer();
+    Customer *c = newCostumer();
 
 
 }
