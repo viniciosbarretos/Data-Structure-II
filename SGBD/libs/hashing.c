@@ -135,7 +135,7 @@ Bucket * splitBucket(Dir *dir, Bucket *bucket) {
         }
     }
 
-    return newBucket();
+    return bucket2;
 }
 
 
