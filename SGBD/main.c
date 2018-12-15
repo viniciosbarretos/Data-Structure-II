@@ -126,6 +126,11 @@ int main() {
     id++;
     insertOnDir(dir, &id, customer);
     render(dir);
+    printf("\n");
+    removeFromDir(dir, 0);
+    removeFromDir(dir, 8);
+    removeFromDir(dir, 16);
+    render(dir);
 
 
 

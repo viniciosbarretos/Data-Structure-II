@@ -9,6 +9,8 @@
 #define false 0
 #define true 1
 
+#define max(a, b) ((a)>(b) ? (a) : (b))
+
 //int hashFunction(unsigned accountNumber, unsigned globalDepth);
 //void newDirectory();
 //void duplicateDirectory();
@@ -138,9 +140,8 @@ Bucket * splitBucket(Dir *dir, Bucket *bucket) {
     return bucket2;
 }
 
-
 void insertOnDir(Dir *dir, int *id, Customer c) {
-    int hash, bucketSize, n;
+    int hash, bucketSize;
     int resolved = false;
 
     Bucket *bucket, *addBucket;
@@ -187,6 +188,84 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
             (*id)++;
         }
     }
+}
+
+int searchInBucket(Bucket *bucket, int id) {
+    int i, length;
+
+    // Get the bucket length.
+    length = getBucketSize(bucket);
+
+    // Search item on bucket elements and return the position.
+    for (i = 0; i < length; i++) {
+        if (bucket->items[i].id == id) {
+            return i;
+        }
+    }
+
+    // Item not found.
+    return -1;
+}
+
+int getMaxDepthFromBuckets(Dir *dir) {
+    int i, pass, vMax=0;
+
+    // Get the number of buckets
+    pass = (int) pow(2, dir->globalDepth);
+
+    // Get the max element.
+    for (i=0; i < pass; i++) {
+        vMax = max(vMax, dir->key[i]->localDepth);
+    }
+
+    return vMax;
+}
+
+Dir * decreaseDir(Dir *dir) {
+    int i, n;
+
+    // Increase the globalDeath.
+    dir->globalDepth--;
+    n = (int) pow(2, dir->globalDepth);
+
+    // Re alloc the memory of the directory
+    dir->key = realloc(dir->key, sizeof(Bucket*) * n);
+
+    return dir;
+}
+
+void removeFromDir(Dir *dir, int id) {
+    int hash, p;
+    Bucket *bucket;
+
+    // Get the bucket of the element
+    hash = calcHash(id, dir->globalDepth);
+    bucket = dir->key[hash];
+
+    // Remove from vector
+    p = searchInBucket(bucket, id);
+    if (p != -1) {
+        removeFromBucket(bucket, p);
+    }
+
+    // Check for a merge.
+    if (getBucketSize(bucket) == 0) {
+        // Deleting the directory.
+        free(bucket);
+
+        int pass = (int) pow(2, dir->globalDepth-1);
+
+        // Re-point to the bucket.
+        dir->key[hash] = dir->key[hash-pass];
+
+        // Check for a directory reduction.
+        if (getMaxDepthFromBuckets(dir) < dir->globalDepth) {
+            dir = decreaseDir(dir);
+        }
+    }
+
+
+
 }
 
 

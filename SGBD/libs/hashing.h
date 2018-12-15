@@ -19,8 +19,9 @@ typedef struct Dir {
 } Dir;
 
 
-void insertOnDir(Dir *dir, int *id, Customer c);
 Dir * newDirectory();
+void insertOnDir(Dir *dir, int *id, Customer c);
+void removeFromDir(Dir *dir, int id);
 
 //int hashFunction(unsigned accountNumber, unsigned globalDepth);
 //void newDirectory();
