@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct customer {
-    unsigned accountNumber;
-    char name[40];
+typedef struct Customer {
+    unsigned id;
+    char *name;
     char *customerType;
     double overbalance;
-} customer;
+} Customer;
 
-customer * newCostumer();
+Customer * newCostumer();
 void registerCustomer();
 void removeCustomer();
 void searchCustomer();
