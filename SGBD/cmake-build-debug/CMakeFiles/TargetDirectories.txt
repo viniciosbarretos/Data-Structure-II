@@ -1,3 +1,0 @@
-/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir
-/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/edit_cache.dir
