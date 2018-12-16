@@ -1,0 +1,24 @@
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  "C"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_C
+  "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/customer.c" "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir/libs/customer.c.o"
+  "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/file.c" "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir/libs/file.c.o"
+  "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/hashing.c" "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir/libs/hashing.c.o"
+  "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/libs/render.c" "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir/libs/render.c.o"
+  "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/main.c" "/cygdrive/c/Users/DCandelero/CLionProjects/data-structure/SGBD/cmake-build-debug/CMakeFiles/SGBD.dir/main.c.o"
+  )
+set(CMAKE_C_COMPILER_ID "GNU")
+
+# The include file search paths:
+set(CMAKE_C_TARGET_INCLUDE_PATH
+  )
+
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")
