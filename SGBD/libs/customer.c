@@ -1,5 +1,6 @@
 #include "customer.h"
 #include "file.h"
+#include "hashing.h"
 #include <math.h>
 
 Customer * newCostumer() {
@@ -30,14 +31,25 @@ Customer * newCostumer() {
     return c;
 }
 
-void registerCustomer() {
+void registerCustomer(Dir *dir, int id) {
     Customer *c = newCostumer();
 
+    insertOnDir(dir, id, c);
 
+    createFile(c->id, c->name, c->customerType, c->overbalance);
 }
 
-void removeCustomer() {
-    int line;
+void removeCustomer(Dir *dir, int id) {
+
+    int cId = 0;
+    printf ("\nType the Client Account Number");
+    scanf ("%d", &cId);
+
+    int hash = calcHash(id, dir->globalDepth);
+    int pos = searchInBucket(dir->key[hash], cId);
+    int line = dir->key[hash]->items[pos].line;
+
+    removeFromDir(dir, id);
     removeFileLine(line);
 }
 

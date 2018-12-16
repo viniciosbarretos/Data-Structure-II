@@ -256,12 +256,24 @@ void removeFromDir(Dir *dir, int id) {
         int pass = (int) pow(2, dir->globalDepth-1);
 
         // Re-point to the bucket.
-        dir->key[hash] = dir->key[hash-pass];
+        if (hash < pass / 2) {
+            dir->key[hash] = dir->key[hash+pass];
+        } else {
+            dir->key[hash] = dir->key[hash-pass];
+        }
 
         // Check for a directory reduction.
         if (getMaxDepthFromBuckets(dir) < dir->globalDepth) {
             dir = decreaseDir(dir);
         }
+    }
+
+    int isEmpty(Dir *dir) {
+        for (int i = 0; i < pow(2,dir->globalDepth), i++) {
+            if (dir->key[i]->items != NULL)
+                return 0;
+        }
+        return 1;
     }
 
 
