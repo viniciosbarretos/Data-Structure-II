@@ -5,7 +5,7 @@
 
 #define minDepth 2
 #define maxDepth 3
-#define defaulBucketSize 4
+#define defaultBucketSize 4
 #define false 0
 #define true 1
 
@@ -53,7 +53,7 @@ int calcHash(int n, int depth) {
 int getBucketSize(Bucket *bucket) {
     int i = 0;
     // Count the number of valid items in the bucket.
-    while (i < defaulBucketSize && bucket->items[i].id != -1) {
+    while (i < defaultBucketSize && bucket->items[i].id != -1) {
         i++;
     }
 
@@ -78,6 +78,19 @@ Dir * increaseDir(Dir *dir) {
     return dir;
 }
 
+Dir * decreaseDir(Dir *dir) {
+    int n;
+
+    // Increase the globalDeath.
+    dir->globalDepth--;
+    n = (int) pow(2, dir->globalDepth);
+
+    // Re alloc the memory of the directory
+    dir->key = realloc(dir->key, sizeof(Bucket*) * n);
+
+    return dir;
+}
+
 Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
     // Todo save on file
     unsigned fileLine = 45;
@@ -89,12 +102,29 @@ Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
     return bucket;
 }
 
+int searchInBucket(Bucket *bucket, int id) {
+    int i, length;
+
+    // Get the bucket length.
+    length = getBucketSize(bucket);
+
+    // Search item on bucket elements and return the position.
+    for (i = 0; i < length; i++) {
+        if (bucket->items[i].id == id) {
+            return i;
+        }
+    }
+
+    // Item not found.
+    return -1;
+}
+
 Bucket * removeFromBucket(Bucket *bucket, int position) {
     int i;
     // Todo remove from file
 
     // Shift elements on bucket.
-    for (i = position; i < defaulBucketSize - 1; i++) {
+    for (i = position; i < defaultBucketSize - 1; i++) {
         bucket->items[i] = bucket->items[i+1];
     }
 
@@ -140,6 +170,20 @@ Bucket * splitBucket(Dir *dir, Bucket *bucket) {
     return bucket2;
 }
 
+int getMaxDepthFromBuckets(Dir *dir) {
+    int i, pass, vMax=0;
+
+    // Get the number of buckets
+    pass = (int) pow(2, dir->globalDepth);
+
+    // Get the max element.
+    for (i=0; i < pass; i++) {
+        vMax = max(vMax, dir->key[i]->localDepth);
+    }
+
+    return vMax;
+}
+
 void insertOnDir(Dir *dir, int *id, Customer c) {
     int hash, bucketSize;
     int resolved = false;
@@ -164,7 +208,7 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
         bucketSize = getBucketSize(bucket);
 
         // Check if item can be inserted on bucket.
-        if (bucketSize < defaulBucketSize) {
+        if (bucketSize < defaultBucketSize) {
             insertOnBucket(bucket, c, bucketSize);
             resolved = true;
         }
@@ -188,50 +232,6 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
             (*id)++;
         }
     }
-}
-
-int searchInBucket(Bucket *bucket, int id) {
-    int i, length;
-
-    // Get the bucket length.
-    length = getBucketSize(bucket);
-
-    // Search item on bucket elements and return the position.
-    for (i = 0; i < length; i++) {
-        if (bucket->items[i].id == id) {
-            return i;
-        }
-    }
-
-    // Item not found.
-    return -1;
-}
-
-int getMaxDepthFromBuckets(Dir *dir) {
-    int i, pass, vMax=0;
-
-    // Get the number of buckets
-    pass = (int) pow(2, dir->globalDepth);
-
-    // Get the max element.
-    for (i=0; i < pass; i++) {
-        vMax = max(vMax, dir->key[i]->localDepth);
-    }
-
-    return vMax;
-}
-
-Dir * decreaseDir(Dir *dir) {
-    int i, n;
-
-    // Increase the globalDeath.
-    dir->globalDepth--;
-    n = (int) pow(2, dir->globalDepth);
-
-    // Re alloc the memory of the directory
-    dir->key = realloc(dir->key, sizeof(Bucket*) * n);
-
-    return dir;
 }
 
 void removeFromDir(Dir *dir, int id) {
@@ -264,11 +264,9 @@ void removeFromDir(Dir *dir, int id) {
 
         // Check for a directory reduction.
         if (getMaxDepthFromBuckets(dir) < dir->globalDepth) {
-            dir = decreaseDir(dir);
+            decreaseDir(dir);
         }
     }
-
-
 
 }
 
