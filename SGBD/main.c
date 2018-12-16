@@ -100,6 +100,16 @@ int main() {
     id++;
     insertOnDir(dir, &id, customer);
     id++;
+
+    render(dir);
+    printf("\n");
+    printf("\n");
+
+    renderHashTable(dir);
+
+    printf("\n");
+    printf("\n");
+
     insertOnDir(dir, &id, customer);
     id++;
     insertOnDir(dir, &id, customer);
@@ -126,6 +136,12 @@ int main() {
     id++;
     insertOnDir(dir, &id, customer);
     render(dir);
+    printf("\n");
+    printf("\n");
+
+    renderHashTable(dir);
+
+    printf("\n");
     printf("\n");
     removeFromDir(dir, 4);
     removeFromDir(dir, 12);
