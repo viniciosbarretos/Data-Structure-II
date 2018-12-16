@@ -16,7 +16,7 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
 
     FILE *input = fopen("Files/SGBD.txt", "w+");
 
-    if(!input) {
+    if(input) {
         return -1;
     }
     else {
