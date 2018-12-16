@@ -264,7 +264,7 @@ void removeFromDir(Dir *dir, int id) {
 }
 
 int isEmpty(Dir *dir) {
-    for (int i = 0; i < pow(2,dir->globalDepth), i++) {
+    for (int i = 0; i < pow(2,dir->globalDepth); i++) {
         if (dir->key[i]->items != NULL)
             return 0;
     }

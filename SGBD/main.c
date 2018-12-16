@@ -161,27 +161,27 @@ int main() {
                 printf("\n\nBye bye :)\n");
                 break;
             case 1:
-                registerCustomer(dir, id);
+                registerCustomer(id);
                 id++;
                 break;
             case 2:
                 //check if is empty
                 if(isEmpty(dir))
-                    removeCustomer(dir, id);
+                    removeCustomer(id);
                 else
                     printf("\nNo registered clients!\n");
                 break;
             case 3:
                 //check if is empty
                 if(isEmpty(dir))
-                    searchCustomer();
+                    searchCustomer(14);
                 else
                     printf("\nNo registered clients!\n");
                 break;
             case 4:
                 //check if is empty
                 if(isEmpty(dir))
-                    showHashTable();
+                    renderHashTable(dir);
                 else
                     printf("\nNo registered clients!\n");
                 break;

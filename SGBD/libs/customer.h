@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "hashing.h"
+//#include "hashing.h"
 
 typedef struct Customer {
     unsigned id;
@@ -13,8 +13,8 @@ typedef struct Customer {
 } Customer;
 
 Customer * newCostumer();
-void registerCustomer(Dir *dir, int id);
-void removeCustomer(Dir *dir, int id);
-void searchCustomer(Dir *dir, int id);
+void registerCustomer(int id);
+void removeCustomer(int id);
+void searchCustomer(int id);
 
 #endif //SGBD_CUSTOMER_H
