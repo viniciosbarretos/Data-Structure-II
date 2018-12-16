@@ -16,7 +16,7 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
 
     FILE *input = fopen("Files/SGBD.txt", "w+");
 
-    if(input) {
+    if(!input) {
         return -1;
     }
     else {
@@ -44,11 +44,16 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
 int removeFile (int line) {
     FILE *file = fopen("Files/SGBD.txt", "r+");
 
-    fseek (file ,line*67 , SEEK_SET );
-    fprintf(file, "0");
-    fseek (file , 0 , SEEK_END );
-
+    if(!file) {
+        return -1;
+    }
+    else {
+        fseek(file, line * 67, SEEK_SET);
+        fprintf(file, "0");
+        fseek(file, 0, SEEK_END);
+    }
     fclose(file);
+    return 1;
 }
 
 //Returns a customer.
