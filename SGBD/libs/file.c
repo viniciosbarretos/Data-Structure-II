@@ -12,9 +12,9 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
 
     int noEmpty = 1;
     int lineCounter = 0;
-    int lineCustomer;
+    int lineCustomer = -1;
 
-    FILE *input = fopen("Files/SGBD.txt", "r+");
+    FILE *input = fopen("Files/SGBD.txt", "w+");
 
     if(!input) {
         return -1;
