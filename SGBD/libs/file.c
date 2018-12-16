@@ -20,7 +20,7 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
         return -1;
     }
     else {
-        while(fscanf(input, "%d", noEmpty)) {
+        while(fscanf(input, "%d", &noEmpty)) {
 
             //Verifying free spaces in SGBD file. notEmpty = 0;
             fscanf(input, "%d", &noEmpty);
