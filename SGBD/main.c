@@ -34,35 +34,35 @@ void printOptions() {
 
     printf("\nSelect your option: ");
 
-    switch(operator) {
-        case 1:
-            //clearScreen();
-            printf("Account number: ");
-            scanf("%d", &accountNumber);
-
-            printf("Name: ");
-            scanf("%[^\n]", name);
-
-//            registerCostumer(accountNumber, name, customerType, overbalance);
-            break;
-
-        case 2:
-
-            break;
-
-        case 3:
-
-            break;
-
-        case 4:
-
-            break;
-
-        case 0:
-
-            system("exit");
-            break;
-    }
+//    switch(operator) {
+//        case 1:
+//            //clearScreen();
+//            printf("Account number: ");
+//            scanf("%d", &accountNumber);
+//
+//            printf("Name: ");
+//            scanf("%[^\n]", name);
+//
+////            registerCostumer(accountNumber, name, customerType, overbalance);
+//            break;
+//
+//        case 2:
+//
+//            break;
+//
+//        case 3:
+//
+//            break;
+//
+//        case 4:
+//
+//            break;
+//
+//        case 0:
+//
+//            system("exit");
+//            break;
+//    }
 }
 
 void render(Dir *dir) {
@@ -134,36 +134,47 @@ int main() {
 
 
 
-//    unsigned option;
-//
-//    do {
-//        printOptions();
-//        scanf("%d", &option);
-//        cleanBuffer();
-//        switch (option) {
-//            case 0:
-//                break;
-//            case 1:
-//                registerCustomer();
-//                break;
-//            case 2:
-//                //check if is empty
-//                removeCustomer();
-//                break;
-//            case 3:
-//                //check if is empty
-//                searchCustomer();
-//                break;
-//            case 4:
-//                //check if is empty
-//                showHashTable();
-//                break;
-//            default:
-//                printf("\nInvalid Option! Try again.");
-//
-//        }
-//
-//    } while (option);
+    unsigned option;
+
+    do {
+        printOptions();
+        scanf("%d", &option);
+        cleanBuffer();
+        switch (option) {
+            case 0:
+                printf("\n\nBye bye :)\n");
+                break;
+            case 1:
+                registerCustomer(dir, id);
+                id++;
+                break;
+            case 2:
+                //check if is empty
+                if(isEmpty(dir))
+                    removeCustomer(dir, id);
+                else
+                    printf("\nNo registered clients!\n");
+                break;
+            case 3:
+                //check if is empty
+                if(isEmpty(dir))
+                    searchCustomer();
+                else
+                    printf("\nNo registered clients!\n");
+                break;
+            case 4:
+                //check if is empty
+                if(isEmpty(dir))
+                    showHashTable();
+                else
+                    printf("\nNo registered clients!\n");
+                break;
+            default:
+                printf("\nInvalid Option! Try again.");
+
+        }
+
+    } while (option);
 
 
 
