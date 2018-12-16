@@ -11,13 +11,6 @@
 
 #define max(a, b) ((a)>(b) ? (a) : (b))
 
-//int hashFunction(unsigned accountNumber, unsigned globalDepth);
-//void newDirectory();
-//void duplicateDirectory();
-//void newBucket();
-//void duplicateBucket();
-
-
 Bucket * newBucket() {
     int i;
 
@@ -270,6 +263,33 @@ void removeFromDir(Dir *dir, int id) {
 
 }
 
+int bucketAppearsBefore(Dir *dir, int position) {
+    int i;
 
+    for (i = 0; i < position; i++) {
+        if (dir->key[i] == dir->key[position]) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int differentBucketsInDir(Dir *dir) {
+    int i, size, counter;
+
+    // Initialize variables
+    size = (int) pow(2, dir->globalDepth);
+    counter = 0;
+
+    // Iterate over dir
+    for (i = 0; i < size; i++) {
+        if (bucketAppearsBefore(dir, i) == -1) {
+            counter++;
+        }
+    }
+
+    return counter;
+}
 
 
