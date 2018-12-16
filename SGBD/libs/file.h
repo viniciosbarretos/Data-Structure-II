@@ -7,7 +7,7 @@
 #include "customer.h"
 
 
-    int createFile (unsigned account_number, char *name, char customer_type, double overbalance);
+    int createFile (Customer customer);
     int lineCounter (unsigned accountNumber);
     void removeFileLine(int line);
     Customer * getCustomer (int line, int line_size);

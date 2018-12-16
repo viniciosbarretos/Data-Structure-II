@@ -8,7 +8,7 @@
 #include "customer.h"
 
 //Write where is "empty".
-int createFile (unsigned account_number, char *name, char customer_type, double overbalance) {
+int createFile (Customer customer) {
 
     int noEmpty = 1;
     int lineCounter = 0;
@@ -25,7 +25,7 @@ int createFile (unsigned account_number, char *name, char customer_type, double 
             //Verifying free spaces in SGBD file. notEmpty = 0;
             fscanf(input, "%d", &noEmpty);
             if(!noEmpty) {
-                fprintf(input, "1, %8d, %40s, %c, %8.2f\n", account_number, name, customer_type, overbalance);
+                fprintf(input, "1, %8d, %40s, %c, %8.2f\n", customer.id, customer.name, customer.type, customer.overbalance);
                 lineCustomer = lineCounter;
                 fseek(input, 0, SEEK_END);
 
@@ -75,7 +75,7 @@ Customer * getCustomer (int line, int line_size) {
 
     customer->id = accountNumber;
     strcpy(customer->name, name);
-    customer->customerType = type;
+    customer->type = type;
     customer->overbalance = overBalancing;
 
     return customer;

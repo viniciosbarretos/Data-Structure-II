@@ -8,7 +8,7 @@
 typedef struct Customer {
     unsigned id;
     char *name;
-    char *customerType;
+    char *type;
     double overbalance;
 } Customer;
 

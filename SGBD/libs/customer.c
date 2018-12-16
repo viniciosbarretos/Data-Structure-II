@@ -16,14 +16,14 @@ Customer * newCostumer() {
         //clearScreen();
         //P: Person, O: Organization
         printf("\nType('P' or 'O'):");
-        scanf("%c ", c->customerType);
+        scanf("%c ", c->type);
 
-        if(*(c->customerType) != 'P' && *(c->customerType) != 'p' && *(c->customerType) != 'O' && *(c->customerType) != 'o') {
+        if(*(c->type) != 'P' && *(c->type) != 'p' && *(c->type) != 'O' && *(c->type) != 'o') {
             printf("\nWrong value.");
             getchar();
         }
 
-    } while (*(c->customerType) != 'P' && *(c->customerType) != 'p' && *(c->customerType) != 'O' && *(c->customerType) != 'o');
+    } while (*(c->type) != 'P' && *(c->type) != 'p' && *(c->type) != 'O' && *(c->type) != 'o');
 
     printf("\nOverbalance:");
     scanf("%f", &c->overbalance);
@@ -36,7 +36,7 @@ void registerCustomer(int id) {
 
 //    insertOnDir(dir, id, c);
 
-    createFile(c->id, c->name, c->customerType, c->overbalance);
+    createFile(c->id, c->name, c->type, c->overbalance);
 }
 
 void removeCustomer(int id) {
