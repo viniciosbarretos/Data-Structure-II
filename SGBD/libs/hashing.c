@@ -263,6 +263,15 @@ void removeFromDir(Dir *dir, int id) {
 
 }
 
+int isEmpty(Dir *dir) {
+    for (int i = 0; i < pow(2,dir->globalDepth), i++) {
+        if (dir->key[i]->items != NULL)
+            return 0;
+    }
+    return 1;
+}
+
+
 int bucketAppearsBefore(Dir *dir, int position) {
     int i;
 
