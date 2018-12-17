@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "hashing.h"
 #include "customer.h"
+#include "file.h"
 #include <math.h>
 
 #define minDepth 2
@@ -241,6 +242,8 @@ void removeFromDir(Dir *dir, int id) {
         removeFromBucket(bucket, p);
     }
 
+    removeFileLine(dir->key[hash]->items->line);
+
     // Check for a merge.
     if (getBucketSize(bucket) == 0) {
         // Deleting the directory.
@@ -265,7 +268,7 @@ void removeFromDir(Dir *dir, int id) {
 
 int isEmpty(Dir *dir) {
     for (int i = 0; i < pow(2,dir->globalDepth); i++) {
-        if (dir->key[i]->items != NULL)
+        if (dir->key[i] != NULL)
             return 0;
     }
     return 1;

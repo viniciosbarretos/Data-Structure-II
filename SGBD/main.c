@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "libs/file.h"
 #include "libs/customer.h"
 #include "libs/hashing.h"
 #include "libs/render.h"
@@ -91,62 +92,62 @@ int main() {
     Dir *dir = newDirectory();
     int id = 0;
 
-    Customer customer = {0, "teste", "o", 21.5, };
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-
-    render(dir);
-    printf("\n");
-    printf("\n");
-
-    renderHashTable(dir);
-
-    printf("\n");
-    printf("\n");
-
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    render(dir);
-    printf("\n");
-    printf("\n");
-
-    renderHashTable(dir);
-
-    printf("\n");
-    printf("\n");
-    removeFromDir(dir, 4);
-    removeFromDir(dir, 12);
-    removeFromDir(dir, 16);
-    render(dir);
+//    Customer customer = {0, "teste", "o", 21.5, };
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//
+//    render(dir);
+//    printf("\n");
+//    printf("\n");
+//
+//    renderHashTable(dir);
+//
+//    printf("\n");
+//    printf("\n");
+//
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    id++;
+//    insertOnDir(dir, &id, customer);
+//    render(dir);
+//    printf("\n");
+//    printf("\n");
+//
+//    renderHashTable(dir);
+//
+//    printf("\n");
+//    printf("\n");
+//    removeFromDir(dir, 4);
+//    removeFromDir(dir, 12);
+//    removeFromDir(dir, 16);
+//    render(dir);
 
 
 
@@ -161,13 +162,15 @@ int main() {
                 printf("\n\nBye bye :)\n");
                 break;
             case 1:
-                registerCustomer(id);
+                Customer *customer = newCostumer();
+                insertOnDir(dir, id, customer);
+                createFile(*customer);
                 id++;
                 break;
             case 2:
                 //check if is empty
                 if(isEmpty(dir))
-                    removeCustomer(id);
+                    removeFromDir(dir, id);
                 else
                     printf("\nNo registered clients!\n");
                 break;

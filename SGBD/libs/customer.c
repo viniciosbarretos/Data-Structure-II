@@ -31,14 +31,6 @@ Customer * newCostumer() {
     return c;
 }
 
-void registerCustomer(int id) {
-    Customer *c = newCostumer();
-
-//    insertOnDir(dir, id, c);
-
-    createFile(c->id, c->name, c->type, c->overbalance);
-}
-
 void removeCustomer(int id) {
 
     int cId = 0;
