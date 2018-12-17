@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "libs/file.h"
 #include "libs/customer.h"
 #include "libs/hashing.h"
 #include "libs/render.h"
-#include "math.h"
 
 
 // Clean buffer after a text input
@@ -67,7 +67,7 @@ void printOptions() {
 }
 
 void render(Dir *dir) {
-    int n = (int) pow(2, dir->globalDepth);
+    int n = (int) floor(pow(2, dir->globalDepth));
     int i, j;
 
     printf("Directory\n");
@@ -150,8 +150,9 @@ int main() {
 //    render(dir);
 
 
-
     unsigned option;
+
+    Customer customer;
 
     do {
         printOptions();
@@ -162,9 +163,9 @@ int main() {
                 printf("\n\nBye bye :)\n");
                 break;
             case 1:
-                Customer *customer = newCostumer();
-                insertOnDir(dir, id, customer);
-                createFile(*customer);
+                customer = newCostumer();
+                insertOnDir(dir, &id, customer);
+                createFile(customer);
                 id++;
                 break;
             case 2:

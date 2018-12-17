@@ -1,6 +1,6 @@
 #ifndef SGBD_HASHING_H
 #define SGBD_HASHING_H
-#include "math.h"
+#include <math.h>
 #include "customer.h"
 
 typedef struct Item {

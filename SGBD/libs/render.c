@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+#include "math.h"
 #include "render.h"
 #include "hashing.h"
 
@@ -196,7 +196,7 @@ void renderFileDir(Blackboard blackboard, int x, int y, Dir *dir) {
     cleanBlackboard(aux);
 
     // Calc the height of the dir.
-    n = (int) pow(2, dir->globalDepth);
+    n = (int) floor(pow(2, dir->globalDepth));
 
     // Print global depth on aux board.
     sprintf(aux.area[0], "+---+  ");
@@ -263,7 +263,7 @@ void renderHashTable(Dir *dir) {
     int i, x, y, n, dist, dirSize, yBucket, prev, depth;
 
     // Calc the height of the dir.
-    n = (int) pow(2, dir->globalDepth);
+    n = (int) floor(pow(2, dir->globalDepth));
 
     // Initiate the board.
     Blackboard blackboard;

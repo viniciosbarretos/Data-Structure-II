@@ -2,9 +2,9 @@
 // Created by vinicius on 08/12/18.
 //
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "file.h"
-#include "stdio.h"
-#include "string.h"
 #include "customer.h"
 
 //Write where is "empty".
@@ -25,7 +25,7 @@ int createFile (Customer customer) {
             //Verifying free spaces in SGBD file. notEmpty = 0;
             fscanf(input, "%d", &noEmpty);
             if(!noEmpty) {
-                fprintf(input, "1, %8d, %40s, %c, %8.2f\n", customer.id, customer.name, customer.type, customer.overbalance);
+                fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
                 lineCustomer = lineCounter;
                 fseek(input, 0, SEEK_END);
 
@@ -62,7 +62,7 @@ Customer * getCustomer (int line, int line_size) {
 //line have to start in 0.
 
     Customer *customer = malloc(sizeof(Customer));
-    int accountNumber;
+    unsigned accountNumber;
     char name[40], type;
     double overBalancing;
 

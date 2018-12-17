@@ -8,11 +8,11 @@
 typedef struct Customer {
     unsigned id;
     char *name;
-    char *type;
+    char type;
     double overbalance;
 } Customer;
 
-Customer * newCostumer();
+Customer newCostumer();
 void registerCustomer(int id);
 void removeCustomer(int id);
 void searchCustomer(int id);

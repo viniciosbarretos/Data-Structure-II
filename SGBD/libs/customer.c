@@ -1,32 +1,32 @@
 #include "customer.h"
+#include "math.h"
 #include "file.h"
 //#include "hashing.h"
-#include <math.h>
 
-Customer * newCostumer() {
+Customer newCostumer() {
 
-    Customer *c = (Customer*) malloc(sizeof(Customer));
+    Customer c;
     printf("\nAcount Number:");
-    scanf("%d ", &c->id);
+    scanf("%d ", &c.id);
     printf("\nName:");
-    scanf("%s ", c->name);
+    scanf("%s ", c.name);
 
     //Validating customer type.
     do {
         //clearScreen();
         //P: Person, O: Organization
         printf("\nType('P' or 'O'):");
-        scanf("%c ", c->type);
+        scanf("%c ", &c.type);
 
-        if(*(c->type) != 'P' && *(c->type) != 'p' && *(c->type) != 'O' && *(c->type) != 'o') {
+        if((c.type) != 'P' && (c.type) != 'p' && (c.type) != 'O' && (c.type) != 'o') {
             printf("\nWrong value.");
             getchar();
         }
 
-    } while (*(c->type) != 'P' && *(c->type) != 'p' && *(c->type) != 'O' && *(c->type) != 'o');
+    } while ((c.type) != 'P' && (c.type) != 'p' && (c.type) != 'O' && (c.type) != 'o');
 
     printf("\nOverbalance:");
-    scanf("%f", &c->overbalance);
+    scanf("%lf", &c.overbalance);
 
     return c;
 }

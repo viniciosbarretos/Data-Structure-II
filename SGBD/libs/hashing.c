@@ -1,8 +1,8 @@
 #include <stdlib.h>
+#include "math.h"
 #include "hashing.h"
 #include "customer.h"
 #include "file.h"
-#include <math.h>
 
 #define minDepth 2
 #define maxDepth 3
@@ -40,7 +40,7 @@ Dir * newDirectory() {
 }
 
 int calcHash(int n, int depth) {
-    int expo = (int) pow(2, depth);
+    int expo = (int) floor(pow(2, depth));
     return n % expo;
 }
 
@@ -58,7 +58,7 @@ Dir * increaseDir(Dir *dir) {
     int i, n;
 
     // Increase the globalDeath.
-    n = (int) pow(2, dir->globalDepth);
+    n = (int) floor(pow(2, dir->globalDepth));
     dir->globalDepth++;
 
     // Re alloc the memory of the directory
@@ -77,7 +77,7 @@ Dir * decreaseDir(Dir *dir) {
 
     // Increase the globalDeath.
     dir->globalDepth--;
-    n = (int) pow(2, dir->globalDepth);
+    n = (int) floor(pow(2, dir->globalDepth));
 
     // Re alloc the memory of the directory
     dir->key = realloc(dir->key, sizeof(Bucket*) * n);
@@ -249,7 +249,7 @@ void removeFromDir(Dir *dir, int id) {
         // Deleting the directory.
         free(bucket);
 
-        int pass = (int) pow(2, dir->globalDepth-1);
+        int pass = (int) floor(pow(2, dir->globalDepth-1));
 
         // Re-point to the bucket.
         if (hash < pass / 2) {
@@ -267,7 +267,7 @@ void removeFromDir(Dir *dir, int id) {
 }
 
 int isEmpty(Dir *dir) {
-    for (int i = 0; i < pow(2,dir->globalDepth); i++) {
+    for (int i = 0; i < floor(pow(2,dir->globalDepth)); i++) {
         if (dir->key[i] != NULL)
             return 0;
     }
@@ -291,7 +291,7 @@ int differentBucketsInDir(Dir *dir) {
     int i, size, counter;
 
     // Initialize variables
-    size = (int) pow(2, dir->globalDepth);
+    size = (int) floor(pow(2, dir->globalDepth));
     counter = 0;
 
     // Iterate over dir
