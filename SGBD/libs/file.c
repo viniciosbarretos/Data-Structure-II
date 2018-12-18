@@ -6,11 +6,10 @@
 
 // Write where is "empty".
 int saveCostumer(Customer customer) {
-    int notFree, lineCounter, lineCustomer, isSaved;
+    int notFree, lineCounter, isSaved;
 
     // Init variables.
     lineCounter = 0;
-    lineCustomer = -1;
     isSaved = 0;
 
     // Open file.
@@ -32,15 +31,12 @@ int saveCostumer(Customer customer) {
         // Verifying free spaces in SGBD file. notFree = 0;
         if (notFree) {
             // Go to line above.
-            fseek(input, lineCounter * 67, SEEK_SET);
             lineCounter++;
+            fseek(input, lineCounter * 67, SEEK_SET);
 
         } else {
             // Save the customer infos.
             fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
-
-            // Save the line that was saved.
-            lineCustomer = lineCounter;
 
             // Change isSaved flag
             isSaved = 1;
@@ -53,15 +49,12 @@ int saveCostumer(Customer customer) {
     if (!isSaved) {
         // Save the customer infos.
         fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
-
-        // Save the line that was saved.
-        lineCustomer = lineCounter;
     }
 
     // Close the file.
     fclose(input);
 
-    return lineCustomer;
+    return lineCounter;
 }
 
 // Put an block is free identifier "0" in the tuple.

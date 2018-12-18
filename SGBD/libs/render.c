@@ -53,15 +53,15 @@ void printHeader(const char *str) {
 
 void printCostumer(Customer customer) {
     printf("+");
-    printSequence("-", 23);
+    printSequence("-", 32);
+    printf("+\n");
+    printf("| id:   %24d |\n", customer.id);
+    printf("| Name: %24s |\n", customer.name);
+    printf("| Type: %c%24s |\n", customer.type, "");
+    printf("| Balance: %21f |\n", customer.overbalance);
     printf("+");
-    printf("| id: %20d |", customer.id);
-    printf("| Name: %20s |", customer.name);
-    printf("| Type: %c%14s |", customer.type, "");
-    printf("| Balance: %20f |", customer.overbalance);
-    printf("+");
-    printSequence("-", 23);
-    printf("+");
+    printSequence("-", 32);
+    printf("+\n");
 }
 
 // Split line trace string on a vector of Trace.
