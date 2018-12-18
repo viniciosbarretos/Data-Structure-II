@@ -3,8 +3,7 @@
 
 #include "hashing.h"
 
-
+void clearScreen();
 void renderHashTable(Dir *dir);
-
 
 #endif //SGBD_RENDER_H

@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "math.h"
+#include <math.h>
 #include "render.h"
 #include "hashing.h"
+#include "utils.h"
 
 // Clear screen both windows and unix
 void clearScreen() {
@@ -33,18 +34,20 @@ typedef struct Trace {
     unsigned size;
 } Trace;
 
-// Copy from input to buffer in a certain range.
-void strcpyfrgm(char *buffer, const char *input, int start, int size) {
-    int i;
-    // if copy can be made.
-    if ( (int) strlen(input) >= start+size) {
-        // Copying all the chars
-        for (i=0; i<size; i++) {
-            buffer[i] = input[i+start];
-        }
-        // Add end to buffer.
-        buffer[i] = '\0';
+void printSequence(const char *str, int times) {
+    while ( times > 0 ) {
+        printf("%s", str);
+        times--;
     }
+}
+
+void printHeader(const char *str) {
+    unsigned size = (unsigned) strlen(str);
+    printf("\n");
+    printSequence("-", size + 8);
+    printf("\n-   %s   -\n", str);
+    printSequence("-", size + 8);
+    printf("\n");
 }
 
 // Split line trace string on a vector of Trace.
@@ -61,7 +64,7 @@ int splitTrace(Trace traces[100], const char *string, char divider){
     for (i=0; i<n; i++){
         if (string[i] == divider) {
             // Copy the fragment of trace.
-            strcpyfrgm(aux, string, start, length);
+            strCopyFragment(aux, string, start, length);
             // Interpret and save the trace.
             sscanf(aux, "%c%d", &direction, &size);
             traces[j].direction = direction;
