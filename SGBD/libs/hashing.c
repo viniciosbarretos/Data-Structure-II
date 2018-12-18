@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "math.h"
+#include <math.h>
 #include "hashing.h"
 #include "customer.h"
 #include "file.h"
@@ -12,6 +12,7 @@
 
 #define max(a, b) ((a)>(b) ? (a) : (b))
 
+// Alloc a new bucket and return a pointer to then.
 Bucket * newBucket() {
     int i;
 
@@ -28,6 +29,7 @@ Bucket * newBucket() {
     return newBucket;
 }
 
+// Alloc a new directory and return a pointer to then.
 Dir * newDirectory() {
     // Allocate memory for the directory.
     Dir *newDir = (Dir *) malloc(sizeof(Dir));
@@ -39,11 +41,13 @@ Dir * newDirectory() {
     return newDir;
 }
 
+// Calc the hash.
 int calcHash(int n, int depth) {
     int expo = (int) floor(pow(2, depth));
     return n % expo;
 }
 
+// Get the number of elements in a bucket.
 int getBucketSize(Bucket *bucket) {
     int i = 0;
     // Count the number of valid items in the bucket.
@@ -54,6 +58,7 @@ int getBucketSize(Bucket *bucket) {
     return i;
 }
 
+// Increase the dir depth and remake the pointers.
 Dir * increaseDir(Dir *dir) {
     int i, n;
 
@@ -72,10 +77,11 @@ Dir * increaseDir(Dir *dir) {
     return dir;
 }
 
+// Decrease the dir depth and remake the pointers.
 Dir * decreaseDir(Dir *dir) {
     int n;
 
-    // Increase the globalDeath.
+    // Decrease the globalDeath.
     dir->globalDepth--;
     n = (int) floor(pow(2, dir->globalDepth));
 
@@ -85,6 +91,7 @@ Dir * decreaseDir(Dir *dir) {
     return dir;
 }
 
+// Insert an element in a bucket.
 Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
     // Todo save on file
     unsigned fileLine = 45;
@@ -96,6 +103,8 @@ Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
     return bucket;
 }
 
+
+// Search an element in a bucket.
 int searchInBucket(Bucket *bucket, int id) {
     int i, length;
 
@@ -113,6 +122,7 @@ int searchInBucket(Bucket *bucket, int id) {
     return -1;
 }
 
+// Remove an element from a bucket.
 Bucket * removeFromBucket(Bucket *bucket, int position) {
     int i;
     // Todo remove from file
@@ -129,6 +139,7 @@ Bucket * removeFromBucket(Bucket *bucket, int position) {
     return bucket;
 }
 
+// Split the bucket and return the new one.
 Bucket * splitBucket(Dir *dir, Bucket *bucket) {
     int i, k, hash, length;
     Bucket *aux;
@@ -164,6 +175,7 @@ Bucket * splitBucket(Dir *dir, Bucket *bucket) {
     return bucket2;
 }
 
+// Get the max depth of all buckets.
 int getMaxDepthFromBuckets(Dir *dir) {
     int i, pass, vMax=0;
 
@@ -178,6 +190,7 @@ int getMaxDepthFromBuckets(Dir *dir) {
     return vMax;
 }
 
+// Insert an element in a dir and, when necessary, split the bucket or increase the dir depth.
 void insertOnDir(Dir *dir, int *id, Customer c) {
     int hash, bucketSize;
     int resolved = false;
@@ -228,6 +241,7 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
     }
 }
 
+// Remove a element from dir and, when necessary, merge buckets or reduce the dir depth.
 void removeFromDir(Dir *dir, int id) {
     int hash, p;
     Bucket *bucket;
@@ -241,8 +255,6 @@ void removeFromDir(Dir *dir, int id) {
     if (p != -1) {
         removeFromBucket(bucket, p);
     }
-
-    removeFileLine(dir->key[hash]->items->line);
 
     // Check for a merge.
     if (getBucketSize(bucket) == 0) {
@@ -266,15 +278,12 @@ void removeFromDir(Dir *dir, int id) {
 
 }
 
-int isEmpty(Dir *dir) {
-    for (int i = 0; i < floor(pow(2,dir->globalDepth)); i++) {
-        if (dir->key[i] != NULL)
-            return 0;
-    }
-    return 1;
-}
+/*
+ * Extra functions for render
+ */
 
-
+// Return the original key if it's position is a pointer to the same bucket.
+// If it's not happens, return -1.
 int bucketAppearsBefore(Dir *dir, int position) {
     int i;
 
@@ -287,6 +296,7 @@ int bucketAppearsBefore(Dir *dir, int position) {
     return -1;
 }
 
+// Return the quantity of different buckets in a dir.
 int differentBucketsInDir(Dir *dir) {
     int i, size, counter;
 
