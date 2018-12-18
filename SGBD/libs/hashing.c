@@ -298,7 +298,7 @@ void removeFromDir(Dir *dir, int id) {
     }
 
     // Check for a merge.
-    if (getBucketSize(bucket) == 0) {
+    if (getBucketSize(bucket) == 0 && bucket->localDepth > dir->globalDepth) {
         // Deleting the directory.
         free(bucket);
 

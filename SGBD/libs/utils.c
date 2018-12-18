@@ -74,7 +74,9 @@ char getCharInOptions(const char *options, const char *errorMessage) {
             }
         }
 
-        printf("%s", errorMessage);
+        if (!isValid) {
+            printf("%s", errorMessage);
+        }
 
     } while (!isValid);
 

@@ -265,6 +265,8 @@ void printConnectorAroundArrow(Blackboard blackboard, int x, int y, int xEnd, in
 void renderHashTable(Dir *dir) {
     int i, x, y, n, dist, dirSize, yBucket, prev, depth;
 
+    printHeader("Hash Directory");
+
     // Calc the height of the dir.
     n = (int) floor(pow(2, dir->globalDepth));
 

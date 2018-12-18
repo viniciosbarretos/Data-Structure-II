@@ -9,6 +9,7 @@
 void addCostumer(Dir *dir, int *id) {
     // Check if insertion can occurs
     if (freeSpaceAtDir > 0) {
+        printHeader("Add a costumer");
         Customer costumer;
 
         // Get the costumer infos.
@@ -19,12 +20,17 @@ void addCostumer(Dir *dir, int *id) {
 
         // Show message
         printHeader("File added!");
+
+    } else {
+        printHeader("Costumer can't be added. Directory is full");
     }
 }
 
 void deleteCustomer(Dir *dir) {
     int id;
     Item item;
+
+    printHeader("Remove a costumer");
 
     // Get the costumer id.
     printf ("\nType the Client Account Number: ");
@@ -37,6 +43,7 @@ void deleteCustomer(Dir *dir) {
     // Remove or show error.
     if (item.id != -1) {
         removeFromDir(dir, id);
+        printHeader("Costumer removed");
     } else {
         printHeader("Costumer not found");
     }
@@ -45,6 +52,8 @@ void deleteCustomer(Dir *dir) {
 void searchCustomer(Dir *dir) {
     int id;
     Item item;
+
+    printHeader("Search a costumer");
 
     // Get the costumer id.
     printf ("\nType the Client Account Number: ");
@@ -89,6 +98,9 @@ int main() {
         printOptions();
         scanf("%d", &option);
         cleanBuffer();
+
+        // Clear the screen for the option.
+        clearScreen();
 
         switch (option) {
             case 0:
