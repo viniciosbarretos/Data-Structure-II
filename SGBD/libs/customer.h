@@ -6,7 +6,7 @@
 
 typedef struct Customer {
     unsigned id;
-    char *name;
+    char name[40];
     char type;
     double overbalance;
 } Customer;
