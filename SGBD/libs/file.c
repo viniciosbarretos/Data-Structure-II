@@ -14,13 +14,13 @@ int saveCostumer(Customer customer) {
     isSaved = 0;
 
     // Open file.
-    FILE *input = fopen("Files/SGBD.txt", "w+");
+    FILE *input = fopen("Files/SGBD.txt", "w");
 
     if (!input) {
         return -1;
     }
 
-    while ( fscanf(input, "%d", &notFree) ) {
+    while ( fscanf(input, "%d", &notFree) == 1) {
 
         // Verifying free spaces in SGBD file. notFree = 0;
         if (notFree) {

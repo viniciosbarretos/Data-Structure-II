@@ -92,6 +92,9 @@ int main() {
     // Create the directory
     Dir *dir = newDirectory();
 
+    // Create files directory.
+    system("mkdir Files");
+
     do {
         // Clear the screen.
         clearScreen();
