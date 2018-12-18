@@ -22,17 +22,10 @@ typedef struct Dir {
 Dir * newDirectory();
 void insertOnDir(Dir *dir, int *id, Customer c);
 void removeFromDir(Dir *dir, int id);
-int isEmpty(Dir *dir);
 int calcHash(int n, int depth);
 int searchInBucket(Bucket *bucket, int id);
 
 int bucketAppearsBefore(Dir *dir, int position);
 int differentBucketsInDir(Dir *dir);
-
-//int hashFunction(unsigned accountNumber, unsigned globalDepth);
-//void newDirectory();
-//void duplicateDirectory();
-//void newBucket();
-//void duplicateBucket();
 
 #endif //SGBD_HASHING_H

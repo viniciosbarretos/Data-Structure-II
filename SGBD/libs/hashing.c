@@ -2,7 +2,6 @@
 #include <math.h>
 #include "hashing.h"
 #include "customer.h"
-#include "file.h"
 
 #define minDepth 2
 #define maxDepth 3
