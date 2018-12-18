@@ -15,7 +15,7 @@ Customer getCostumer() {
     printf("\nType ['p' or 'o']: ");
     c.type = getCharInOptions("op", "Wrong value, try again.\nType ['p' or 'o']: ");
 
-    printf("\nOverbalance:");
+    printf("\nOverbalance: ");
     scanf("%lf", &c.overbalance);
 
     return c;
