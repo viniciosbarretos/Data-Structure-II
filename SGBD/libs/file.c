@@ -17,9 +17,6 @@ int saveCostumer(Customer customer) {
     FILE *input = fopen("Files/sgbd.txt", "r+");
 
     if (!input) {
-        // Close the null file.
-        fclose(input);
-
         // Create file.
         input = fopen("Files/sgbd.txt", "w+");
 

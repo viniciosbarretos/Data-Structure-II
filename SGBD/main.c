@@ -127,7 +127,12 @@ int main() {
             default:
                 printf("\nInvalid Option! Try again.");
         }
+
+        printf("Press enter to continue...");
+        getchar();
+
     } while (option);
+
 
     return 0;
 }

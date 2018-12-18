@@ -147,7 +147,8 @@ int searchInBucket(Bucket *bucket, int id) {
 // Remove an element from a bucket.
 Bucket * removeFromBucket(Bucket *bucket, int position) {
     int i;
-    // Todo remove from file
+    // Remove item
+    removeCostumer(bucket->items[position].line);
 
     // Shift elements on bucket.
     for (i = position; i < defaultBucketSize - 1; i++) {
