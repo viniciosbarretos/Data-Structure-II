@@ -70,7 +70,7 @@ int removeCostumer(int line) {
 }
 
 // Returns the customer of the row.
-Customer getCustomer(int line) {
+Customer readCustomer(int line) {
     Customer customer;
 
     // Open the file.

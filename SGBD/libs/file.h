@@ -4,6 +4,6 @@
 
 int saveCostumer(Customer customer);
 int removeCostumer(int line);
-Customer getCustomer(int line);
+Customer readCustomer(int line);
 
 #endif //SGBD_FILE_H

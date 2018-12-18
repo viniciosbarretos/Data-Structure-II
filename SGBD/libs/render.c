@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "customer.h"
 #include "render.h"
 #include "hashing.h"
 #include "utils.h"
@@ -48,6 +49,19 @@ void printHeader(const char *str) {
     printf("\n-   %s   -\n", str);
     printSequence("-", size + 8);
     printf("\n");
+}
+
+void printCostumer(Customer customer) {
+    printf("+");
+    printSequence("-", 23);
+    printf("+");
+    printf("| id: %20d |", customer.id);
+    printf("| Name: %20s |", customer.name);
+    printf("| Type: %c%14s |", customer.type, "");
+    printf("| Balance: %20f |", customer.overbalance);
+    printf("+");
+    printSequence("-", 23);
+    printf("+");
 }
 
 // Split line trace string on a vector of Trace.

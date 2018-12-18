@@ -52,6 +52,7 @@ void deleteCustomer(Dir *dir) {
 void searchCustomer(Dir *dir) {
     int id;
     Item item;
+    Customer customer;
 
     printHeader("Search a costumer");
 
@@ -65,7 +66,8 @@ void searchCustomer(Dir *dir) {
 
     // Remove or show error.
     if (item.id != -1) {
-        // Todo show costumer
+        customer = readCustomer(item.line);
+        printCostumer(customer);
     } else {
         printHeader("Costumer not found");
     }
