@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include "hashing.h"
 
 typedef struct Customer {
     unsigned id;
@@ -12,9 +11,6 @@ typedef struct Customer {
     double overbalance;
 } Customer;
 
-Customer newCostumer();
-void registerCustomer(int id);
-void removeCustomer(int id);
-void searchCustomer(int id);
+Customer getCostumer();
 
 #endif //SGBD_CUSTOMER_H
