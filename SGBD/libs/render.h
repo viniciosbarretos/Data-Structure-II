@@ -4,6 +4,7 @@
 #include "hashing.h"
 
 void clearScreen();
+void printHeader(const char *str);
 void renderHashTable(Dir *dir);
 
 #endif //SGBD_RENDER_H

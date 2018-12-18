@@ -216,7 +216,7 @@ void renderFileDir(Blackboard blackboard, int x, int y, Dir *dir) {
     for (k = 0; k < n; k++) {
         // Print dir on aux board.
         sprintf(aux.area[0], "+-----+");
-        sprintf(aux.area[1], "| %3d |", 3);
+        sprintf(aux.area[1], "| %3d |", k);
         sprintf(aux.area[2], "+-----+");
 
         // Copy for board.
@@ -227,11 +227,11 @@ void renderFileDir(Blackboard blackboard, int x, int y, Dir *dir) {
     }
 }
 
-void renderBucket(Blackboard blackboard, int x, int y, Bucket *bucket) {
+void renderBucket(Blackboard blackboard, int x, int y, Bucket *bucket, int name) {
     Blackboard aux = newBlackboard(26, 5);
 
     // Print on aux board.
-    sprintf(aux.area[0], "+Bucket %3d               ", 3);
+    sprintf(aux.area[0], "Bucket %3d                ", name);
     sprintf(aux.area[1], "+---------------------++-+");
     sprintf(aux.area[2], "| %4d %4d %4d %4d ||%d|", bucket->items[0].id, bucket->items[1].id, bucket->items[2].id, bucket->items[3].id, bucket->localDepth);
     sprintf(aux.area[3], "| %4d %4d %4d %4d |+-+", bucket->items[0].line, bucket->items[1].line, bucket->items[2].line, bucket->items[3].line);
@@ -303,7 +303,7 @@ void renderHashTable(Dir *dir) {
         // Check if connect to a new bucket or in a exist one.
         if (prev == -1) {
             // Render bucket and arrow.
-            renderBucket(blackboard, 31, yBucket, dir->key[i]);
+            renderBucket(blackboard, 31, yBucket, dir->key[i], i);
             printConnectorArrow(blackboard, 7, y, 30, yBucket+2, dist, line1);
 
             // Increment yBucket counters.
