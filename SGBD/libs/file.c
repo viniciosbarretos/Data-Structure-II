@@ -6,11 +6,12 @@
 
 // Write where is "empty".
 int saveCostumer(Customer customer) {
-    int notFree, lineCounter, lineCustomer;
+    int notFree, lineCounter, lineCustomer, isSaved;
 
     // Init variables.
     lineCounter = 0;
     lineCustomer = -1;
+    isSaved = 0;
 
     // Open file.
     FILE *input = fopen("Files/SGBD.txt", "w+");
@@ -34,9 +35,20 @@ int saveCostumer(Customer customer) {
             // Save the line that was saved.
             lineCustomer = lineCounter;
 
+            // Change isSaved flag
+            isSaved = 1;
+
             // Go to the end of the file.
             fseek(input, 0, SEEK_END);
         }
+    }
+
+    if (!isSaved) {
+        // Save the customer infos.
+        fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
+
+        // Save the line that was saved.
+        lineCustomer = lineCounter;
     }
 
     // Close the file.
