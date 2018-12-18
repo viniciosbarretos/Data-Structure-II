@@ -13,11 +13,11 @@ int saveCostumer(Customer customer) {
     isSaved = 0;
 
     // Open file.
-    FILE *input = fopen("Files/sgbd.txt", "r+");
+    FILE *input = fopen("Files/SGBD.txt", "r+");
 
     if (!input) {
         // Create file.
-        input = fopen("Files/sgbd.txt", "w+");
+        input = fopen("Files/SGBD.txt", "w+");
 
         // Can't manage files, exit.
         if (!input) {
