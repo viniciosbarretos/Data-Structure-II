@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "hashing.h"
+#include "file.h"
 #include "customer.h"
 
 #define minDepth 2
@@ -107,12 +108,19 @@ Dir * decreaseDir(Dir *dir) {
 
 // Insert an element in a bucket.
 Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
-    // Todo save on file
-    unsigned fileLine = 45;
+    int fileLine;
+
+    // Save on file
+    fileLine = saveCostumer(c);
 
     // Save item
-    bucket->items[position].id = c.id;
-    bucket->items[position].line = fileLine;
+    if (fileLine != -1) {
+        bucket->items[position].id = c.id;
+        bucket->items[position].line = (unsigned) fileLine;
+    } else {
+        // Todo improve this.
+        printf("Deu erro ao salvar");
+    }
 
     return bucket;
 }
