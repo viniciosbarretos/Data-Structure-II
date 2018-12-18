@@ -35,6 +35,9 @@ int saveCostumer(Customer customer) {
             fseek(input, lineCounter * 67, SEEK_SET);
 
         } else {
+            // Go to insertion point
+            fseek(input, lineCounter * 67, SEEK_SET);
+
             // Save the customer infos.
             fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
 

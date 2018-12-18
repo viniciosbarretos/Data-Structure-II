@@ -57,8 +57,8 @@ void printCostumer(Customer customer) {
     printf("+\n");
     printf("| id:   %24d |\n", customer.id);
     printf("| Name: %24s |\n", customer.name);
-    printf("| Type: %c%24s |\n", customer.type, "");
-    printf("| Balance: %21f |\n", customer.overbalance);
+    printf("| Type: %23s%c |\n", "", customer.type);
+    printf("| Balance: %21.2f |\n", customer.overbalance);
     printf("+");
     printSequence("-", 32);
     printf("+\n");
