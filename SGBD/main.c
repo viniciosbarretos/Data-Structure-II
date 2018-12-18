@@ -6,50 +6,60 @@
 #include "libs/render.h"
 #include "libs/utils.h"
 
-Customer newCostumer() {
-    Customer c;
+void addCostumer(Dir *dir, int *id) {
+    // Check if insertion can occurs
+    if (freeSpaceAtDir > 0) {
+        Customer costumer;
 
-    // The costumer information.
-    printf("\nAccount Number:");
-    scanf("%d ", &c.id);
+        // Get the costumer infos.
+        costumer = getCostumer();
 
-    printf("\nName:");
-    scanf("%s ", c.name);
+        // Insert costumer in dir.
+        insertOnDir(dir, id, costumer);
 
-    //Validating customer type.
-    do {
-        printf("\nType('P' or 'O'):");
-        scanf("%c ", &c.type);
-
-        if((c.type) != 'P' && (c.type) != 'p' && (c.type) != 'O' && (c.type) != 'o') {
-            printf("\nWrong value.");
-            getchar();
-        }
-
-    } while ((c.type) != 'P' && (c.type) != 'p' && (c.type) != 'O' && (c.type) != 'o');
-
-    printf("\nOverbalance:");
-    scanf("%lf", &c.overbalance);
-
-    return c;
+        // Show message
+        printHeader("File added!");
+    }
 }
 
-void removeCustomer(int id) {
+void deleteCustomer(Dir *dir) {
+    int id;
+    Item item;
 
-    int cId = 0;
-    printf ("\nType the Client Account Number");
-    scanf ("%d", &cId);
+    // Get the costumer id.
+    printf ("\nType the Client Account Number: ");
+    scanf ("%d", &id);
+    cleanBuffer();
 
-//    int hash = calcHash(id, dir->globalDepth);
-//    int pos = searchInBucket(dir->key[hash], cId);
-//    int line = dir->key[hash]->items[pos].line;
-//
-//    removeFromDir(dir, id);
-//    removeFileLine(line);
+    // Search for the item.
+    item = searchFromDir(dir, id);
+
+    // Remove or show error.
+    if (item.id != -1) {
+        removeFromDir(dir, id);
+    } else {
+        printHeader("Costumer not found");
+    }
 }
 
-void searchCustomer(int id) {
+void searchCustomer(Dir *dir) {
+    int id;
+    Item item;
 
+    // Get the costumer id.
+    printf ("\nType the Client Account Number: ");
+    scanf ("%d", &id);
+    cleanBuffer();
+
+    // Search for the item.
+    item = searchFromDir(dir, id);
+
+    // Remove or show error.
+    if (item.id != -1) {
+        // Todo show costumer
+    } else {
+        printHeader("Costumer not found");
+    }
 }
 
 // Menu options
@@ -64,136 +74,43 @@ void printOptions() {
     printf("\nEnter with your option: ");
 }
 
-void render(Dir *dir) {
-    int n = (int) floor(pow(2, dir->globalDepth));
-    int i, j;
-
-    printf("Directory\n");
-    for (i=0; i<n; i++) {
-        if (dir->key[i]) {
-            printf("{");
-            for (j=0; j<4; j++) {
-                printf("%d|", dir->key[i]->items[j].id);
-
-            }
-            printf("}");
-
-        } else {
-            printf(" NULL ");
-        }
-
-    }
-}
-
 int main() {
-    // Create the directory
-    Dir *dir = newDirectory();
     int id = 0;
-
-    Customer customer = {0, "teste", 'o', 21.5, };
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-
-    render(dir);
-    printf("\n");
-    printf("\n");
-
-    renderHashTable(dir);
-
-    printf("\n");
-    printf("\n");
-
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    id++;
-    insertOnDir(dir, &id, customer);
-    render(dir);
-    printf("\n");
-    printf("\n");
-
-    renderHashTable(dir);
-
-    printf("\n");
-    printf("\n");
-    removeFromDir(dir, 4);
-    removeFromDir(dir, 12);
-    removeFromDir(dir, 16);
-    render(dir);
-
-
     unsigned option;
 
+    // Create the directory
+    Dir *dir = newDirectory();
 
     do {
+        // Clear the screen.
+        clearScreen();
+
+        // Print menu and get the option.
         printOptions();
         scanf("%d", &option);
         cleanBuffer();
+
         switch (option) {
             case 0:
                 printf("\n\nBye bye :)\n");
                 break;
             case 1:
-                customer = newCostumer();
-                insertOnDir(dir, &id, customer);
-//                createFile(customer);
+                addCostumer(dir, &id);
                 id++;
                 break;
             case 2:
-                //check if is empty
-                if(1)
-                    removeFromDir(dir, id);
-                else
-                    printf("\nNo registered clients!\n");
+                deleteCustomer(dir);
                 break;
             case 3:
-                //check if is empty
-                if(1)
-                    printf("search completed");
-                else
-                    printf("\nNo registered clients!\n");
+                searchCustomer(dir);
                 break;
             case 4:
-                //check if is empty
-                if(1)
-                    renderHashTable(dir);
-                else
-                    printf("\nNo registered clients!\n");
+                renderHashTable(dir);
                 break;
             default:
                 printf("\nInvalid Option! Try again.");
-
         }
-
     } while (option);
-
-
 
     return 0;
 }
