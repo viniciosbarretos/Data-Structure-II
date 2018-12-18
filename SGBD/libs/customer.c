@@ -9,7 +9,8 @@ Customer getCostumer() {
 
     // Get costumer information.
     printf("\nName:");
-    scanf("%s ", c.name);
+    scanf("%[^\n]", c.name);
+    cleanBuffer();
 
     printf("Type ['p' or 'o']:");
     c.type = getCharInOptions("op", "Wrong value.");
