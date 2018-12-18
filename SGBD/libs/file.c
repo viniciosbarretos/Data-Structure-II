@@ -1,83 +1,91 @@
-//
-// Created by vinicius on 08/12/18.
-//
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "file.h"
 #include "customer.h"
 
-//Write where is "empty".
-int createFile (Customer customer) {
+// Write where is "empty".
+int saveCostumer(Customer customer) {
+    int notFree, lineCounter, lineCustomer;
 
-    int noEmpty = 1;
-    int lineCounter = 0;
-    int lineCustomer = -1;
+    // Init variables.
+    lineCounter = 0;
+    lineCustomer = -1;
 
+    // Open file.
     FILE *input = fopen("Files/SGBD.txt", "w+");
 
-    if(!input) {
+    if (!input) {
         return -1;
     }
-    else {
-        while(fscanf(input, "%d", &noEmpty)) {
 
-            //Verifying free spaces in SGBD file. notEmpty = 0;
-            fscanf(input, "%d", &noEmpty);
-            if(!noEmpty) {
-                fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
-                lineCustomer = lineCounter;
-                fseek(input, 0, SEEK_END);
+    while ( fscanf(input, "%d", &notFree) ) {
 
-            } else {
-                fseek(input, lineCounter * 67, SEEK_SET);
-                lineCounter++;
-            }
+        // Verifying free spaces in SGBD file. notFree = 0;
+        if (notFree) {
+            // Go to line above.
+            fseek(input, lineCounter * 67, SEEK_SET);
+            lineCounter++;
+
+        } else {
+            // Save the customer infos.
+            fprintf(input, "1, %8d, %40s, %c, %8.2lf\n", customer.id, customer.name, customer.type, customer.overbalance);
+
+            // Save the line that was saved.
+            lineCustomer = lineCounter;
+
+            // Go to the end of the file.
+            fseek(input, 0, SEEK_END);
         }
     }
+
+    // Close the file.
     fclose(input);
 
     return lineCustomer;
 }
 
-//Put an blank space identifier "0" in a tuple.
-int removeFile (int line) {
+// Put an block is free identifier "0" in the tuple.
+int removeCostumer(int line) {
+    // Open file
     FILE *file = fopen("Files/SGBD.txt", "r+");
 
     if(!file) {
         return -1;
     }
-    else {
-        fseek(file, line * 67, SEEK_SET);
-        fprintf(file, "0");
-        fseek(file, 0, SEEK_END);
-    }
+
+    // Go to the line of the customer.
+    fseek(file, line * 67, SEEK_SET);
+
+    // Alter flag.
+    fprintf(file, "0");
+
+    // Go to the end of the file.
+    fseek(file, 0, SEEK_END);
+
+    // Close the file.
     fclose(file);
+
     return 1;
 }
 
-//Returns a customer.
-Customer * getCustomer (int line, int line_size) {
-//line_size = 67;
-//line have to start in 0.
+// Returns the customer of the row.
+Customer getCustomer(int line) {
+    Customer customer;
 
-    Customer *customer = malloc(sizeof(Customer));
-    unsigned accountNumber;
-    char name[40], type;
-    double overBalancing;
+    // Open the file.
+    FILE *file = fopen("Files/SGBD.txt", "r");
 
-    FILE *file;
+    // Go to line of the customer.
+    fseek (file , line * 67 , SEEK_SET );
 
-    file = fopen("Files/SGBD.txt", "r");
-    fseek (file , line * line_size , SEEK_SET );
-    fscanf(file, "1, %d, %[^,], %c, %lf", &accountNumber, name, &type, &overBalancing);
+    // Read the customer infos.
+    fscanf(file, "1, %d, %[^,], %c, %lf", &customer.id, customer.name, &customer.type, &customer.overbalance);
+
+    // Close the file.
     fclose(file);
 
-    customer->id = accountNumber;
-    strcpy(customer->name, name);
-    customer->type = type;
-    customer->overbalance = overBalancing;
-
+    // Return the customer.
     return customer;
 }
 
