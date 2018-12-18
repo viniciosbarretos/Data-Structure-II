@@ -15,16 +15,18 @@ typedef struct Bucket {
 
 typedef struct Dir {
     unsigned globalDepth;
+    unsigned itemsSaved;
     struct Bucket **key;
 } Dir;
 
 
 Dir * newDirectory();
+int freeSpaceAtDir(Dir *dir);
 void insertOnDir(Dir *dir, int *id, Customer c);
+Item searchFromDir(Dir *dir, int id);
 void removeFromDir(Dir *dir, int id);
 int calcHash(int n, int depth);
 int searchInBucket(Bucket *bucket, int id);
-
 int bucketAppearsBefore(Dir *dir, int position);
 int differentBucketsInDir(Dir *dir);
 

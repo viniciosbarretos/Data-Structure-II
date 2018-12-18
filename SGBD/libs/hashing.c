@@ -30,14 +30,29 @@ Bucket * newBucket() {
 
 // Alloc a new directory and return a pointer to then.
 Dir * newDirectory() {
+    int i, n;
+
     // Allocate memory for the directory.
     Dir *newDir = (Dir *) malloc(sizeof(Dir));
 
+    // Calc the size of the dir.
+    n = (int) pow(2, minDepth);
+
     // Initialize the directory.
     newDir->globalDepth = minDepth;
-    newDir->key = malloc(sizeof(Bucket*) * (int) pow(2, minDepth));
+    newDir->itemsSaved = 0;
+    newDir->key = malloc(sizeof(Bucket*) * n);
+
+    // Create the first buckets.
+    for (i = 0; i < n; i++) {
+        newDir->key[i] = newBucket();
+    }
 
     return newDir;
+}
+
+int freeSpaceAtDir(Dir *dir) {
+    return ((int) pow(2, dir->globalDepth) * 4) - dir->itemsSaved;
 }
 
 // Calc the hash.
@@ -171,6 +186,10 @@ Bucket * splitBucket(Dir *dir, Bucket *bucket) {
         }
     }
 
+    // Alter the depth of the buckets
+    bucket->localDepth++;
+    bucket2->localDepth++;
+
     return bucket2;
 }
 
@@ -216,6 +235,7 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
         // Check if item can be inserted on bucket.
         if (bucketSize < defaultBucketSize) {
             insertOnBucket(bucket, c, bucketSize);
+            dir->itemsSaved++;
             resolved = true;
         }
         // Check if is possible to split the bucket.
@@ -240,6 +260,27 @@ void insertOnDir(Dir *dir, int *id, Customer c) {
     }
 }
 
+Item searchFromDir(Dir *dir, int id) {
+    int hash, p;
+    Bucket *bucket;
+
+    // Get the bucket of the element
+    hash = calcHash(id, dir->globalDepth);
+    bucket = dir->key[hash];
+
+    // Get the position
+    p = searchInBucket(bucket, id);
+
+    // If not found, return a blank item.
+    if (p == -1) {
+        Item i = {-1, 0};
+        return i;
+    }
+
+    // Return the item.
+    return dir->key[hash]->items[p];
+}
+
 // Remove a element from dir and, when necessary, merge buckets or reduce the dir depth.
 void removeFromDir(Dir *dir, int id) {
     int hash, p;
@@ -253,6 +294,7 @@ void removeFromDir(Dir *dir, int id) {
     p = searchInBucket(bucket, id);
     if (p != -1) {
         removeFromBucket(bucket, p);
+        dir->itemsSaved--;
     }
 
     // Check for a merge.
