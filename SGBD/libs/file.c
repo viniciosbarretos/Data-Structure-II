@@ -14,19 +14,21 @@ int saveCostumer(Customer customer) {
     isSaved = 0;
 
     // Open file.
-    FILE *input = fopen("Files/sgbd.txt", "w+");
+    FILE *input = fopen("Files/sgbd.txt", "r+");
 
     if (!input) {
         // Close the null file.
         fclose(input);
 
         // Create file.
-        input = fopen("Files/sgbd.txt", "w");
+        input = fopen("Files/sgbd.txt", "w+");
+
+        // Can't manage files, exit.
+        if (!input) {
+            return -1;
+        }
     }
 
-    if (!input) {
-        return -1;
-    }
 
     while ( fscanf(input, "%d", &notFree) == 1) {
 
