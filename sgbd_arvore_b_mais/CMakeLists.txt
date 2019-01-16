@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.12)
+project(sgbd_arvore_b_mais C)
+
+set(CMAKE_C_STANDARD 11)
+
+add_executable(sgbd_arvore_b_mais main.c)
