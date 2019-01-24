@@ -109,9 +109,7 @@ bool verbose_output = false;
 // Output and utility.
 
 void license_notice(void);
-//void usage_1(void);
-//void usage_2(void);
-//void usage_3(void);
+
 void enqueue(node * new_node);
 node * dequeue(void);
 int height(const node * root);
@@ -1235,21 +1233,17 @@ node * delete(node * root, int key) {
 }
 
 
-void destroy_tree_nodes(node * root) {
+node * destroy_tree(node * root) {
     int i;
     if (root->is_leaf)
         for (i = 0; i < root->num_keys; i++)
             free(root->pointers[i]);
     else
         for (i = 0; i < root->num_keys + 1; i++)
-            destroy_tree_nodes(root->pointers[i]);
+            destroy_tree(root->pointers[i]);
     free(root->pointers);
     free(root->keys);
     free(root);
-}
 
-
-node * destroy_tree(node * root) {
-    destroy_tree_nodes(root);
     return NULL;
 }
