@@ -3,4 +3,4 @@ project(sgbd_arvore_b_mais C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(sgbd_arvore_b_mais main.c libs/bplustree.c libs/bplustree.h)
+add_executable(sgbd_arvore_b_mais main.c libs/render.c libs/render.h)
