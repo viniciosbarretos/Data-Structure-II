@@ -1,8 +1,3 @@
-#include "bplustree.h"
-
-/*
- *  bpt.c
- */
 #define Version "1.16.1"
 /*
  *
@@ -65,6 +60,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "bplustree.h"
 
 
 // Default order is 4.
@@ -91,7 +87,11 @@
  * of the value field.
  */
 typedef struct record {
-    int value;
+    int id;
+    char name[20];
+    char email[40];
+    int age;
+    int status;
 } record;
 
 /* Type representing a node in the B+ tree.
