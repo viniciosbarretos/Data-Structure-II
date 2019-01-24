@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "libs/render.h"
 
 int main() {
-    printf("Hello world");
+    printf("Hello world\n");
+
+    printRecordRow(3826, "Thiago Leal Pozati", "teste@unesp.br", 19, 1);
 
     return 0;
 }
