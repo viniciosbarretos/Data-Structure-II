@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "bplustree.h"
 #include "file.h"
 
 // Write where is "empty".
@@ -39,7 +38,7 @@ int saveRecord(Record record) {
             fseek(input, lineCounter * 79, SEEK_SET);
 
             // Save the customer infos.
-            fprintf(input, "0, %8d, %20s, %40s, %c\n", record.id, record.name, record.email, record.status);
+//            fprintf(input, "0, %8d, %20s, %40s, %c\n", record.id, record.name, record.email, record.status);
 
             // Change isSaved flag
             isSaved = 1;
@@ -51,7 +50,7 @@ int saveRecord(Record record) {
 
     if (!isSaved) {
         // Save the record infos.
-        fprintf(input, "1, %8d, %20s, %40s, %c\n", record.id, record.name, record.email, record.status);
+//        fprintf(input, "1, %8d, %20s, %40s, %c\n", record.id, record.name, record.email, record.status);
     }
 
     // Close the file.
@@ -95,7 +94,7 @@ Record readRecord(int line) {
     fseek (file , line * 79 , SEEK_SET );
 
     // Read the record infos.
-    fscanf(file, "1, %d, %[^,], %s, %c\n", &record.id, record.name, &record.email, &record.status);
+//    fscanf(file, "1, %d, %[^,], %s, %c\n", &record.id, record.name, &record.email, &record.status);
 
     // Close the file.
     fclose(file);
