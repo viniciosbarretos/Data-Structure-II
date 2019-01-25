@@ -3,6 +3,14 @@
 
 // TYPES.
 
+#include "student.h"
+#include <stdbool.h>
+#ifdef _WIN32
+#define bool char
+#define false 0
+#define true 1
+#endif
+
 /* Type representing the Record
  * to which a given key refers.
  * In a real B+ tree system, the
@@ -13,12 +21,9 @@
  * to change the type and content
  * of the value field.
  */
-typedef struct record {
+typedef struct Record {
     int id;
-    char name[20];
-    char email[40];
-    int age;
-    int status;
+    int line;
 } Record;
 
 /* Type representing a node in the B+ tree.
@@ -59,8 +64,11 @@ typedef struct node {
 } node;
 
 
-node * insert(node * root, int key, int value);
-node * delete(node * root, int key);
-Record * find(node * root, int key, bool verbose, node ** leaf_out);
+node * insert(node * root, int id, Student student);
+node * delete(node * root, int id);
+Record * find(node * root, int id, bool verbose, node ** leaf_out);
+
+void print_leaves(const node *root);
+void print_tree(const node *root);
 
 #endif //SGBD_ARVORE_B_MAIS_BPLUSTREE_H

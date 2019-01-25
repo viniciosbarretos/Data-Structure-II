@@ -51,16 +51,12 @@
  *
  */
 
-#include <stdbool.h>
-#ifdef _WIN32
-#define bool char
-#define false 0
-#define true 1
-#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "bplustree.h"
+#include "student.h"
 
 
 // Default order is 4.
@@ -114,8 +110,6 @@ void enqueue(node * new_node);
 node * dequeue(void);
 int height(const node * root);
 int path_to_root(const node * root, node * child);
-void print_leaves(const node * root);
-void print_tree(const node * root);
 void find_and_print(const node * root, int key, bool verbose);
 void find_and_print_range(const node * root, int range1, int range2, bool verbose);
 int find_range(const node * root, int key_start, int key_end, bool verbose,
@@ -125,7 +119,7 @@ int cut(int length);
 
 // Insertion.
 
-Record * make_record(int value);
+Record * make_record(int id, int line);
 node * make_node(void);
 node * make_leaf(void);
 int get_left_index(node * parent, node * left);
@@ -212,7 +206,7 @@ void print_leaves(const node * root) {
         return;
     }
     int i;
-    node * c = root;
+    node *c = root;
     while (!c->is_leaf)
         c = c->pointers[0];
     while (true) {
@@ -238,9 +232,9 @@ void print_leaves(const node * root) {
  * of the tree, which length in number of edges
  * of the path from the root to any leaf.
  */
-int height(const node * root) {
+int height(const node *root) {
     int h = 0;
-    node * c = root;
+    node *c = root;
     while (!c->is_leaf) {
         c = c->pointers[0];
         h++;
@@ -252,7 +246,7 @@ int height(const node * root) {
 /* Utility function to give the length in edges
  * of the path from any node to the root.
  */
-int path_to_root(const node * root, node * child) {
+int path_to_root(const node *root, node *child) {
     int length = 0;
     node * c = child;
     while (c != root) {
@@ -326,7 +320,7 @@ void find_and_print(const node * root, int key, bool verbose) {
         printf("Record not found under key %d.\n", key);
     else
         printf("Record at %p -- key %d, value %d.\n",
-               r, key, r->value);
+               r, key, r->line);
 }
 
 
@@ -349,7 +343,7 @@ void find_and_print_range(const node * root, int key_start, int key_end,
                    returned_keys[i],
                    returned_pointers[i],
                    ((Record *)
-                           returned_pointers[i])->value);
+                           returned_pointers[i])->line);
     }
 }
 
@@ -468,14 +462,15 @@ int cut(int length) {
 /* Creates a new Record to hold the value
  * to which a key refers.
  */
-Record * make_record(int value) {
+Record * make_record(int id, int line) {
     Record * new_record = (Record *)malloc(sizeof(Record));
     if (new_record == NULL) {
         perror("Record creation.");
         exit(EXIT_FAILURE);
     }
     else {
-        new_record->value = value;
+        new_record->id = id;
+        new_record->line = line;
     }
     return new_record;
 }
@@ -810,51 +805,55 @@ node * start_new_tree(int key, Record * pointer) {
  * however necessary to maintain the B+ tree
  * properties.
  */
-node * insert(node * root, int key, int value) {
+node * insert(node * root, int id, Student student) {
 
     Record * record_pointer = NULL;
     node * leaf = NULL;
+    int line;
 
     /* The current implementation ignores
      * duplicates.
      */
 
-    record_pointer = find(root, key, false, NULL);
+    record_pointer = find(root, id, false, NULL);
     if (record_pointer != NULL) {
 
         /* If the key already exists in this tree, update
          * the value and return the tree.
          */
 
-        record_pointer->value = value;
+        // Todo: Update the student on file.
+
         return root;
     }
+
+    // Todo: Insert the student in file.
+//    line = saveStudent(student);
 
     /* Create a new Record for the
      * value.
      */
-    record_pointer = make_record(value);
-
+    record_pointer = make_record(id, line);
 
     /* Case: the tree does not exist yet.
      * Start a new tree.
      */
 
     if (root == NULL)
-        return start_new_tree(key, record_pointer);
+        return start_new_tree(id, record_pointer);
 
 
     /* Case: the tree already exists.
      * (Rest of function body.)
      */
 
-    leaf = find_leaf(root, key, false);
+    leaf = find_leaf(root, id, false);
 
     /* Case: leaf has room for key and record_pointer.
      */
 
     if (leaf->num_keys < order - 1) {
-        leaf = insert_into_leaf(leaf, key, record_pointer);
+        leaf = insert_into_leaf(leaf, id, record_pointer);
         return root;
     }
 
@@ -862,7 +861,7 @@ node * insert(node * root, int key, int value) {
     /* Case:  leaf must be split.
      */
 
-    return insert_into_leaf_after_splitting(root, leaf, key, record_pointer);
+    return insert_into_leaf_after_splitting(root, leaf, id, record_pointer);
 }
 
 
