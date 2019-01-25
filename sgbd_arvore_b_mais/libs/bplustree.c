@@ -125,13 +125,13 @@ int cut(int length);
 
 // Insertion.
 
-record * make_record(int value);
+Record * make_record(int value);
 node * make_node(void);
 node * make_leaf(void);
 int get_left_index(node * parent, node * left);
-node * insert_into_leaf(node * leaf, int key, record * pointer);
+node * insert_into_leaf(node * leaf, int key, Record * pointer);
 node * insert_into_leaf_after_splitting(node * root, node * leaf, int key,
-                                        record * pointer);
+                                        Record * pointer);
 node * insert_into_node(node * root, node * parent,
                         int left_index, int key, node * right);
 node * insert_into_node_after_splitting(node * root, node * parent,
@@ -139,7 +139,7 @@ node * insert_into_node_after_splitting(node * root, node * parent,
                                         int key, node * right);
 node * insert_into_parent(node * root, node * left, int key, node * right);
 node * insert_into_new_root(node * left, int key, node * right);
-node * start_new_tree(int key, record * pointer);
+node * start_new_tree(int key, Record * pointer);
 
 // Deletion.
 
@@ -316,12 +316,12 @@ void print_tree(const node * root) {
 }
 
 
-/* Finds the record under a given key and prints an
+/* Finds the Record under a given key and prints an
  * appropriate message to stdout.
  */
 void find_and_print(const node * root, int key, bool verbose) {
     node * leaf = NULL;
-    record * r = find(root, key, verbose, NULL);
+    Record * r = find(root, key, verbose, NULL);
     if (r == NULL)
         printf("Record not found under key %d.\n", key);
     else
@@ -348,7 +348,7 @@ void find_and_print_range(const node * root, int key_start, int key_end,
             printf("Key: %d   Location: %p  Value: %d\n",
                    returned_keys[i],
                    returned_pointers[i],
-                   ((record *)
+                   ((Record *)
                            returned_pointers[i])->value);
     }
 }
@@ -419,10 +419,10 @@ node * find_leaf(const node * root, int key, bool verbose) {
 }
 
 
-/* Finds and returns the record to which
+/* Finds and returns the Record to which
  * a key refers.
  */
-record * find(node * root, int key, bool verbose, node ** leaf_out) {
+Record * find(node * root, int key, bool verbose, node ** leaf_out) {
     if (root == NULL) {
         if (leaf_out != NULL) {
             *leaf_out = NULL;
@@ -449,7 +449,7 @@ record * find(node * root, int key, bool verbose, node ** leaf_out) {
     if (i == leaf->num_keys)
         return NULL;
     else
-        return (record *)leaf->pointers[i];
+        return (Record *)leaf->pointers[i];
 }
 
 /* Finds the appropriate place to
@@ -465,11 +465,11 @@ int cut(int length) {
 
 // INSERTION
 
-/* Creates a new record to hold the value
+/* Creates a new Record to hold the value
  * to which a key refers.
  */
-record * make_record(int value) {
-    record * new_record = (record *)malloc(sizeof(record));
+Record * make_record(int value) {
+    Record * new_record = (Record *)malloc(sizeof(Record));
     if (new_record == NULL) {
         perror("Record creation.");
         exit(EXIT_FAILURE);
@@ -531,11 +531,11 @@ int get_left_index(node * parent, node * left) {
     return left_index;
 }
 
-/* Inserts a new pointer to a record and its corresponding
+/* Inserts a new pointer to a Record and its corresponding
  * key into a leaf.
  * Returns the altered leaf.
  */
-node * insert_into_leaf(node * leaf, int key, record * pointer) {
+node * insert_into_leaf(node * leaf, int key, Record * pointer) {
 
     int i, insertion_point;
 
@@ -555,11 +555,11 @@ node * insert_into_leaf(node * leaf, int key, record * pointer) {
 
 
 /* Inserts a new key and pointer
- * to a new record into a leaf so as to exceed
+ * to a new Record into a leaf so as to exceed
  * the tree's order, causing the leaf to be split
  * in half.
  */
-node * insert_into_leaf_after_splitting(node * root, node * leaf, int key, record * pointer) {
+node * insert_into_leaf_after_splitting(node * root, node * leaf, int key, Record * pointer) {
 
     node * new_leaf;
     int * temp_keys;
@@ -791,7 +791,7 @@ node * insert_into_new_root(node * left, int key, node * right) {
 /* First insertion:
  * start a new tree.
  */
-node * start_new_tree(int key, record * pointer) {
+node * start_new_tree(int key, Record * pointer) {
 
     node * root = make_leaf();
     root->keys[0] = key;
@@ -812,7 +812,7 @@ node * start_new_tree(int key, record * pointer) {
  */
 node * insert(node * root, int key, int value) {
 
-    record * record_pointer = NULL;
+    Record * record_pointer = NULL;
     node * leaf = NULL;
 
     /* The current implementation ignores
@@ -830,7 +830,7 @@ node * insert(node * root, int key, int value) {
         return root;
     }
 
-    /* Create a new record for the
+    /* Create a new Record for the
      * value.
      */
     record_pointer = make_record(value);
@@ -1141,7 +1141,7 @@ node * redistribute_nodes(node * root, node * n, node * neighbor, int neighbor_i
 
 
 /* Deletes an entry from the B+ tree.
- * Removes the record and its key and pointer
+ * Removes the Record and its key and pointer
  * from the leaf, and then makes all appropriate
  * changes to preserve the B+ tree properties.
  */
@@ -1219,7 +1219,7 @@ node * delete_entry(node * root, node * n, int key, void * pointer) {
 node * delete(node * root, int key) {
 
     node * key_leaf = NULL;
-    record * key_record = NULL;
+    Record * key_record = NULL;
 
     key_record = find(root, key, false, &key_leaf);
 

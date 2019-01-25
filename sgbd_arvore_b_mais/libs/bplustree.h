@@ -3,10 +3,10 @@
 
 // TYPES.
 
-/* Type representing the record
+/* Type representing the Record
  * to which a given key refers.
  * In a real B+ tree system, the
- * record would hold data (in a database)
+ * Record would hold data (in a database)
  * or a file (in an operating system)
  * or some other information.
  * Users can rewrite this part of the code
@@ -19,7 +19,7 @@ typedef struct record {
     char email[40];
     int age;
     int status;
-} record;
+} Record;
 
 /* Type representing a node in the B+ tree.
  * This type is general enough to serve for both
@@ -61,6 +61,6 @@ typedef struct node {
 
 node * insert(node * root, int key, int value);
 node * delete(node * root, int key);
-record * find(node * root, int key, bool verbose, node ** leaf_out);
+Record * find(node * root, int key, bool verbose, node ** leaf_out);
 
 #endif //SGBD_ARVORE_B_MAIS_BPLUSTREE_H
