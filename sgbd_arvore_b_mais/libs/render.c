@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include "render.h"
 
 void printSequence(const char *str, int times) {
@@ -28,4 +29,13 @@ void printRecordRow(int id, const char *name, const char *email, int age, short 
     printRecordDivision("+", "-", 5, 11, 28, 49, 10, 11);
     printf("| id: %5d | name: %20s | email: %40s | age: %3d | status: %1d |\n", id, name, email, age, status);
     printRecordDivision("+", "-", 5, 11, 28, 49, 10, 11);
+}
+
+void printHeader(const char *str) {
+    unsigned size = (unsigned) strlen(str);
+    printf("\n");
+    printSequence("-", size + 8);
+    printf("\n-   %s   -\n", str);
+    printSequence("-", size + 8);
+    printf("\n");
 }
