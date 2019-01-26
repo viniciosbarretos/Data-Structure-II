@@ -826,7 +826,6 @@ node * insert(node * root, int id, Student student) {
 
         return root;
     }
-
     // Todo: Insert the student in file.
 //    line = saveStudent(student);
 

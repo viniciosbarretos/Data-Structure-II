@@ -103,6 +103,32 @@ Student readStudent(int line) {
     return student;
 }
 
+// Set student data
+int setStudent(int line, Student student) {
+
+    // Open the file.
+    FILE *file = fopen("Files/SGBD.txt", "r+");
+
+    if(file) { //If file was opened.
+
+        // Go to line of the record.
+        fseek(file, line * 79, SEEK_SET);
+
+        // Read the record infos.
+        fprintf(file, "1, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);
+
+        // Close the file.
+        fclose(file);
+        return 1;
+    }
+
+    else //If can't open file.
+        return 0;
+}
+
+
+
+
 
 
 
