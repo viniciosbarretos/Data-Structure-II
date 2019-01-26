@@ -11,6 +11,7 @@ Student getStudent(int defaultID) {
     printf("\nName: ");
     scanf("%[^\n]", s.name);
     cleanBuffer();
+    cleanBuffer();
 
     printf("\nEmail: ");
     scanf("%[^\n]", s.email);
