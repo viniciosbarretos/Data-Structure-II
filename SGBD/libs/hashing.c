@@ -118,7 +118,6 @@ Bucket * insertOnBucket(Bucket *bucket, Customer c, int position) {
         bucket->items[position].id = c.id;
         bucket->items[position].line = (unsigned) fileLine;
     } else {
-        // Todo improve this.
         printf("Deu erro ao salvar");
     }
 

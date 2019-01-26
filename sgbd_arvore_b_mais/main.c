@@ -90,11 +90,7 @@ void printMenu() {
     int opt;
 
     printf("\n");
-    for(int i = 0; i < 50; i++) {
-        printf("-");
-        if (i == 24)
-            printf("MENU");
-    }
+    printHeader("MENU");
 
     printf("\n\nChoose an option entering the corresponding number:\n\n");
     printf("(1) Insert student record.\n");
