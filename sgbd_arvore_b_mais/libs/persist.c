@@ -6,16 +6,17 @@
 //Recover the SGBD state by the file.
 int hydrateFile(Node *root) {
     FILE *file = fopen("Files/SGBD.txt", "r");
+    int lineCounter=0;
 
     int aux; //Verifies if is an existing data, "1" Copies and "0" Jumps
-    Student student;
-
+    int id;
 
     if(file) {
-        while(fscanf(file, "%d, %d, %[^,], %s, %c\n", &aux, &student.id, student.name, student.email, &student.status) == 1) {
-        // TODO: Change insertion function, can't copy students again in file.
+        while(fscanf(file, "%d, %d", &aux, &id) == 2) {
             if (aux)
-                root = insert(root, student.id, student);
+                root = insert(root, id, lineCounter);
+            fseek(file, 68, SEEK_CUR);
+            lineCounter++;
         }
         fclose(file);
         return 1;
