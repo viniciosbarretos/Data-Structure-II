@@ -54,21 +54,21 @@ typedef struct Record {
  * to data is always num_keys.  The
  * last leaf pointer points to the next leaf.
  */
-typedef struct node {
+typedef struct Node {
     void ** pointers;
     int * keys;
-    struct node * parent;
+    struct Node * parent;
     bool is_leaf;
     int num_keys;
-    struct node * next; // Used for queue.
-} node;
+    struct Node * next; // Used for queue.
+} Node;
 
 
-node * insert(node * root, int id, Student student);
-node * delete(node * root, int id);
-Record * find(node * root, int id, bool verbose, node ** leaf_out);
+Node * insert(Node * root, int id, int line);
+Node * delete(Node * root, int id);
+Record * find(Node * root, int id, bool verbose, Node ** leaf_out);
 
-void print_leaves(const node *root);
-void print_tree(const node *root);
+void print_leaves(const Node *root);
+void print_tree(const Node *root);
 
 #endif //SGBD_ARVORE_B_MAIS_BPLUSTREE_H

@@ -4,7 +4,7 @@
 #include "persist.h"
 
 //Recover the SGBD state by the file.
-int hydrateFile(node *root) {
+int hydrateFile(Node *root) {
     FILE *file = fopen("Files/SGBD.txt", "r");
 
     int aux; //Verifies if is an existing data, "1" Copies and "0" Jumps

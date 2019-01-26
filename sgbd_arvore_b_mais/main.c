@@ -3,6 +3,7 @@
 #include "libs/render.h"
 #include "libs/bplustree.h"
 #include "libs/student.h"
+#include "libs/file.h"
 /*
 void addStudent(node *root, int defaultId) {
 
@@ -110,10 +111,11 @@ int main() {
     int opt;
     int input_key = 0;
     int key = 0;
+    int line = -1;
 
 //    readOrDefault("%d", &result, 15);
 
-    node * root = NULL;
+    Node * root = NULL;
 
     //Student s = {1, "tahio", "email", 19, 'a'};
 
@@ -127,9 +129,14 @@ int main() {
         //clear screen
         switch (opt) {
             case 1:
-                root = insert(root, key, getStudent(key));
+                // Get and save the new student.
+                line = saveStudent(getStudent(key++));
+
+                // Save the student id on index tree.
+                root = insert(root, key, line);
+
+                // Print the tree just for testing.
                 print_tree(root);
-                key++;
                 break;
             case 2:
                 scanf("%d", &input_key);
@@ -153,9 +160,10 @@ int main() {
     printf("\n");
 
     print_tree(root);
+    print_leaves(root);
 
 
-//    printRecordRow(3826, "Thiago Leal Pozati", "teste@unesp.br", 19, 1);
+//    printStudentRow(3826, "Thiago Leal Pozati", "teste@unesp.br", 19, 1);
 
     return 0;
 }

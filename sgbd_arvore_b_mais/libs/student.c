@@ -6,8 +6,6 @@ Student getStudent(int defaultID) {
     // Initialize the costumer.
     Student s;
 
-
-
     // Get costumer information.
     printf("\nName: ");
     scanf("%[^\n]", s.name);
