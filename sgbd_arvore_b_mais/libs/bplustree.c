@@ -190,6 +190,8 @@ Node * dequeue(void) {
  * pointers, if the verbose_output flag is set.
  */
 void print_leaves(const Node * root) {
+    Student student;
+
     if (root == NULL) {
         printf("Empty tree.\n");
         return;
@@ -203,21 +205,19 @@ void print_leaves(const Node * root) {
         c = c->pointers[0];
     }
 
-    //
+
     printStudentDivision();
     printStudentRowHeader();
     printStudentDivision();
     while (true) {
         for (i = 0; i < c->num_keys; i++) {
-            // Todo make work the file.
-//            Student student = readStudent( ((Record*) c->pointers[i])->line );
-//            printStudentRow(student.id, student.name, student.email, student.age, student.status);
-            printf("%d ", ((Record*) c->pointers[i])->line);
+            student = readStudent( ((Record*) c->pointers[i])->line );
+            printStudentRow(student.id, student.name, student.email, student.age, student.status);
         }
+
         if (c->pointers[order - 1] != NULL) {
             c = c->pointers[order - 1];
-        }
-        else {
+        } else {
             break;
         }
     }
