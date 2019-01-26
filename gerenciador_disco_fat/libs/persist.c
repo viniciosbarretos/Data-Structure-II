@@ -137,5 +137,4 @@ void hydrate(Storage **pStorage, NodeList **pNodeList, unsigned *id, int storage
         *pStorage = initializeStorage((unsigned int) storageSize);
         *pNodeList = newNodeList();
     }
-
 }
