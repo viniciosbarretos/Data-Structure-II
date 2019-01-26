@@ -125,10 +125,3 @@ int setStudent(int line, Student student) {
     else //If can't open file.
         return 0;
 }
-
-
-
-
-
-
-
