@@ -57,6 +57,8 @@
 #include <string.h>
 #include "bplustree.h"
 #include "student.h"
+#include "file.h"
+#include "render.h"
 
 
 // Default order is 4.
@@ -205,25 +207,35 @@ void print_leaves(const node * root) {
         printf("Empty tree.\n");
         return;
     }
+
     int i;
     node *c = root;
-    while (!c->is_leaf)
+
+    // Go to the first leave.
+    while (!c->is_leaf) {
         c = c->pointers[0];
+    }
+
+    //
+    printStudentDivision();
+    printStudentRowHeader();
+    printStudentDivision();
     while (true) {
         for (i = 0; i < c->num_keys; i++) {
-            if (verbose_output)
-                printf("%p ", c->pointers[i]);
-            printf("%d ", c->keys[i]);
+            // Todo make work the file.
+//            Student student = readStudent( ((Record*) c->pointers[i])->line );
+//            printStudentRow(student.id, student.name, student.email, student.age, student.status);
+            printf("%d ", ((Record*) c->pointers[i])->id);
         }
-        if (verbose_output)
-            printf("%p ", c->pointers[order - 1]);
         if (c->pointers[order - 1] != NULL) {
-            printf(" | ");
             c = c->pointers[order - 1];
         }
-        else
+        else {
             break;
+        }
     }
+    printf("\n");
+    printStudentDivision();
     printf("\n");
 }
 
@@ -342,8 +354,7 @@ void find_and_print_range(const node * root, int key_start, int key_end,
             printf("Key: %d   Location: %p  Value: %d\n",
                    returned_keys[i],
                    returned_pointers[i],
-                   ((Record *)
-                           returned_pointers[i])->line);
+                   ((Record *) returned_pointers[i])->line);
     }
 }
 
@@ -827,8 +838,7 @@ node * insert(node * root, int id, Student student) {
         return root;
     }
 
-    // Todo: Insert the student in file.
-//    line = saveStudent(student);
+    line = saveStudent(student);
 
     /* Create a new Record for the
      * value.
