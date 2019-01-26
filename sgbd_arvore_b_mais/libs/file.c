@@ -31,11 +31,11 @@ int saveStudent(Student student) {
         if (notFree) {
             // Go to line above.
             lineCounter++;
-            fseek(input, lineCounter * 79, SEEK_SET);
+            fseek(input, lineCounter * 80, SEEK_SET);
 
         } else {
             // Go to insertion point
-            fseek(input, lineCounter * 79, SEEK_SET);
+            fseek(input, lineCounter * 80, SEEK_SET);
 
             // Save the customer infos.
             fprintf(input, "0, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);
@@ -69,7 +69,7 @@ int removeStudent(int line) {
     }
 
     // Go to the line of the record.
-    fseek(file, line * 79, SEEK_SET);
+    fseek(file, line * 80, SEEK_SET);
 
     // Alter flag.
     fprintf(file, "0");
@@ -91,7 +91,7 @@ Student readStudent(int line) {
     FILE *file = fopen("Files/SGBD.txt", "r");
 
     // Go to line of the record.
-    fseek (file , line * 79 , SEEK_SET );
+    fseek (file , line * 80 , SEEK_SET );
 
     // Read the record infos.
     fscanf(file, "1, %d, %[^,], %s, %c\n", &student.id, student.name, student.email, &student.status);
@@ -112,7 +112,7 @@ int setStudent(int line, Student student) {
     if(file) { //If file was opened.
 
         // Go to line of the record.
-        fseek(file, line * 79, SEEK_SET);
+        fseek(file, line * 80, SEEK_SET);
 
         // Read the record infos.
         fprintf(file, "1, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);

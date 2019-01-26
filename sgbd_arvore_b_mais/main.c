@@ -87,8 +87,6 @@ void readOrDefaultInt(const char *message, int defaultValue, int *result) {
 }
 
 void printMenu() {
-    int opt;
-
     printf("\n");
     printHeader("MENU");
 
@@ -135,6 +133,7 @@ int main() {
                 print_tree(root);
                 break;
             case 2:
+                printf("Enter the key corresponding to the student who will be removed");
                 scanf("%d", &input_key);
                 root = delete(root, input_key);
                 print_tree(root);
