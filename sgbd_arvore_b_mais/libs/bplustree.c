@@ -60,18 +60,8 @@
 #include "file.h"
 #include "render.h"
 
-
 // Default order is 4.
-#define DEFAULT_ORDER 4
-
-// Minimum order is necessarily 3.  We set the maximum
-// order arbitrarily.  You may change the maximum order.
-#define MIN_ORDER 3
-#define MAX_ORDER 20
-
-// Constant for optional command-line input with "i" command.
-#define BUFFER_SIZE 256
-
+#define DEFAULT_ORDER 5
 
 // GLOBALS.
 
@@ -113,9 +103,6 @@ Node * dequeue(void);
 int height(const Node * root);
 int path_to_root(const Node * root, Node * child);
 void find_and_print(const Node * root, int key, bool verbose);
-void find_and_print_range(const Node * root, int range1, int range2, bool verbose);
-int find_range(const Node * root, int key_start, int key_end, bool verbose,
-               int returned_keys[], void * returned_pointers[]);
 Node * find_leaf(const Node * root, int key, bool verbose);
 int cut(int length);
 
@@ -225,7 +212,7 @@ void print_leaves(const Node * root) {
             // Todo make work the file.
 //            Student student = readStudent( ((Record*) c->pointers[i])->line );
 //            printStudentRow(student.id, student.name, student.email, student.age, student.status);
-            printf("%d ", ((Record*) c->pointers[i])->id);
+            printf("%d ", ((Record*) c->pointers[i])->line);
         }
         if (c->pointers[order - 1] != NULL) {
             c = c->pointers[order - 1];
@@ -333,55 +320,6 @@ void find_and_print(const Node * root, int key, bool verbose) {
     else
         printf("Record at %p -- key %d, value %d.\n",
                r, key, r->line);
-}
-
-
-/* Finds and prints the keys, pointers, and values within a range
- * of keys between key_start and key_end, including both bounds.
- */
-void find_and_print_range(const Node * root, int key_start, int key_end,
-                          bool verbose) {
-    int i;
-    int array_size = key_end - key_start + 1;
-    int returned_keys[array_size];
-    void * returned_pointers[array_size];
-    int num_found = find_range(root, key_start, key_end, verbose,
-                               returned_keys, returned_pointers);
-    if (!num_found)
-        printf("None found.\n");
-    else {
-        for (i = 0; i < num_found; i++)
-            printf("Key: %d   Location: %p  Value: %d\n",
-                   returned_keys[i],
-                   returned_pointers[i],
-                   ((Record *) returned_pointers[i])->line);
-    }
-}
-
-
-/* Finds keys and their pointers, if present, in the range specified
- * by key_start and key_end, inclusive.  Places these in the arrays
- * returned_keys and returned_pointers, and returns the number of
- * entries found.
- */
-int find_range(const Node * root, int key_start, int key_end, bool verbose,
-               int returned_keys[], void * returned_pointers[]) {
-    int i, num_found;
-    num_found = 0;
-    Node * n = find_leaf(root, key_start, verbose);
-    if (n == NULL) return 0;
-    for (i = 0; i < n->num_keys && n->keys[i] < key_start; i++) ;
-    if (i == n->num_keys) return 0;
-    while (n != NULL) {
-        for (; i < n->num_keys && n->keys[i] <= key_end; i++) {
-            returned_keys[num_found] = n->keys[i];
-            returned_pointers[num_found] = n->pointers[i];
-            num_found++;
-        }
-        n = n->pointers[order - 1];
-        i = 0;
-    }
-    return num_found;
 }
 
 

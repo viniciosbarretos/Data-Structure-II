@@ -22,7 +22,6 @@
  * of the value field.
  */
 typedef struct Record {
-    int id;
     int line;
 } Record;
 
