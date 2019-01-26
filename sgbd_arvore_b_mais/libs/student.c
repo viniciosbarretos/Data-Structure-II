@@ -2,7 +2,7 @@
 #include "student.h"
 #include "utils.h"
 
-Student readStudent(int defaultID) {
+Student getStudent(int defaultID) {
     // Initialize the costumer.
     Student s;
 

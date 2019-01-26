@@ -9,4 +9,6 @@ typedef struct Student {
     char status;
 } Student;
 
+Student getStudent(int defaultID);
+
 #endif //DATA_STRUCTURE_STUDENT_H
