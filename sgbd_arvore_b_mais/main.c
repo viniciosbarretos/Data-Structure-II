@@ -85,37 +85,88 @@ void readOrDefaultInt(const char *message, int defaultValue, int *result) {
     scanf("%s", buffer);
 }
 
+void printMenu() {
+    int opt;
+
+    printf("\n");
+    for(int i = 0; i < 50; i++) {
+        printf("-");
+        if (i == 24)
+            printf("MENU");
+    }
+
+    printf("\n\nChoose an option entering the corresponding number:\n\n");
+    printf("(1) Insert student record.\n");
+    printf("(2) Delete student record.\n");
+    printf("(3) Show student list.\n");
+    printf("(4) resume.\n");
+    printf("(0) EXIT.\n");
+
+    printf("Option:");
+}
+
 int main() {
     int result;
+    int opt;
+    int input_key = 0;
+    int key = 0;
 
 //    readOrDefault("%d", &result, 15);
 
     node * root = NULL;
 
-    Student s = {1, "tahio", "email", 19, 'a'};
+    //Student s = {1, "tahio", "email", 19, 'a'};
 
-    for (int i = 0; i < 15; i++) {
-        root = insert(root, i, s);
-    }
+//    for (int i = 0; i < 15; i++) {
+//        root = insert(root, i, s);
+//    }
+
+    do {
+        printMenu();
+        (scanf("%d", &opt) != 0);
+        //clear screen
+        switch (opt) {
+            case 1:
+                root = insert(root, key, getStudent(key));
+                print_tree(root);
+                key++;
+                break;
+            case 2:
+                scanf("%d", &input_key);
+                root = delete(root, input_key);
+                print_tree(root);
+                break;
+            case 3:
+                //show student list
+                break;
+            case 4:
+                //show total pages of the tree and total of KB that is stored
+                break;
+            case 0:
+                printf("Bye bye :( \n");
+                break;
+            default:
+                printf("Invalid option!!\nTry again!\n");
+                break;
+        }
+    } while (opt != 0);
+    printf("\n");
 
     print_tree(root);
 
-//    printf("Hello world\n");
 
 //    printRecordRow(3826, "Thiago Leal Pozati", "teste@unesp.br", 19, 1);
 
     return 0;
 }
 
-
-
-// MAIN
 /*
+// MAIN
 int main(int argc, char ** argv) {
 
     char * input_file;
     FILE * fp;
-//    node * root;
+    node * root;
     int input_key, input_key_2;
     char instruction;
 
@@ -218,4 +269,4 @@ int main(int argc, char ** argv) {
 
     return EXIT_SUCCESS;
 }
- */
+*/
