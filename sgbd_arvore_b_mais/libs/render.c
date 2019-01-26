@@ -10,7 +10,7 @@ void printSequence(const char *str, int times) {
     }
 }
 
-void printRecordDivision(const char *divider, const char *sequence, int size, ...) {
+void printDivision(const char *divider, const char *sequence, int size, ...) {
     int i;
 
     va_list list;
@@ -24,11 +24,17 @@ void printRecordDivision(const char *divider, const char *sequence, int size, ..
     printf("%s\n", divider);
 }
 
-// Receive the infos to render a racord in a row.
-void printRecordRow(int id, const char *name, const char *email, int age, short int status) {
-    printRecordDivision("+", "-", 5, 11, 28, 49, 10, 11);
-    printf("| id: %5d | name: %20s | email: %40s | age: %3d | status: %1d |\n", id, name, email, age, status);
-    printRecordDivision("+", "-", 5, 11, 28, 49, 10, 11);
+void printStudentDivision() {
+    printDivision("+", "-", 5, 7, 22, 42, 5, 8);
+}
+
+void printStudentRowHeader() {
+    printf("| %5s | %20s | %40s | %3s | %6s |\n", "id", "name", "email", "age", "status");
+}
+
+// Receive the infos to render a student in a row.
+void printStudentRow(int id, const char *name, const char *email, int age, short int status) {
+    printf("| %5d | %20s | %40s | %3d | %6d |\n", id, name, email, age, status);
 }
 
 void printHeader(const char *str) {
