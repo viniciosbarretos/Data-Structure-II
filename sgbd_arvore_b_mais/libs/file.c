@@ -137,7 +137,7 @@ void showStudentList() {
     if(file == NULL)
         printf("Empty list!");
     else {
-        while (fscanf(file, "%d, %d, %[^,], %d, %s, %c\n", &aux, &id, name, &age, email, &status) == 1) {
+        while (fscanf(file, "%d, %d, %[^,], %d, %[^,], %c\n", &aux, &id, name, &age, email, &status) != feof(file)) {
             if(aux) {
                 printf("%d, %s, %d, %s, %c\n", id, name, age, email, status);
             }
