@@ -114,7 +114,7 @@ int setStudent(int line, Student student) {
         // Go to line of the record.
         fseek(file, line * 84, SEEK_SET);
 
-        // Read the record infos.
+        // set the record infos.
         fprintf(file, "1, %8d, %20s, %3d, %40s, %c\n", student.id, student.name, student.age, student.email, student.status);
 
         // Close the file.
@@ -132,13 +132,19 @@ void showStudentList() {
     char name[20];
     char email[40];
     int age;
+    int aux;
     char status;
     if(file == NULL)
         printf("Empty list!");
     else {
-        while (!feof(file)) {
-            fscanf(file, "1, %8d, %20s, %40s, %c\n", id, name, email, status);
-            printf ("1, %8d, %20s, %40s, %c\n", id, name, email, status);
+        while (fscanf(file, "%d", &aux) == 1) {
+            if(aux) {
+                fscanf(file, ", %d, %[^,], %d, %s, %c\n", &id, name, &age, email, &status);
+                printf("%d, %s, %d, %s, %c\n", id, name, age, email, status);
+            }
+            else {
+                fseek(file, 84, SEEK_SET);
+            }
         }
         fclose(file);
     }
