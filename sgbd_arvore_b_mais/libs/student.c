@@ -13,7 +13,6 @@ Student getStudent(int defaultID) {
     printf("Name: ");
     scanf("%[^\n]", s.name);
     cleanBuffer();
-//    cleanBuffer();
 
     printf("Email: ");
     scanf("%[^\n]", s.email);
