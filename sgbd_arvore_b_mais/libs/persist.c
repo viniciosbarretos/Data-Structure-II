@@ -19,10 +19,10 @@ int hydrateFile(Node **root) {
             if (aux) {
                 // Insert the student on index tree.
                 *root = insert(*root, id, lineCounter);
-
-                // Save the max id read.
-                maxId = max(maxId, id);
             }
+
+            // Save the max id read.
+            maxId = max(maxId, id);
 
             // Go to the next student.
             fseek(file, 73, SEEK_CUR);
