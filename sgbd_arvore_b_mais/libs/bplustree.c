@@ -137,7 +137,6 @@ Node * delete_entry(Node * root, Node * n, int key, void * pointer);
 
 
 
-
 // FUNCTION DEFINITIONS.
 
 // OUTPUT AND UTILITIES
@@ -190,8 +189,6 @@ Node * dequeue(void) {
  * pointers, if the verbose_output flag is set.
  */
 void print_leaves(const Node * root) {
-    Student student;
-
     if (root == NULL) {
         printf("Empty tree.\n");
         return;
@@ -205,22 +202,17 @@ void print_leaves(const Node * root) {
         c = c->pointers[0];
     }
 
-
+    //
     printStudentDivision();
     printStudentRowHeader();
     printStudentDivision();
-    while (true) {
+    do {
         for (i = 0; i < c->num_keys; i++) {
-            student = readStudent( ((Record*) c->pointers[i])->line );
+            Student student = readStudent( ((Record*) c->pointers[i])->line );
             printStudentRow(student.id, student.name, student.email, student.age, student.status);
         }
-
-        if (c->pointers[order - 1] != NULL) {
-            c = c->pointers[order - 1];
-        } else {
-            break;
-        }
-    }
+        c = c->pointers[order - 1];
+    } while (c != NULL);
     printf("\n");
     printStudentDivision();
     printf("\n");
@@ -1159,4 +1151,12 @@ Node * destroy_tree(Node * root) {
     free(root);
 
     return NULL;
+}
+
+int countPages(Node * root) {
+    if (root->is_leaf)
+        return 1;
+    else
+        for (int i = 0; i < root->num_keys + 1; i++)
+            return countPages(root->pointers[i]) + 1;
 }

@@ -140,10 +140,15 @@ int main() {
                 break;
             case 3:
                 //show student list
+                print_leaves(root);
                 break;
             case 4:
                 //show total pages of the tree and total of KB that is stored
+                //printf("\nNumber of pages:%d\n\n", countPages(Node * root));
                 break;
+            case 5:
+                //Search for a student by id
+
             case 0:
                 printf("Bye bye :( \n");
                 break;
