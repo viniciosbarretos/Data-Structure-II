@@ -70,6 +70,7 @@ void printMenu() {
     printf("[3] - Show student list.\n");
     printf("[4] - Resume.\n");
     printf("[5] - Find student by id.\n");
+    printf("[6] - Destroy everything.\n");
     printf("[0] - Exit.\n\n");
 
     printf("Option: ");

@@ -45,6 +45,7 @@ Node* deleteStudent(Node *root) {
     // Get the id of student.
     printf("Enter the id corresponding to the student who will be removed.\nId: ");
     scanf("%d", &id);
+    cleanBuffer();
 
     // Search for student.
     Record *record = find(root, id, false, NULL);
@@ -93,6 +94,20 @@ void findStudent(Node *root) {
 
 }
 
+Node* destroyEverything(Node *root) {
+    // Clean the file.
+    destroyFile();
+
+    // Clean the tree.
+    root = destroy_tree(root);
+
+    printf("Its all clean!\n\n");
+
+    waitForChar("\nPress any key to continue...");
+
+    return root;
+}
+
 
 // Print all students on db.
 void showStudentsList(Node *root) {
@@ -116,7 +131,7 @@ int main() {
         clearScreen();
         // Show menu.
         printMenu();
-        opt = getIntegerBetween(0, 4);
+        opt = getIntegerBetween(0, 6);
         cleanBuffer();
 
         clearScreen();
@@ -135,10 +150,14 @@ int main() {
                 //printf("\nNumber of pages:%d\n\n", countPages(Node * root));
                 printHeader("RESUME");
                 resume(root);
-                waitForChar("\nPress any key to continue...");
+                waitForChar("\n\nPress any key to continue...");
                 break;
             case 5:
                 findStudent(root);
+                break;
+            case 6:
+                root = destroyEverything(root);
+                break;
             case 0:
                 printf("Bye bye :( \n");
                 break;

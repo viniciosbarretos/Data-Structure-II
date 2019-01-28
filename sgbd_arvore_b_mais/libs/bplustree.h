@@ -66,6 +66,7 @@ typedef struct Node {
 Node * insert(Node * root, int id, int line);
 Node * delete(Node * root, int id);
 Record * find(Node * root, int id, bool verbose, Node ** leaf_out);
+Node * destroy_tree(Node * root);
 
 void print_leaves(const Node *root);
 void print_tree(const Node *root);
