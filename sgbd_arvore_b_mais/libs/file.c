@@ -129,6 +129,7 @@ int setStudent(int line, Student student) {
 void showStudentList() {
     FILE *file = fopen("SGBD.txt", "r");
     int id;
+    int aux2;
     char name[20];
     char email[40];
     int age;
@@ -137,7 +138,7 @@ void showStudentList() {
     if(file == NULL)
         printf("Empty list!");
     else {
-        while (fscanf(file, "%d, %d, %[^,], %d, %[^,], %c\n", &aux, &id, name, &age, email, &status) == 1) {
+        while (fscanf(file, "%d, %d, %[^,], %d, %[^,], %c\n", &aux, &id, name, &age, email, &status) == 6) {
             if(aux) {
                 printf("%d, %s, %d, %s, %c\n", id, name, age, email, status);
             }
