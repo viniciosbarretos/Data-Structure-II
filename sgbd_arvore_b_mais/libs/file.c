@@ -125,3 +125,21 @@ int setStudent(int line, Student student) {
     else //If can't open file.
         return 0;
 }
+
+void showStudentList() {
+    FILE *file = fopen("SGBD.txt", "r+");
+    int id;
+    char name[20];
+    char email[40];
+    int age;
+    char status;
+    if(file == NULL)
+        printf("Empty list!");
+    else {
+        while (!feof(file)) {
+            fscanf(file, "1, %8d, %20s, %40s, %c\n", id, name, email, status);
+            printf ("1, %8d, %20s, %40s, %c\n", id, name, email, status);
+        }
+        fclose(file);
+    }
+}
