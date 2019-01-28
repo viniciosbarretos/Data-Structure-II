@@ -61,8 +61,8 @@
 #include "render.h"
 
 
-// Default order is 4.
-#define DEFAULT_ORDER 4
+// Default order is 5.
+#define DEFAULT_ORDER 5
 
 // Minimum order is necessarily 3.  We set the maximum
 // order arbitrarily.  You may change the maximum order.

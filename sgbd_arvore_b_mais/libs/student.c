@@ -6,6 +6,8 @@ Student getStudent(int defaultID) {
     // Initialize the costumer.
     Student s;
 
+    s.id = defaultID;
+
     cleanBuffer();
     // Get costumer information.
     printf("\nName: ");
@@ -23,6 +25,7 @@ Student getStudent(int defaultID) {
 
     printf("\nType ['a' for active or 'f' for 'finalized']: ");
     s.status = getCharInOptions("af", "Wrong value, try again.\nType ['a' for active or 'f' for finalized]: ");
+    cleanBuffer();
 
     return s;
 }

@@ -31,14 +31,14 @@ int saveStudent(Student student) {
         if (notFree) {
             // Go to line above.
             lineCounter++;
-            fseek(input, lineCounter * 79, SEEK_SET);
+            fseek(input, lineCounter * 84, SEEK_SET);
 
         } else {
             // Go to insertion point
-            fseek(input, lineCounter * 79, SEEK_SET);
+            fseek(input, lineCounter * 84, SEEK_SET);
 
             // Save the customer infos.
-            fprintf(input, "0, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);
+            fprintf(input, "1, %8d, %20s, %3d, %40s, %c\n", student.id, student.name, student.age, student.email, student.status);
 
             // Change isSaved flag
             isSaved = 1;
@@ -50,7 +50,7 @@ int saveStudent(Student student) {
 
     if (!isSaved) {
         // Save the student infos.
-        fprintf(input, "1, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);
+        fprintf(input, "1, %8d, %20s, %3d, %40s, %c\n", student.id, student.name, student.age, student.email, student.status);
     }
 
     // Close the file.
@@ -62,14 +62,14 @@ int saveStudent(Student student) {
 // Put an block is free identifier "0" in the tuple.
 int removeStudent(int line) {
     // Open file
-    FILE *file = fopen("Files/SGBD.txt", "r+");
+    FILE *file = fopen("SGBD.txt", "r+");
 
     if(!file) {
         return -1;
     }
 
     // Go to the line of the record.
-    fseek(file, line * 79, SEEK_SET);
+    fseek(file, line * 84, SEEK_SET);
 
     // Alter flag.
     fprintf(file, "0");
@@ -88,13 +88,13 @@ Student readStudent(int line) {
     Student student;
 
     // Open the file.
-    FILE *file = fopen("Files/SGBD.txt", "r");
+    FILE *file = fopen("SGBD.txt", "r");
 
     // Go to line of the record.
-    fseek (file , line * 79 , SEEK_SET );
+    fseek (file , line * 84 , SEEK_SET );
 
     // Read the record infos.
-    fscanf(file, "1, %d, %[^,], %s, %c\n", &student.id, student.name, student.email, &student.status);
+    fscanf(file, "1, %d, %[^,], %d, %s, %c\n", &student.id, student.name, &student.age, student.email, &student.status);
 
     // Close the file.
     fclose(file);
@@ -107,15 +107,15 @@ Student readStudent(int line) {
 int setStudent(int line, Student student) {
 
     // Open the file.
-    FILE *file = fopen("Files/SGBD.txt", "r+");
+    FILE *file = fopen("SGBD.txt", "r+");
 
     if(file) { //If file was opened.
 
         // Go to line of the record.
-        fseek(file, line * 79, SEEK_SET);
+        fseek(file, line * 84, SEEK_SET);
 
         // Read the record infos.
-        fprintf(file, "1, %8d, %20s, %40s, %c\n", student.id, student.name, student.email, student.status);
+        fprintf(file, "1, %8d, %20s, %3d, %40s, %c\n", student.id, student.name, student.age, student.email, student.status);
 
         // Close the file.
         fclose(file);
