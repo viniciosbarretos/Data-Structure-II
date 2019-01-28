@@ -45,7 +45,6 @@ Node* deleteStudent(Node *root) {
     // Get the id of student.
     printf("Enter the id corresponding to the student who will be removed.\nId: ");
     scanf("%d", &id);
-    cleanBuffer();
 
     // Search for student.
     Record *record = find(root, id, false, NULL);
@@ -117,7 +116,7 @@ int main() {
         clearScreen();
         // Show menu.
         printMenu();
-        opt = getIntegerBetween(0, 5);
+        opt = getIntegerBetween(0, 4);
         cleanBuffer();
 
         clearScreen();
@@ -136,7 +135,7 @@ int main() {
                 //printf("\nNumber of pages:%d\n\n", countPages(Node * root));
                 printHeader("RESUME");
                 resume(root);
-                waitForChar("\n\nPress any key to continue...");
+                waitForChar("\nPress any key to continue...");
                 break;
             case 5:
                 findStudent(root);
