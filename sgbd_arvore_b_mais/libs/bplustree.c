@@ -219,18 +219,13 @@ void print_leaves(const Node * root) {
     printStudentDivision();
     printStudentRowHeader();
     printStudentDivision();
-    while (true) {
+    do {
         for (i = 0; i < c->num_keys; i++) {
             Student student = readStudent( ((Record*) c->pointers[i])->line );
             printStudentRow(student.id, student.name, student.email, student.age, student.status);
         }
-        if (c->pointers[order - 1] != NULL) {
-            c = c->pointers[order - 1];
-        }
-        else {
-            break;
-        }
-    }
+        c = c->pointers[order - 1];
+    } while (c != NULL);
     printf("\n");
     printStudentDivision();
     printf("\n");

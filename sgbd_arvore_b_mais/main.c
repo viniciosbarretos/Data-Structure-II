@@ -147,6 +147,9 @@ int main() {
                 //printf("\nNumber of pages:%d\n\n", countPages(Node * root));
                 resume(root);
                 break;
+            case 5:
+                //Search for a student by id
+
             case 0:
                 printf("Bye bye :( \n");
                 break;
