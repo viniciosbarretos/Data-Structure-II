@@ -94,7 +94,7 @@ Student readStudent(int line) {
     fseek (file , line * 84 , SEEK_SET );
 
     // Read the record infos.
-    fscanf(file, "1, %d, %[^,], %d, %s, %c\n", &student.id, student.name, &student.age, student.email, &student.status);
+    fscanf(file, "1, %d, %[^,], %d, %[^,], %c\n", &student.id, student.name, &student.age, student.email, &student.status);
 
     // Close the file.
     fclose(file);

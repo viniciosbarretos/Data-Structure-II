@@ -33,8 +33,8 @@ void printStudentRowHeader() {
 }
 
 // Receive the infos to render a student in a row.
-void printStudentRow(int id, const char *name, const char *email, int age, short int status) {
-    printf("| %5d | %20s | %40s | %3d | %6d |\n", id, name, email, age, status);
+void printStudentRow(int id, const char *name, const char *email, int age, char status) {
+    printf("| %5d | %20s | %40s | %3d | %6c |\n", id, name, email, age, status);
 }
 
 void printHeader(const char *str) {

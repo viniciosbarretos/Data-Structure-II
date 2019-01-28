@@ -140,7 +140,7 @@ int main() {
                 break;
             case 3:
                 //show student list
-                showStudentList();
+                print_leaves(root);
                 break;
             case 4:
                 //show total pages of the tree and total of KB that is stored
