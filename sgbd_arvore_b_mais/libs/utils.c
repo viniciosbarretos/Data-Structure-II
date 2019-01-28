@@ -7,7 +7,16 @@
 // Clean buffer after a text input
 void cleanBuffer() {
     int i;
-    while ((i = getchar()) != '\n' && i != EOF);
+    while ((i = getchar()) != '\n');
+}
+
+// Clear screen both windows and unix
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
 
 // Copy from input to buffer in a certain range.
@@ -82,5 +91,25 @@ char getCharInOptions(const char *options, const char *errorMessage) {
 
     // Return the character
     return t;
+}
+
+void waitForChar(const char *message) {
+    printf("%s", message);
+    getchar();
+}
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+void readOrDefaultInt(const char *message, int defaultValue, int *result) {
+    char buffer[20];
+
+    printf("%s (%d):", message, defaultValue);
+    scanf("%s", buffer);
 }
 
