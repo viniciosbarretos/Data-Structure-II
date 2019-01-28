@@ -226,7 +226,6 @@ void print_leaves(const Node * root) {
         }
         c = c->pointers[order - 1];
     } while (c != NULL);
-    printf("\n");
     printStudentDivision();
     printf("\n");
 }
