@@ -139,7 +139,7 @@ void showStudentList() {
     else {
         while (fscanf(file, "%d, %d, %[^,], %d, %[^,], %c\n", &aux, &id, name, &age, email, &status) == 6) {
             if(aux) {
-                printf("%d, %s, %d, %s, %c\n", id, name, age, email, status);
+                printf("Student %d: \n\tName: %s\n\tAge: %d\n\te-mail: %s\n\tStatus: %c\n", id, name, age, email, status);
             }
         }
         fclose(file);
