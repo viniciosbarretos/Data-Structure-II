@@ -10,20 +10,20 @@ Student getStudent(int defaultID) {
 
     cleanBuffer();
     // Get costumer information.
-    printf("\nName: ");
+    printf("Name: ");
     scanf("%[^\n]", s.name);
     cleanBuffer();
-    cleanBuffer();
+//    cleanBuffer();
 
-    printf("\nEmail: ");
+    printf("Email: ");
     scanf("%[^\n]", s.email);
     cleanBuffer();
 
-    printf("\nAge: ");
+    printf("Age: ");
     s.age = getIntegerBetween(0, 200);
     cleanBuffer();
 
-    printf("\nType ['a' for active or 'f' for 'finalized']: ");
+    printf("Type ['a' for active or 'f' for 'finalized']: ");
     s.status = getCharInOptions("af", "Wrong value, try again.\nType ['a' for active or 'f' for finalized]: ");
     cleanBuffer();
 
