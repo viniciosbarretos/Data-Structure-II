@@ -103,6 +103,14 @@ Student readStudent(int line) {
     return student;
 }
 
+void destroyFile() {
+    // Open file.
+    FILE *input = fopen("SGBD.txt", "w");
+
+    // Close the file.
+    fclose(input);
+}
+
 // Set student data
 int setStudent(int line, Student student) {
 

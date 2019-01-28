@@ -94,6 +94,20 @@ void findStudent(Node *root) {
 
 }
 
+Node* destroyEverything(Node *root) {
+    // Clean the file.
+    destroyFile();
+
+    // Clean the tree.
+    root = destroy_tree(root);
+
+    printf("Its all clean!\n\n");
+
+    waitForChar("\nPress any key to continue...");
+
+    return root;
+}
+
 
 // Print all students on db.
 void showStudentsList(Node *root) {
@@ -117,7 +131,7 @@ int main() {
         clearScreen();
         // Show menu.
         printMenu();
-        opt = getIntegerBetween(0, 5);
+        opt = getIntegerBetween(0, 6);
         cleanBuffer();
 
         clearScreen();
@@ -140,6 +154,10 @@ int main() {
                 break;
             case 5:
                 findStudent(root);
+                break;
+            case 6:
+                root = destroyEverything(root);
+                break;
             case 0:
                 printf("Bye bye :( \n");
                 break;
