@@ -1,26 +1,39 @@
-//
-// Created by vinny on 1/25/2019.
-//
 #include "persist.h"
+#include "utils.h"
 
 //Recover the SGBD state by the file.
-int hydrateFile(Node *root) {
-    FILE *file = fopen("SGBD.txt", "r");
-    int lineCounter=0;
+int hydrateFile(Node **root) {
 
-    int aux; //Verifies if is an existing data, "1" Copies and "0" Jumps
+    // Open the file.
+    FILE *file = fopen("SGBD.txt", "r");
+
+    int lineCounter = 0;
+    int maxId = -1;
+
+    int aux;
     int id;
 
     if(file) {
         while(fscanf(file, "%d, %d", &aux, &id) == 2) {
-            if (aux)
-                root = insert(root, id, lineCounter);
-            fseek(file, 74, SEEK_CUR);
+            // Verifies if is an valid data, "1" Copies or "0" Jumps.
+            if (aux) {
+                // Insert the student on index tree.
+                *root = insert(*root, id, lineCounter);
+
+                // Save the max id read.
+                maxId = max(maxId, id);
+            }
+
+            // Go to the next student.
+            fseek(file, 73, SEEK_CUR);
+
+            // Increment line counter.
             lineCounter++;
         }
         fclose(file);
-        return 1;
+        return maxId;
     }
-    else
-        return 0;
+    else {
+        return -1;
+    }
 }
