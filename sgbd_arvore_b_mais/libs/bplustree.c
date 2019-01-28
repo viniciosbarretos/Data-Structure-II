@@ -236,6 +236,55 @@ void print_leaves(const Node * root) {
     printf("\n");
 }
 
+void resume(const Node * root) {
+    if (root == NULL) {
+        printf("Empty tree.\n");
+        return;
+    }
+
+    int i;
+    int cRecord = 0;
+    float sizeRecord = 84;
+    float totalKB = 0;
+    Node *c = root;
+
+    // Go to the first leave.
+    while (!c->is_leaf) {
+        c = c->pointers[0];
+    }
+
+    //
+    while (true) {
+        for (i = 0; i < c->num_keys; i++)
+            cRecord++;
+
+        if (c->pointers[order - 1] != NULL) {
+            c = c->pointers[order - 1];
+        }
+        else {
+            break;
+        }
+    }
+
+    printf("\n");
+    //sizeof record == 84 bytes
+    printf("Number of pages: %d\n", countPages(root));
+    totalKB = (cRecord*sizeRecord)/1024;
+    printf("Total of KB stored: %f", totalKB);
+
+
+
+
+}
+
+int countPages(const Node * root) {
+    if (root->is_leaf)
+        return 1;
+    else
+        for (int i = 0; i < root->num_keys + 1; i++)
+            return countPages(root->pointers[i]) + root->num_keys + 1;
+}
+
 
 /* Utility function to give the height
  * of the tree, which length in number of edges
@@ -1218,12 +1267,4 @@ Node * destroy_tree(Node * root) {
     free(root);
 
     return NULL;
-}
-
-int countPages(Node * root) {
-    if (root->is_leaf)
-        return 1;
-    else
-        for (int i = 0; i < root->num_keys + 1; i++)
-            return countPages(root->pointers[i]) + 1;
 }

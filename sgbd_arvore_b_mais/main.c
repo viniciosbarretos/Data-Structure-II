@@ -145,6 +145,7 @@ int main() {
             case 4:
                 //show total pages of the tree and total of KB that is stored
                 //printf("\nNumber of pages:%d\n\n", countPages(Node * root));
+                resume(root);
                 break;
             case 0:
                 printf("Bye bye :( \n");

@@ -71,4 +71,7 @@ Record * find(Node * root, int id, bool verbose, Node ** leaf_out);
 void print_leaves(const Node *root);
 void print_tree(const Node *root);
 
+void resume(const Node * root);
+int countPages(const Node * root);
+
 #endif //SGBD_ARVORE_B_MAIS_BPLUSTREE_H
