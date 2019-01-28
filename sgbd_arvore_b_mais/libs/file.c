@@ -125,23 +125,3 @@ int setStudent(int line, Student student) {
     else //If can't open file.
         return 0;
 }
-
-void showStudentList() {
-    FILE *file = fopen("SGBD.txt", "r");
-    int id;
-    char name[20];
-    char email[40];
-    int age;
-    int aux;
-    char status;
-    if(file == NULL)
-        printf("Empty list!");
-    else {
-        while (fscanf(file, "%d, %d, %[^,], %d, %[^,], %c\n", &aux, &id, name, &age, email, &status) == 6) {
-            if(aux) {
-                printf("%d, %s, %d, %s, %c\n", id, name, age, email, status);
-            }
-        }
-        fclose(file);
-    }
-}
