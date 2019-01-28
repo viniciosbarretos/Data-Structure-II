@@ -69,6 +69,7 @@ void printMenu() {
     printf("[2] - Delete student record.\n");
     printf("[3] - Show student list.\n");
     printf("[4] - Resume.\n");
+    printf("[5] - Find student by id.\n");
     printf("[0] - Exit.\n\n");
 
     printf("Option: ");

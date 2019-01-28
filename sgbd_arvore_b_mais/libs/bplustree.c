@@ -252,11 +252,44 @@ void resume(const Node * root) {
     printf("Number of pages: %d\n", countPages(root));
     totalKB = (cRecord*sizeRecord)/1024;
     printf("Total of KB stored: %f", totalKB);
-
-
-
-
 }
+
+
+int count_tree(const Node * root, int *pages, int *size) {
+    Node * n = NULL;
+    int i = 0;
+    int rank = 0;
+    int new_rank = 0;
+
+    if (root == NULL) {
+        return 0;
+    }
+    queue = NULL;
+    enqueue(root);
+    while(queue != NULL) {
+        n = dequeue();
+        if (n->parent != NULL && n == n->parent->pointers[0]) {
+            new_rank = path_to_root(root, n);
+            if (new_rank != rank) {
+                rank = new_rank;
+            }
+        }
+        for (i = 0; i < n->num_keys; i++) {
+            printf("%d ", n->keys[i]);
+        }
+        if (!n->is_leaf)
+            for (i = 0; i <= n->num_keys; i++)
+                enqueue(n->pointers[i]);
+        if (verbose_output) {
+            if (n->is_leaf)
+                printf("%p ", n->pointers[order - 1]);
+            else
+                printf("%p ", n->pointers[n->num_keys]);
+        }
+    }
+}
+
+
 
 int countPages(const Node * root) {
     if (root->is_leaf)
@@ -264,6 +297,8 @@ int countPages(const Node * root) {
     else
         for (int i = 0; i < root->num_keys + 1; i++)
             return countPages(root->pointers[i]) + root->num_keys + 1;
+
+//            return countPages(root->pointers[i])  + 1;
 }
 
 

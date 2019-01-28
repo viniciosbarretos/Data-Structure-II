@@ -8,7 +8,6 @@ Student getStudent(int defaultID) {
 
     s.id = defaultID;
 
-    cleanBuffer();
     // Get costumer information.
     printf("Name: ");
     scanf("%[^\n]", s.name);
