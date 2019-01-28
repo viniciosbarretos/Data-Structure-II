@@ -150,7 +150,6 @@ Node * delete_entry(Node * root, Node * n, int key, void * pointer);
 
 
 
-
 // FUNCTION DEFINITIONS.
 
 // OUTPUT AND UTILITIES
@@ -1221,4 +1220,12 @@ Node * destroy_tree(Node * root) {
     free(root);
 
     return NULL;
+}
+
+int countPages(Node * root) {
+    if (root->is_leaf)
+        return 1;
+    else
+        for (int i = 0; i < root->num_keys + 1; i++)
+            return countPages(root->pointers[i]) + 1;
 }
