@@ -129,7 +129,6 @@ int setStudent(int line, Student student) {
 void showStudentList() {
     FILE *file = fopen("SGBD.txt", "r");
     int id;
-    int aux2;
     char name[20];
     char email[40];
     int age;
