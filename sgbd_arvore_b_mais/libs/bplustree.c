@@ -105,6 +105,7 @@ int path_to_root(const Node * root, Node * child);
 void find_and_print(const Node * root, int key, bool verbose);
 Node * find_leaf(const Node * root, int key, bool verbose);
 int cut(int length);
+void count_tree(const Node * root, int *pages, int *size);
 
 // Insertion.
 
@@ -218,75 +219,66 @@ void print_leaves(const Node * root) {
 }
 
 void resume(const Node * root) {
-    if (root == NULL) {
-        printf("Empty tree.\n");
-        return;
-    }
-
-    int i;
-    int cRecord = 0;
+    int cPages = 0;
+    int cSize = 0;
     float sizeRecord = 84;
     float totalKB = 0;
-    Node *c = root;
 
-    // Go to the first leave.
-    while (!c->is_leaf) {
-        c = c->pointers[0];
-    }
+    count_tree(root, &cPages, &cSize);
 
-    //
-    while (true) {
-        for (i = 0; i < c->num_keys; i++)
-            cRecord++;
-
-        if (c->pointers[order - 1] != NULL) {
-            c = c->pointers[order - 1];
-        }
-        else {
-            break;
-        }
-    }
 
     printf("\n");
     //sizeof record == 84 bytes
-    printf("Number of pages: %d\n", countPages(root));
-    totalKB = (cRecord*sizeRecord)/1024;
+    printf("Number of pages: %d\n", cPages);
+    totalKB = (cPages*sizeRecord)/1024;
     printf("Total of KB stored: %f", totalKB);
 }
 
 
-int count_tree(const Node * root, int *pages, int *size) {
+void count_tree(const Node * root, int *pages, int *size) {
     Node * n = NULL;
     int i = 0;
     int rank = 0;
     int new_rank = 0;
+    *pages = 0;
+    *size = 0;
 
     if (root == NULL) {
-        return 0;
+        printf("Empty tree.\n");
+        return;
     }
     queue = NULL;
     enqueue(root);
+
     while(queue != NULL) {
         n = dequeue();
         if (n->parent != NULL && n == n->parent->pointers[0]) {
             new_rank = path_to_root(root, n);
             if (new_rank != rank) {
                 rank = new_rank;
+                printf("\n");
             }
         }
+//        if (verbose_output)
+//            printf("(%p)", n);
         for (i = 0; i < n->num_keys; i++) {
+//            if (verbose_output)
+//                printf("%p ", n->pointers[i]);
             printf("%d ", n->keys[i]);
         }
         if (!n->is_leaf)
             for (i = 0; i <= n->num_keys; i++)
                 enqueue(n->pointers[i]);
-        if (verbose_output) {
-            if (n->is_leaf)
-                printf("%p ", n->pointers[order - 1]);
-            else
-                printf("%p ", n->pointers[n->num_keys]);
-        }
+//        if (verbose_output) {
+//            if (n->is_leaf)
+//                printf("%p ", n->pointers[order - 1]);
+//            else
+//                printf("%p ", n->pointers[n->num_keys]);
+//        }
+        printf("| ");
+        (*pages)++; // Add a page;
     }
+    printf("\n");
 }
 
 
