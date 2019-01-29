@@ -105,7 +105,7 @@ int path_to_root(const Node * root, Node * child);
 void find_and_print(const Node * root, int key, bool verbose);
 Node * find_leaf(const Node * root, int key, bool verbose);
 int cut(int length);
-void count_tree(const Node * root, int *pages, int *size);
+void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf);
 
 // Insertion.
 
@@ -221,27 +221,27 @@ void print_leaves(const Node * root) {
 void resume(const Node * root) {
     int cPages = 0;
     int cSize = 0;
+    int leafs = 0;
     float sizeRecord = 84;
     float totalKB = 0;
 
-    count_tree(root, &cPages, &cSize);
+    count_tree(root, &cPages, &cSize, &leafs);
 
 
     printf("\n");
     //sizeof record == 84 bytes
     printf("Number of pages: %d\n", cPages);
+    printf("Leafs: %d\n", leafs);
     totalKB = (cPages*sizeRecord)/1024;
     printf("Total of KB stored: %f", totalKB);
 }
 
 
-void count_tree(const Node * root, int *pages, int *size) {
+void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf) {
     Node * n = NULL;
     int i = 0;
     int rank = 0;
     int new_rank = 0;
-    *pages = 0;
-    *size = 0;
 
     if (root == NULL) {
         printf("Empty tree.\n");
@@ -269,6 +269,8 @@ void count_tree(const Node * root, int *pages, int *size) {
         if (!n->is_leaf)
             for (i = 0; i <= n->num_keys; i++)
                 enqueue(n->pointers[i]);
+        else
+            (*leaf)++;
 //        if (verbose_output) {
 //            if (n->is_leaf)
 //                printf("%p ", n->pointers[order - 1]);
