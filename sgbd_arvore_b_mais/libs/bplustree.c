@@ -226,6 +226,8 @@ void resume(const Node * root) {
     //sizeof record == 84 bytes
     printf("Number of pages: %d\n", pages);
     printf("Number of leafs: %d\n", leafs);
+    printf("Number of Sparse index: %d\n", pages-leafs);
+    printf("Number of Dense index: %d\n", leafs);
     printf("Height of tree: %d\n", h);
     printf("Number of elements stored: %d\n", elements);
     printf("Total of KB stored in tree: %f\n", (float) treeSize/1024);
