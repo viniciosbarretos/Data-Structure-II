@@ -105,7 +105,7 @@ int path_to_root(const Node * root, Node * child);
 void find_and_print(const Node * root, int key, bool verbose);
 Node * find_leaf(const Node * root, int key, bool verbose);
 int cut(int length);
-void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf);
+void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf, int *numberOfElements);
 
 // Insertion.
 
@@ -219,25 +219,30 @@ void print_leaves(const Node * root) {
 }
 
 void resume(const Node * root) {
-    int cPages = 0;
-    int cSize = 0;
+    int pages = 0;
+    int treeSize = 0;
     int leafs = 0;
+    int elements = 0;
     float sizeRecord = 84;
     float totalKB = 0;
 
-    count_tree(root, &cPages, &cSize, &leafs);
+    count_tree(root, &pages, &treeSize, &leafs, &elements);
 
 
     printf("\n");
     //sizeof record == 84 bytes
-    printf("Number of pages: %d\n", cPages);
-    printf("Leafs: %d\n", leafs);
-    totalKB = (cPages*sizeRecord)/1024;
-    printf("Total of KB stored: %f", totalKB);
+    printf("Number of pages: %d\n", pages);
+    printf("Number of leafs: %d\n", leafs);
+    printf("Number of elements stored: %d\n", elements);
+    printf("Total of KB stored in tree: %f", (float) treeSize/1024);
+
+
+    totalKB = (elements*sizeRecord)/1024;
+    printf("Total of KB stored in file: %f", totalKB);
 }
 
 
-void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf) {
+void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf, int *numberOfElements) {
     Node * n = NULL;
     int i = 0;
     int rank = 0;
@@ -266,11 +271,24 @@ void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf) {
 //                printf("%p ", n->pointers[i]);
             printf("%d ", n->keys[i]);
         }
-        if (!n->is_leaf)
-            for (i = 0; i <= n->num_keys; i++)
+        if (!n->is_leaf) {
+            for (i = 0; i <= n->num_keys; i++) {
                 enqueue(n->pointers[i]);
-        else
-            (*leaf)++;
+            }
+        }
+        else {
+            (*leaf)++; // Add a leaf.
+            (*numberOfElements) += n->num_keys; // Add the number of elements.
+        }
+
+        // Count size for each node.
+        (*sizeTree) += (n->num_keys + 1) * sizeof(void*);
+        (*sizeTree) += n->num_keys * sizeof(int*);
+        (*sizeTree) += sizeof(Node*);
+        (*sizeTree) += sizeof(bool);
+        (*sizeTree) += sizeof(int);
+        (*sizeTree) += sizeof(Node *);
+
 //        if (verbose_output) {
 //            if (n->is_leaf)
 //                printf("%p ", n->pointers[order - 1]);
