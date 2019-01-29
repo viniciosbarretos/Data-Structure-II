@@ -168,7 +168,5 @@ int main() {
     } while (opt != 0);
     printf("\n");
 
-    print_tree(root);
-
     return 0;
 }

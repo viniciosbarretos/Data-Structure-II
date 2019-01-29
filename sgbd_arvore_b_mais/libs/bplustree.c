@@ -213,15 +213,20 @@ void resume(const Node * root) {
     int elements = 0;
     float sizeRecord = 84;
     float totalKB = 0;
+    int h;
 
     printf("\nB++ TREE\n");
     count_tree(root, &pages, &treeSize, &leafs, &elements);
+
+    //Get tree height
+    h = height(root);
 
 
     printf("\n");
     //sizeof record == 84 bytes
     printf("Number of pages: %d\n", pages);
     printf("Number of leafs: %d\n", leafs);
+    printf("Height of tree: %d\n", h);
     printf("Number of elements stored: %d\n", elements);
     printf("Total of KB stored in tree: %f\n", (float) treeSize/1024);
 
