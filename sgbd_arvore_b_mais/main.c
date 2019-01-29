@@ -82,7 +82,7 @@ void findStudent(Node *root) {
 
     if (record) {
         // Get the student.
-        readStudent(record->line);
+        student = readStudent(record->line);
 
         // Print the student.
         printStudentBlock(student.id, student.name, student.email, student.age, student.status);
