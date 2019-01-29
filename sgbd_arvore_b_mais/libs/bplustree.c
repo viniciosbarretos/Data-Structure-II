@@ -142,18 +142,6 @@ Node * delete_entry(Node * root, Node * n, int key, void * pointer);
 
 // OUTPUT AND UTILITIES
 
-/* Copyright and license notice to user at startup.
- */
-void license_notice(void) {
-    printf("bpt version %s -- Copyright (c) 2018  Amittai Aviram "
-           "http://www.amittai.com\n", Version);
-    printf("This program comes with ABSOLUTELY NO WARRANTY.\n"
-           "This is free software, and you are welcome to redistribute it\n"
-           "under certain conditions.\n"
-           "Please see the headnote in the source code for details.\n");
-}
-
-
 /* Helper function for printing the
  * tree out.  See print_tree.
  */
@@ -382,21 +370,6 @@ void print_tree(const Node * root) {
     }
     printf("\n");
 }
-
-
-/* Finds the Record under a given key and prints an
- * appropriate message to stdout.
- */
-void find_and_print(const Node * root, int key, bool verbose) {
-    Node * leaf = NULL;
-    Record * r = find(root, key, verbose, NULL);
-    if (r == NULL)
-        printf("Record not found under key %d.\n", key);
-    else
-        printf("Record at %p -- key %d, value %d.\n",
-               r, key, r->line);
-}
-
 
 /* Traces the path from the root to a leaf, searching
  * by key.  Displays information about the path
