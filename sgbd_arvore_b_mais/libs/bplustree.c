@@ -226,6 +226,7 @@ void resume(const Node * root) {
     float sizeRecord = 84;
     float totalKB = 0;
 
+    printf("\nB++ TREE\n");
     count_tree(root, &pages, &treeSize, &leafs, &elements);
 
 
@@ -234,7 +235,7 @@ void resume(const Node * root) {
     printf("Number of pages: %d\n", pages);
     printf("Number of leafs: %d\n", leafs);
     printf("Number of elements stored: %d\n", elements);
-    printf("Total of KB stored in tree: %f", (float) treeSize/1024);
+    printf("Total of KB stored in tree: %f\n", (float) treeSize/1024);
 
 
     totalKB = (elements*sizeRecord)/1024;
@@ -264,11 +265,7 @@ void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf, int *nu
                 printf("\n");
             }
         }
-//        if (verbose_output)
-//            printf("(%p)", n);
         for (i = 0; i < n->num_keys; i++) {
-//            if (verbose_output)
-//                printf("%p ", n->pointers[i]);
             printf("%d ", n->keys[i]);
         }
         if (!n->is_leaf) {
@@ -288,13 +285,6 @@ void count_tree(const Node * root, int *pages, int *sizeTree, int *leaf, int *nu
         (*sizeTree) += sizeof(bool);
         (*sizeTree) += sizeof(int);
         (*sizeTree) += sizeof(Node *);
-
-//        if (verbose_output) {
-//            if (n->is_leaf)
-//                printf("%p ", n->pointers[order - 1]);
-//            else
-//                printf("%p ", n->pointers[n->num_keys]);
-//        }
         printf("| ");
         (*pages)++; // Add a page;
     }
@@ -309,8 +299,6 @@ int countPages(const Node * root) {
     else
         for (int i = 0; i < root->num_keys + 1; i++)
             return countPages(root->pointers[i]) + root->num_keys + 1;
-
-//            return countPages(root->pointers[i])  + 1;
 }
 
 
