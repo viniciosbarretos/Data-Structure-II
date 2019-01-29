@@ -31,9 +31,6 @@ int hydrateFile(Node **root) {
             lineCounter++;
         }
         fclose(file);
-        return maxId;
     }
-    else {
-        return -1;
-    }
+    return maxId;
 }
