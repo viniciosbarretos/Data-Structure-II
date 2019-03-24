@@ -1,4 +1,6 @@
-# Data-Structure-II
+# Escalonamento de Processos
+
+Gerencia filas de processos e sua execução na CPU utilizando o algoritmo Round Robin, lidando com interrupções e prioridades.
 
 # File Allocation Table Manager
 
