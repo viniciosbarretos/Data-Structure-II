@@ -38,6 +38,7 @@ Escreva um programa em linguagem C que utilize uma árvore B+ como estrutura de 
 - E-mail: Char 40;
 - Idade. Tipo inteiro;
 - Status. Valores possíveis, <A>tivo ou <F>inalizado.
+  
 Utilize o atributo ID como índice, visando o preenchimento das páginas. Devem estar disponíveis
 as operações: cadastrar, remover, exibir lista de alunos e uma opção nomeada resumo para mostrar o total de páginas da árvore, com o total em KB que está armazenado. O sistema deve utilizar uma árvore B+ de ordem 5. Cada elemento armazenado na folha deve (também) ter um apontamento para o registro armazenado um arquivo. Todos os registros estão em um único arquivo do tipo txt, abstraindo o modelo de índice denso. A abstração é que cada página representa um bloco de dados em disco, limitado por um tamanho em KB (soma dos bytes de um registro vezes o número de elementos de uma página).
   
